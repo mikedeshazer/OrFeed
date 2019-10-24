@@ -1,8 +1,9 @@
 # OrFeed Smart Contract
 
-![OrFeed Logo](https://www.structuredeth.com/images/orfeed.png)
+## A Better Price Feed Oracle On Ethereum
 
-A Better Price Feed Oracle
+![OrFeed Logo](https://www.orfeed.org/images/orfeed.png)
+
 
 Website: [orfeed.org](https://www.orfeed.org)
 
