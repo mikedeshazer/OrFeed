@@ -316,30 +316,6 @@ contract orfeed {
         throw;
     }
 
-    function getEthToSynthOutputAmount(bytes32 synth, uint256 inputAmount) external view returns(uint256) {
-        uint256 sethAmount = uniswap.getEthToTokenInputPrice(inputAmount);
-        uint256 outputAmount = synthetix.getOutputAmount('sETH', synth, sethAmount);
-        return outputAmount;
-    }
-
-    function getEthToSynthInputAmount(bytes32 synth, uint256 outputAmount) external view returns(uint256) {
-        uint256 sethAmount = synthetix.getInputAmount('sETH', synth, outputAmount);
-        uint256 inputAmount = uniswap.getEthToTokenOutputPrice(sethAmount);
-        return inputAmount;
-    }
-
-    function getSynthToEthOutputAmount(bytes32 synth, uint256 inputAmount) external view returns(uint256) {
-        uint256 sethAmount = synthetix.getOutputAmount(synth, 'sETH', inputAmount);
-        uint outputAmount = uniswap.getTokenToEthInputPrice(sethAmount);
-        return outputAmount;
-    }
-
-    function getSynthToEthInputAmount(bytes32 synth, uint256 outputAmount) external view returns(uint256) {
-        uint256 sethAmount = uniswap.getTokenToEthOutputPrice(outputAmount);
-        uint256 inputAmount = synthetix.getInputAmount(synth, 'sETH', sethAmount);
-        return inputAmount;
-    }
-
     function getTokenToSynthOutputAmount(ERC20 token, bytes32 synth, uint256 inputAmount)  returns(uint256) {
         uint256 ethAmount = kyber.getOutputAmount(token, ethToken, inputAmount);
         uint256 sethAmount = uniswap.getEthToTokenInputPrice(ethAmount);
@@ -347,25 +323,11 @@ contract orfeed {
         return outputAmount;
     }
 
-    function getTokenToSynthInputAmount(ERC20 token, bytes32 synth, uint256 outputAmount) external view returns(uint256) {
-        uint256 sethAmount = synthetix.getInputAmount('sETH', synth, outputAmount);
-        uint256 ethAmount = uniswap.getEthToTokenOutputPrice(sethAmount);
-        uint256 inputAmount = kyber.getInputAmount(token, ethToken, ethAmount);
-        return inputAmount;
-    }
-
     function getSynthToTokenOutputAmount(bytes32 synth, ERC20 token, uint256 inputAmount) returns(uint256) {
         uint256 sethAmount = synthetix.getOutputAmount(synth, 'sETH', inputAmount);
         uint256 ethAmount = uniswap.getTokenToEthInputPrice(sethAmount);
         uint256 outputAmount = kyber.getOutputAmount(ethToken, token, ethAmount);
         return outputAmount;
-    }
-
-    function getSynthToTokenInputAmount(bytes32 synth, ERC20 token, uint256 outputAmount) external view returns(uint256) {
-        uint256 ethAmount = kyber.getInputAmount(ethToken, token, outputAmount);
-        uint256 sethAmount = uniswap.getTokenToEthOutputPrice(ethAmount);
-        uint256 inputAmount = synthetix.getInputAmount(synth, 'sETH', sethAmount);
-        return inputAmount;
     }
 
     //this will go to a DAO
