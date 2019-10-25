@@ -15,6 +15,18 @@ interface IKyberNetworkProxy {
     function swapTokenToEther(ERC20 token, uint tokenQty, uint minRate) external returns (uint);
 }
 
+
+ 
+interface Kyber {
+    function getOutputAmount(ERC20 from, ERC20 to, uint256 amount) external view returns (uint256);
+    function getInputAmount(ERC20 from, ERC20 to, uint256 amount) external view returns (uint256);
+}
+ 
+interface Synthetix {
+    function getOutputAmount(bytes32 from, bytes32 to, uint256 amount) external view returns (uint256);
+    function getInputAmount(bytes32 from, bytes32 to, uint256 amount) external view returns (uint256);
+}
+
 interface premiumSubInterface {
     function getExchangeRate(string fromSymbol, string toSymbol, string venue, uint256 amount, address requestAddress ) external view returns(uint256);
 
@@ -91,6 +103,15 @@ contract synthConvertInterface{
   function issueMaxSynths ( bytes32 currencyKey ) external;
   function exchangeEnabled (  ) external view returns ( bool );
 }
+
+
+interface Uniswap {
+    function getEthToTokenInputPrice(uint256 ethSold) external view returns(uint256);
+    function getEthToTokenOutputPrice(uint256 tokensBought) external view returns(uint256);
+    function getTokenToEthInputPrice(uint256 tokensSold) external view returns(uint256);
+    function getTokenToEthOutputPrice(uint256 ethBought) external view returns(uint256);
+}
+
 
 interface ERC20 {
     function totalSupply() public view returns (uint supply);
@@ -171,6 +192,9 @@ library SafeMath {
 
 
         address tokenPriceOracleAddress;
+        
+        address tokenPriceOracleAddress2;
+        
 
         //forex price oracle address. Can be changed by DAO
         address forexPriceOracleAddress;
@@ -187,6 +211,15 @@ library SafeMath {
         synthConvertInterface s;
         
         synthetixMain si;
+        
+        Kyber kyber;
+        
+        Synthetix synthetix;
+        
+        Uniswap uniswap;
+        
+        ERC20 ethToken;
+        
 
 
         /*
@@ -283,7 +316,9 @@ library SafeMath {
 
 
         //erc20 price oracle address. Can be changed by DAO
-        tokenPriceOracleAddress = 0x818E6FECD516Ecc3849DAf6845e3EC868087B755;
+        tokenPriceOracleAddress = 0xFd9304Db24009694c680885e6aa0166C639727D6;
+        
+        tokenPriceOracleAddress2 =0xe9Cf7887b93150D4F2Da7dFc6D502B216438F244;
 
         //forex price oracle address. Can be changed by DAO
         forexPriceOracleAddress = 0xE86C848De6e4457720A1eb7f37B519010CD26d35;
@@ -293,12 +328,18 @@ library SafeMath {
         premiumSubPriceOracleAddress = 0xc011a72400e58ecd99ee497cf89e3775d4bd732f;
 
 
+        ethToken = ERC20(0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE);
+
         psi = premiumSubInterface(premiumSubPriceOracleAddress);
 
         ki = IKyberNetworkProxy(tokenPriceOracleAddress);
 
-        si = synthConvertInterface(forexPriceOracleAddress);
+        si = synthetixMain(forexPriceOracleAddress);
+        
+        kyber = Kyber(tokenPriceOracleAddress); // Kyber oracle
+        synthetix = Synthetix(forexPriceOracleAddress); // Synthetix oracle
 
+        uniswap = Uniswap(tokenPriceOracleAddress2); 
 
         owner = msg.sender;
         
@@ -308,6 +349,59 @@ library SafeMath {
       function () payable {
             throw;
         }
+        
+        
+    function getEthToSynthOutputAmount(bytes32 synth, uint256 inputAmount) external view returns(uint256) {
+        uint256 sethAmount = uniswap.getEthToTokenInputPrice(inputAmount);
+        uint256 outputAmount = synthetix.getOutputAmount('sETH', synth, sethAmount);
+        return outputAmount;
+    }
+   
+    function getEthToSynthInputAmount(bytes32 synth, uint256 outputAmount) external view returns(uint256) {
+        uint256 sethAmount = synthetix.getInputAmount('sETH', synth, outputAmount);
+        uint256 inputAmount = uniswap.getEthToTokenOutputPrice(sethAmount);
+        return inputAmount;
+    }
+   
+    function getSynthToEthOutputAmount(bytes32 synth, uint256 inputAmount) external view returns(uint256) {
+        uint256 sethAmount = synthetix.getOutputAmount(synth, 'sETH', inputAmount);
+        uint outputAmount = uniswap.getTokenToEthInputPrice(sethAmount);
+        return outputAmount;
+    }
+   
+    function getSynthToEthInputAmount(bytes32 synth, uint256 outputAmount) external view returns(uint256) {
+        uint256 sethAmount = uniswap.getTokenToEthOutputPrice(outputAmount);
+        uint256 inputAmount = synthetix.getInputAmount(synth, 'sETH', sethAmount);
+        return inputAmount;
+    }
+   
+    function getTokenToSynthOutputAmount(ERC20 token, bytes32 synth, uint256 inputAmount)  returns(uint256) {
+        uint256 ethAmount = kyber.getOutputAmount(token, ethToken, inputAmount);
+        uint256 sethAmount = uniswap.getEthToTokenInputPrice(ethAmount);
+        uint256 outputAmount = synthetix.getOutputAmount('sETH', synth, sethAmount);
+        return outputAmount;
+    }
+   
+    function getTokenToSynthInputAmount(ERC20 token, bytes32 synth, uint256 outputAmount) external view returns(uint256) {
+        uint256 sethAmount = synthetix.getInputAmount('sETH', synth, outputAmount);
+        uint256 ethAmount = uniswap.getEthToTokenOutputPrice(sethAmount);
+        uint256 inputAmount = kyber.getInputAmount(token, ethToken, ethAmount);
+        return inputAmount;
+    }
+   
+    function getSynthToTokenOutputAmount(bytes32 synth, ERC20 token, uint256 inputAmount) returns(uint256) {
+        uint256 sethAmount = synthetix.getOutputAmount(synth, 'sETH', inputAmount);
+        uint256 ethAmount = uniswap.getTokenToEthInputPrice(sethAmount);
+        uint256 outputAmount = kyber.getOutputAmount(ethToken, token, ethAmount);
+        return outputAmount;
+    }
+   
+    function getSynthToTokenInputAmount(bytes32 synth, ERC20 token, uint256 outputAmount) external view returns(uint256) {
+        uint256 ethAmount = kyber.getInputAmount(ethToken, token, outputAmount);
+        uint256 sethAmount = uniswap.getTokenToEthOutputPrice(ethAmount);
+        uint256 inputAmount = synthetix.getInputAmount(synth, 'sETH', sethAmount);
+        return inputAmount;
+    }
 
 
 
@@ -353,6 +447,13 @@ library SafeMath {
             tokenPriceOracleAddress = newOracle;
             return true;
       }
+      
+      
+      function updateTokenOracleAddress2(address newOracle) onlyOwner external returns(bool){
+            tokenPriceOracleAddress2 = newOracle;
+            return true;
+      }
+      
 
        //this will go to a DAO
       function updateForexOracleAddress(address newOracle) onlyOwner external returns(bool){
@@ -433,7 +534,7 @@ This will be set in external premium sub contract
 
 
       //returns zero if the rate cannot be found
-      function getExchangeRate(string fromSymbol, string toSymbol, string venue, uint256 amount ) constant returns (uint256){
+      function getExchangeRate(string fromSymbol, string toSymbol, string venue, uint256 amount ) constant external returns (uint256){
 
         bool isFreeFrom = isFree(fromSymbol);
         bool isFreeTo = isFree(toSymbol);
@@ -489,40 +590,45 @@ This will be set in external premium sub contract
     }
 
 
-    function getFreeExchangeRate(string fromSymb, string toSymb, uint256 amount) returns (uint256){
-
+    function getFreeExchangeRate(string fromSymb, string toSymb, uint256 amount)  returns (uint256){
+     
+     uint256 ethAmount;
+      //token to forex
 
       //token to token
       if(freeRateTokenSymbols[fromSymb] != 0x0 && freeRateTokenSymbols[toSymb] != 0x0){
 
+        
+        uint256 toRate = kyber.getOutputAmount(ERC20(freeRateTokenSymbols[fromSymb]), ERC20(freeRateTokenSymbols[toSymb]), amount);
+       // var (toRate, slip) = ki.getExpectedRate( ERC20(freeRateTokenSymbols[fromSymb]), ERC20(freeRateTokenSymbols[toSymb]), amount);
 
-        var (toRate, slip) = ki.getExpectedRate( ERC20(freeRateTokenSymbols[fromSymb]), ERC20(freeRateTokenSymbols[toSymb]), amount);
-
-        return toRate.mul(rateMultiply1).div(rateDivide1);
+       return toRate.mul(rateMultiply1).div(rateDivide1);
 
 
       }
 
-        uint256 ethAmount;
-      //token to forex
+       
+    //token to forex
+      else if(freeRateTokenSymbols[fromSymb] != 0x0 && freeRateTokenSymbols[toSymb] == 0x0){
 
-      if(freeRateTokenSymbols[fromSymb] != 0x0 && freeRateTokenSymbols[toSymb] == 0x0){
-
-        var (ethAmount1, slippp) = ki.getExpectedRate(ERC20(freeRateTokenSymbols[fromSymb]),ERC20(freeRateTokenSymbols['ETH']), amount);
-        uint256 ethToSynthRate = si.getOutputAmount('sETH', freeRateForexBytes[fromSymb], ethAmount1);
-
-        return ethToSynthRate.mul(rateMultiply2).div(rateDivide2);
+       // var (ethAmount1, slippp) = ki.getExpectedRate(ERC20(freeRateTokenSymbols[fromSymb]),ERC20(freeRateTokenSymbols['ETH']), amount);
+       // uint256 ethToSynthRate = si.getOutputAmount('sETH', freeRateForexBytes[fromSymb], ethAmount1);
+       uint256 toRate2 =  getTokenToSynthOutputAmount ( ERC20(freeRateTokenSymbols[fromSymb]), freeRateForexBytes[fromSymb], amount);
+       
+        return toRate2.mul(rateMultiply2).div(rateDivide2);
 
       }
 
       //forex to token
       else if(freeRateTokenSymbols[fromSymb] == 0x0 && freeRateTokenSymbols[toSymb] != 0x0){
 
-        uint256 sethAmount = si.getOutputAmount(freeRateForexBytes[fromSymb], 'sETH', amount);
-       var (ethAmount2, slipppp) = ki.getExpectedRate(ERC20(freeRateTokenSymbols['ETH']), ERC20(freeRateTokenSymbols[toSymb]), amount);
-        var(foToRate, slippppp) =  ki.getExpectedRate(ERC20(freeRateTokenSymbols['ETH']), ERC20(freeRateTokenSymbols[toSymb]), amount);
+       // uint256 sethAmount = si.getOutputAmount(freeRateForexBytes[fromSymb], 'sETH', amount);
+       //var (ethAmount2, slipppp) = ki.getExpectedRate(ERC20(freeRateTokenSymbols['ETH']), ERC20(freeRateTokenSymbols[toSymb]), amount);
+        //var(foToRate, slippppp) =  ki.getExpectedRate(ERC20(freeRateTokenSymbols['ETH']), ERC20(freeRateTokenSymbols[toSymb]), amount);
         
-        return foToRate.mul(rateMultiply3).div(rateDivide3);
+        uint256 toRate3 =  getSynthToTokenOutputAmount( freeRateForexBytes[fromSymb], ERC20(freeRateTokenSymbols[fromSymb]),  amount);
+        
+        return toRate3.mul(rateMultiply3).div(rateDivide3);
 
       }
 
@@ -531,7 +637,7 @@ This will be set in external premium sub contract
       //forex to forex
      else if(freeRateTokenSymbols[fromSymb] == 0x0 && freeRateTokenSymbols[toSymb] == 0x0){
 
-        uint256 price1 = si.getOutputAmount(freeRateForexBytes[fromSymb], 'sUSD', amount);
+       uint256 price1 = si.getOutputAmount(freeRateForexBytes[fromSymb], 'sUSD', amount);
         uint256 price2 = si.getOutputAmount(freeRateForexBytes[toSymb], 'sUSD', amount);
 
         uint256 forexRate = price1.div(price2);
@@ -548,6 +654,9 @@ This will be set in external premium sub contract
 
 
     }
+    
+    
+    
 
     
    
