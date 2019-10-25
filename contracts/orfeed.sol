@@ -569,7 +569,7 @@ contract orfeed {
             uint256 price2 = si.getOutputAmount(freeRateForexBytes[toSymb], 'sUSD', amount);
 
             uint256 forexRate = price1.div(price2);
-            return forexRate.mul(rateMultiply4).div(rateMultiply4);
+            return forexRate.mul(rateMultiply4).div(rateDivide4);
         } else{
             return 0;
         }
