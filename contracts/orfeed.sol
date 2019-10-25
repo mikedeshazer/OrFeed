@@ -554,14 +554,14 @@ contract orfeed {
             //token to forex 
             // var (ethAmount1, slippp) = ki.getExpectedRate(ERC20(freeRateTokenSymbols[fromSymb]),ERC20(freeRateTokenSymbols['ETH']), amount);
             // uint256 ethToSynthRate = si.getOutputAmount('sETH', freeRateForexBytes[fromSymb], ethAmount1);
-            uint256 toRate2 =  getTokenToSynthOutputAmount ( ERC20(freeRateTokenSymbols[fromSymb]), freeRateForexBytes[fromSymb], amount);
+            uint256 toRate2 =  getTokenToSynthOutputAmount ( ERC20(freeRateTokenSymbols[fromSymb]), freeRateForexBytes[toSymb], amount);
             return toRate2.mul(rateMultiply2).div(rateDivide2);
         } else if(freeRateTokenSymbols[fromSymb] == 0x0 && freeRateTokenSymbols[toSymb] != 0x0){
             //forex to token
             // uint256 sethAmount = si.getOutputAmount(freeRateForexBytes[fromSymb], 'sETH', amount);
             //var (ethAmount2, slipppp) = ki.getExpectedRate(ERC20(freeRateTokenSymbols['ETH']), ERC20(freeRateTokenSymbols[toSymb]), amount);
             //var(foToRate, slippppp) =  ki.getExpectedRate(ERC20(freeRateTokenSymbols['ETH']), ERC20(freeRateTokenSymbols[toSymb]), amount);
-            uint256 toRate3 =  getSynthToTokenOutputAmount( freeRateForexBytes[fromSymb], ERC20(freeRateTokenSymbols[fromSymb]),  amount);
+            uint256 toRate3 =  getSynthToTokenOutputAmount( freeRateForexBytes[fromSymb], ERC20(freeRateTokenSymbols[toSymb]),  amount);
             return toRate3.mul(rateMultiply3).div(rateDivide3);
         } else if(freeRateTokenSymbols[fromSymb] == 0x0 && freeRateTokenSymbols[toSymb] == 0x0){
             //forex to forex
