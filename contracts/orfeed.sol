@@ -2,7 +2,6 @@
 
 pragma solidity ^0.4.26;
 
-
 interface IKyberNetworkProxy {
     function maxGasPrice() external view returns(uint);
     function getUserCapInWei(address user) external view returns(uint);
@@ -15,8 +14,6 @@ interface IKyberNetworkProxy {
     function swapTokenToEther(ERC20 token, uint tokenQty, uint minRate) external returns (uint);
 }
 
-
- 
 interface Kyber {
     function getOutputAmount(ERC20 from, ERC20 to, uint256 amount) external view returns (uint256);
     function getInputAmount(ERC20 from, ERC20 to, uint256 amount) external view returns (uint256);
@@ -104,14 +101,12 @@ contract synthConvertInterface{
     function exchangeEnabled (  ) external view returns ( bool );
 }
 
-
 interface Uniswap {
     function getEthToTokenInputPrice(uint256 ethSold) external view returns(uint256);
     function getEthToTokenOutputPrice(uint256 tokensBought) external view returns(uint256);
     function getTokenToEthInputPrice(uint256 tokensSold) external view returns(uint256);
     function getTokenToEthOutputPrice(uint256 ethBought) external view returns(uint256);
 }
-
 
 interface ERC20 {
     function totalSupply() public view returns (uint supply);
@@ -132,12 +127,10 @@ contract IERC20Token {
     function totalSupply() public view returns (uint256) {}
     function balanceOf(address _owner) public view returns (uint256) { _owner; }
     function allowance(address _owner, address _spender) public view returns (uint256) { _owner; _spender; }
-
     function transfer(address _to, uint256 _value) public returns (bool success);
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);
     function approve(address _spender, uint256 _value) public returns (bool success);
 }
-
 
 library SafeMath {
     function mul(uint256 a, uint256 b) internal constant returns (uint256) {
@@ -169,12 +162,10 @@ library SafeMath {
 contract orfeed {
     using SafeMath for uint256;
 
-
     address owner;
     mapping (string => address) freeRateTokenSymbols;
     mapping (string => address) freeRateForexSymbols;
     mapping (string => bytes32) freeRateForexBytes;
-
 
     uint256 rateDivide1;
     uint256 rateMultiply1;
@@ -182,44 +173,30 @@ contract orfeed {
     uint256 rateDivide2;
     uint256 rateMultiply2;
 
-
     uint256 rateDivide3;
     uint256 rateMultiply3;
 
     uint256 rateDivide4;
     uint256 rateMultiply4;
 
-
     address tokenPriceOracleAddress;
-    
+
     address tokenPriceOracleAddress2;
-    
 
     //forex price oracle address. Can be changed by DAO
     address forexPriceOracleAddress;
 
-
     //premium price oracle address. Can be changed by DAO
     address premiumSubPriceOracleAddress;
 
-
     premiumSubInterface psi;
-
     IKyberNetworkProxy ki;
-
     synthConvertInterface s;
-    
     synthetixMain si;
-    
     Kyber kyber;
-    
     Synthetix synthetix;
-    
     Uniswap uniswap;
-    
     ERC20 ethToken;
-    
-
 
     /*
 
@@ -274,25 +251,18 @@ contract orfeed {
         freeRateTokenSymbols['ETH'] = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
         freeRateTokenSymbols['WETH'] = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
 
-
-
-         //free forex rates. Can be changed/updated by ownerDAO
-        
+        //free forex rates. Can be changed/updated by ownerDAO        
         freeRateForexSymbols['USD'] = 0x57ab1e02fee23774580c119740129eac7081e9d3;
         freeRateForexSymbols['EUR'] = 0xd71ecff9342a5ced620049e616c5035f1db98620;
         freeRateForexSymbols['CHF'] = 0x0f83287ff768d1c1e17a42f44d644d7f22e8ee1d;
         freeRateForexSymbols['JPY'] = 0xf6b1c627e95bfc3c1b4c9b825a032ff0fbf3e07d;
         freeRateForexSymbols['GBP'] = 0x97fe22e7341a0cd8db6f6c021a24dc8f4dad855f;
-
-
         
         freeRateForexBytes['USD'] = 0x7355534400000000000000000000000000000000000000000000000000000000;
         freeRateForexBytes['EUR'] = 0x7345555200000000000000000000000000000000000000000000000000000000;
         freeRateForexBytes['CHF'] = 0x7343484600000000000000000000000000000000000000000000000000000000;
         freeRateForexBytes['JPY'] = 0x734a505900000000000000000000000000000000000000000000000000000000;
         freeRateForexBytes['GBP'] = 0x7347425000000000000000000000000000000000000000000000000000000000;
-
-
 
         //when returning rates they will be first divided by and then multiplied by these rates
         rateDivide1 = 100;
@@ -301,27 +271,22 @@ contract orfeed {
         rateDivide2 = 100;
         rateMultiply2 = 100;
 
-
         rateDivide3 = 100;
         rateMultiply3 = 100;
 
         rateDivide4 = 100;
         rateMultiply4 = 100;
 
-
-
         //erc20 price oracle address. Can be changed by DAO
         tokenPriceOracleAddress = 0xFd9304Db24009694c680885e6aa0166C639727D6;
-        
+
         tokenPriceOracleAddress2 =0xe9Cf7887b93150D4F2Da7dFc6D502B216438F244;
 
         //forex price oracle address. Can be changed by DAO
         forexPriceOracleAddress = 0xE86C848De6e4457720A1eb7f37B519010CD26d35;
 
-
         //premium price oracle address. Can be changed by DAO
         premiumSubPriceOracleAddress = 0xc011a72400e58ecd99ee497cf89e3775d4bd732f;
-
 
         ethToken = ERC20(0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE);
 
@@ -330,7 +295,7 @@ contract orfeed {
         ki = IKyberNetworkProxy(tokenPriceOracleAddress);
 
         si = synthetixMain(forexPriceOracleAddress);
-        
+
         kyber = Kyber(tokenPriceOracleAddress); // Kyber oracle
         synthetix = Synthetix(forexPriceOracleAddress); // Synthetix oracle
 
@@ -338,13 +303,11 @@ contract orfeed {
 
         owner = msg.sender;
     }
-           
-          
+
     function () payable {
         throw;
     }
-            
-            
+
     function getEthToSynthOutputAmount(bytes32 synth, uint256 inputAmount) external view returns(uint256) {
         uint256 sethAmount = uniswap.getEthToTokenInputPrice(inputAmount);
         uint256 outputAmount = synthetix.getOutputAmount('sETH', synth, sethAmount);
@@ -403,7 +366,6 @@ contract orfeed {
         return true;
     }
 
-
     function updateMulDivConverter1(uint256 newDiv, uint256 newMul) onlyOwner external returns(bool){
         rateMultiply1 = newMul;
         rateDivide1 = newDiv;
@@ -453,7 +415,6 @@ contract orfeed {
         premiumSubPriceOracleAddress = newOracle;
         return true;
     }
-
 
     //this will go to a DAO
     function addFreeToken(string symb, address tokenAddress) onlyOwner external returns(bool){
@@ -540,7 +501,6 @@ contract orfeed {
         }
         return false;
     }
-
 
     function getFreeExchangeRate(string fromSymb, string toSymb, uint256 amount)  returns (uint256){
         uint256 ethAmount;
