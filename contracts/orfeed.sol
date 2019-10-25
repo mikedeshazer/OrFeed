@@ -14,6 +14,10 @@ interface IKyberNetworkProxy {
     function swapTokenToEther(ERC20 token, uint tokenQty, uint minRate) external returns (uint);
 }
 
+interface SynthetixExchange {
+    function effectiveValue(bytes32 from, uint256 amount, bytes32 to) external view returns (uint256);
+}
+
 interface Kyber {
     function getOutputAmount(ERC20 from, ERC20 to, uint256 amount) external view returns (uint256);
     function getInputAmount(ERC20 from, ERC20 to, uint256 amount) external view returns (uint256);
@@ -180,6 +184,7 @@ contract orfeed {
     uint256 rateMultiply4;
 
     address tokenPriceOracleAddress;
+    address synthetixExchangeAddress;
 
     address tokenPriceOracleAddress2;
 
@@ -191,6 +196,7 @@ contract orfeed {
 
     premiumSubInterface psi;
     IKyberNetworkProxy ki;
+    SynthetixExchange se;
     synthConvertInterface s;
     synthetixMain si;
     Kyber kyber;
@@ -279,6 +285,7 @@ contract orfeed {
 
         //erc20 price oracle address. Can be changed by DAO
         tokenPriceOracleAddress = 0xFd9304Db24009694c680885e6aa0166C639727D6;
+        synthetixExchangeAddress = 0x99a46c42689720d9118FF7aF7ce80C2a92fC4f97;
 
         tokenPriceOracleAddress2 =0xe9Cf7887b93150D4F2Da7dFc6D502B216438F244;
 
@@ -293,6 +300,7 @@ contract orfeed {
         psi = premiumSubInterface(premiumSubPriceOracleAddress);
 
         ki = IKyberNetworkProxy(tokenPriceOracleAddress);
+        se = SynthetixExchange(synthetixExchangeAddress);
 
         si = synthetixMain(forexPriceOracleAddress);
 
@@ -525,11 +533,8 @@ contract orfeed {
             return toRate3.mul(rateMultiply3).div(rateDivide3);
         } else if(freeRateTokenSymbols[fromSymb] == 0x0 && freeRateTokenSymbols[toSymb] == 0x0){
             //forex to forex
-            uint256 price1 = si.getOutputAmount(freeRateForexBytes[fromSymb], 'sUSD', amount);
-            uint256 price2 = si.getOutputAmount(freeRateForexBytes[toSymb], 'sUSD', amount);
-
-            uint256 forexRate = price1.div(price2);
-            return forexRate.mul(rateMultiply4).div(rateDivide4);
+            uint256 toRate4 = se.effectiveValue(freeRateForexBytes[fromSymb], amount, freeRateForexBytes[toSymb]);
+            return toRate4.mul(rateMultiply4).div(rateDivide4);
         } else{
             return 0;
         }
