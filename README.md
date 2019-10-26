@@ -44,7 +44,11 @@ uint jpyusdPrice = orfeed.getExchangeRate("JPY", "USD", 100000);
 
 ### Read the full docs [orfeed.org/docs](https://www.orfeed.org/docs)
 
+Free data is provided by Kyber, Uniswap and Synthetix. 
+
+Premium data is provided as follows:
 
 ![How it all fits together](https://www.orfeed.org/images/diagram.png)
+
 
 
