@@ -40,3 +40,11 @@ One of the best things about OrFeed is that OrFeed automatically detects which k
 uint jpyusdPrice = orfeed.getExchangeRate("JPY", "USD", 100000);
 // returns 920 (or $920.00)
 ```
+
+
+### Read the full docs [orfeed.org/docs](https://www.orfeed.org/docs)
+
+
+![How it all fits together](https://www.orfeed.org/images/diagram.png)
+
+
