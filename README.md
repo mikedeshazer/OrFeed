@@ -9,6 +9,9 @@ A highly reliable oracle for Ethereum-based DeFi apps that need financial data f
 
 Website: [orfeed.org](https://www.orfeed.org)
 
+[Youtube video tutorial](https://youtu.be/LK1BiSveEI4)
+
+
 ## Getting Started
 
 At the top of your smart contract or in a referenced file in your dApp project, include this interface.
@@ -24,14 +27,14 @@ interface OrFeedInterface {
 ```
 
 
-To Initiate OrFeed, simple include this code to initialize OrFeed:
+To Initialize OrFeed, simply include this code:
 
 ```javascript
 OrFeedInterface orfeed= OrFeedinterface(0x298e0d904954e5076b1836937cb3b3527adf8783);
 
 ```
 
-One of the best things about OrFeed is that OrFeed automatically detects which kind of asset you are looking for, though the data can come from different providers. For example, you can get the price for ETH/USD the same way you get the price for JPY/ETH. 
+One of the best things about OrFeed is that OrFeed automatically detects which kind of asset you are looking for (though the data can come from different providers), as the parameter of "venue" when making the getExchangeRate call. For example, you can get the price for ETH/USD the same way you get the price for JPY/ETH.
 
 ```javascript
 uint jpyusdPrice = orfeed.getExchangeRate("JPY", "USD", 100000);
