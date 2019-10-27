@@ -9,6 +9,8 @@ A highly reliable oracle for Ethereum-based DeFi apps that need financial data f
 
 Website: [orfeed.org](https://www.orfeed.org)
 
+Demo: [orfeed.netlify.com](https://orfeed.netlify.com)
+
 [Youtube video tutorial](https://youtu.be/LK1BiSveEI4)
 
 
