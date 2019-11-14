@@ -138,8 +138,8 @@ const daiPrice = contract1.methods.getDAIPrice().call({
 var tx = contract1.methods.buyDai().send({
 
   'from': '0xC0DcE374F9aC0607B432Be0b3439c5Dc84c8f985',
-  'gas':10,
-  value: 1000,
+  'gas':1000000,
+  value: 10000000,
 
 
 }, function(error, data){
