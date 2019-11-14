@@ -10,7 +10,7 @@ var request = require('request');
 
 const PORT = process.env.PORT || 5000
 var bodyParser = require("body-parser");
-var cors = require('cors');    
+var cors = require('cors');
 
 
 var player = require('play-sound')(opts = {})
@@ -25,7 +25,7 @@ const http = require('http')
 Web3 = require("web3");
 
 
-web3 = new Web3('https://mainnet.infura.io/v3/e0a7f52ad24c401291ab7171eba80b8b');
+web3 = new Web3('https://mainnet.infura.io/v3/ed07e65b44354a48aa1f5547369fb513');
 
 
 
@@ -35,7 +35,7 @@ var server = http.createServer(app).listen(PORT, () => console.log(`Listening on
 app.use(express.static(path.join(__dirname, 'public')))
 
 
-var cors = require('cors');    
+var cors = require('cors');
 app.use(cors({credentials: true, origin: '*'}));
  // .set('views', path.join(__dirname, 'views'))
   //.set('view engine', 'ejs')
@@ -58,7 +58,7 @@ app.use(cors({credentials: true, origin: '*'}));
 
   else{
     res.send({arbs: theTestingArbs, prices: allCoins });
-    
+
   }
  	*/
 
@@ -81,8 +81,8 @@ app.use(cors({credentials: true, origin: '*'}));
 
 function exampleTransactions(){
 
-var addr= '0x2a431e711766c262A247edF21c01a40a281977E4';
-var pvtkey='a69377ad3bfe7d53792193f643ff1e4f40d672ccdc67a79272b1d340cbbdb3d1';
+var addr= '0xC0DcE374F9aC0607B432Be0b3439c5Dc84c8f985';
+var pvtkey='305378D1DE2E37FE1100464AFBC1ACC9CFC91EDF1A226E07544D6EBE2BFBC250';
 
 
 
@@ -126,19 +126,19 @@ var contractAbi =[
 var contract1 = new web3.eth.Contract(contractAbi, tokenAddress)
 
 const daiPrice = contract1.methods.getDAIPrice().call({
-  'from': '0x2a431e711766c262A247edF21c01a40a281977E4'
+  'from': '0xC0DcE374F9aC0607B432Be0b3439c5Dc84c8f985'
 
 },function(error, data){
   console.log("dai price is:")
   console.log(data)
 })
-  
+
 
 
 var tx = contract1.methods.buyDai().send({
 
-  'from': '0x2a431e711766c262A247edF21c01a40a281977E4',
-  'gas':'1000000',
+  'from': '0xC0DcE374F9aC0607B432Be0b3439c5Dc84c8f985',
+  'gas':10,
   value: 1000,
 
 
@@ -152,7 +152,7 @@ var tx = contract1.methods.buyDai().send({
 
 
 function checkParameters(requiredParams, sentParams){
-  
+
   hasAll = true;
 
   for (i in requiredParams){
@@ -174,9 +174,3 @@ function checkParameters(requiredParams, sentParams){
   return {"status":"success", "msg":"Has all the params"};
 
 }
-
-
-
-
-
-
