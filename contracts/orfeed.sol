@@ -1,4 +1,4 @@
-//Latest Cotnract Address: 0x298e0d904954e5076b1836937cb3b3527adf8783
+//Latest Cotnract Address: 0x3c1935ebe06ca18964a5b49b8cd55a4a71081de2
 
 //orfeed.org alpha contract
 pragma solidity ^ 0.4 .26;

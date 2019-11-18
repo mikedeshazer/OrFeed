@@ -32,14 +32,14 @@ interface OrFeedInterface {
 To Initialize OrFeed, simply include this code:
 
 ```javascript
-OrFeedInterface orfeed= OrFeedinterface(0x298e0d904954e5076b1836937cb3b3527adf8783);
+OrFeedInterface orfeed= OrFeedinterface(0x3c1935ebe06ca18964a5b49b8cd55a4a71081de2);
 
 ```
 
 One of the best things about OrFeed is that OrFeed automatically detects which kind of asset you are looking for (though the data can come from different providers), as the parameter of "venue" when making the getExchangeRate call. For example, you can get the price for ETH/USD the same way you get the price for JPY/ETH. The 3rd parameter is the venue. Use blank ('') for default oracle. In the future, you can reference several venues/providers to get their data and throw out any that deviate too far from the average.
 
 ```javascript
-uint jpyusdPrice = orfeed.getExchangeRate("JPY", "USD", "", 100000);
+uint jpyusdPrice = orfeed.getExchangeRate("JPY", "USD", "DEFAULT", 100000);
 // returns 920 (or $920.00)
 ```
 
