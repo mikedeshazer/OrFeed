@@ -1,3 +1,4 @@
+//https://etherscan.io/dapp/0x5e00a16eb51157fb192bd4fcaef4f79a4f16f480#code
 
 pragma solidity ^0.4.26;
 contract UniswapExchangeInterface {
@@ -73,65 +74,6 @@ interface Kyber {
 }
 
 
-library StringUtils {
-    /// @dev Does a byte-by-byte lexicographical comparison of two strings.
-    /// @return a negative number if `_a` is smaller, zero if they are equal
-    /// and a positive numbe if `_b` is smaller.
-    function compare(string _a, string _b) returns (int) {
-        bytes memory a = bytes(_a);
-        bytes memory b = bytes(_b);
-        uint minLength = a.length;
-        if (b.length < minLength) minLength = b.length;
-        //@todo unroll the loop into increments of 32 and do full 32 byte comparisons
-        for (uint i = 0; i < minLength; i ++)
-            if (a[i] < b[i])
-                return -1;
-            else if (a[i] > b[i])
-                return 1;
-        if (a.length < b.length)
-            return -1;
-        else if (a.length > b.length)
-            return 1;
-        else
-            return 0;
-    }
-    /// @dev Compares two strings and returns true iff they are equal.
-    function equal(string _a, string _b) returns (bool) {
-        return compare(_a, _b) == 0;
-    }
-    /// @dev Finds the index of the first occurrence of _needle in _haystack
-    function indexOf(string _haystack, string _needle) returns (int)
-    {
-    	bytes memory h = bytes(_haystack);
-    	bytes memory n = bytes(_needle);
-    	if(h.length < 1 || n.length < 1 || (n.length > h.length)) 
-    		return -1;
-    	else if(h.length > (2**128 -1)) // since we have to be able to return -1 (if the char isn't found or input error), this function must return an "int" type with a max length of (2^128 - 1)
-    		return -1;									
-    	else
-    	{
-    		uint subindex = 0;
-    		for (uint i = 0; i < h.length; i ++)
-    		{
-    			if (h[i] == n[0]) // found the first char of b
-    			{
-    				subindex = 1;
-    				while(subindex < n.length && (i + subindex) < h.length && h[i + subindex] == n[subindex]) // search until the chars don't match or until we reach the end of a or b
-    				{
-    					subindex++;
-    				}	
-    				if(subindex == n.length)
-    					return int(i);
-    			}
-    		}
-    		return -1;
-    	}	
-    }
-}
-
-
-
-
 library SafeMath {
     function mul(uint256 a, uint256 b) internal constant returns(uint256) {
         uint256 c = a * b;
@@ -160,6 +102,9 @@ library SafeMath {
 
 
 
+
+
+
 contract PremiumFeedPrices{
     
     mapping (address=>address) uniswapAddresses;
@@ -168,7 +113,12 @@ contract PremiumFeedPrices{
     
      constructor() public  {
          
+         
+        
          //DAI
+         uniswapAddresses[0x6b175474e89094c44da98b954eedeac495271d0f] =  0x2a1530c4c41db0b0b2bb646cb5eb1a67b7158667;
+         
+         //SAI
          uniswapAddresses[0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359] = 0x09cabec1ead1c0ba254b09efb3ee13841712be14;
          
          //usdc
@@ -187,12 +137,21 @@ contract PremiumFeedPrices{
          //ZRX
          uniswapAddresses[0xe41d2489571d322189246dafa5ebde1f4699f498] = 0xae76c84c9262cdb9abc0c2c8888e62db8e22a0bf;
      
+          //BTC
+         uniswapAddresses[0x2260fac5e5542a773aa44fbcfedf7c193bc2c599] = 0x4d2f5cfba55ae412221182d8475bc85799a5644b;
+         
+          //KNC
+         uniswapAddresses[0xdd974d5c2e2928dea5f71b9825b8b646686bd200] =0x49c4f9bc14884f6210f28342ced592a633801a8b;
          
          
          
          
          
-         tokenAddress['DAI'] = 0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359;
+         
+         
+        
+         tokenAddress['DAI'] = 0x6b175474e89094c44da98b954eedeac495271d0f;
+         tokenAddress['SAI'] = 0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359;
         tokenAddress['USDC'] = 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48;
         tokenAddress['MKR'] = 0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2;
         tokenAddress['LINK'] = 0x514910771af9ca656af840dff83e8264ecf986ca;
@@ -204,6 +163,7 @@ contract PremiumFeedPrices{
         tokenAddress['TUSD'] = 0x0000000000085d4780B73119b644AE5ecd22b376;
         tokenAddress['ETH'] = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
         tokenAddress['WETH'] = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
+         tokenAddress['KNC'] = 0xdd974d5c2e2928dea5f71b9825b8b646686bd200;
         
      }
      
@@ -219,11 +179,11 @@ contract PremiumFeedPrices{
          
          uint256 price = 0;
          
-         if(StringUtils.equal(theExchange,"UNISWAP")){
+         if(equal(theExchange,"UNISWAP")){
             price= uniswapPrice(toA1, toA2, theSide, amount);
          }
          
-         if(StringUtils.equal(theExchange,"KYBER")){
+         if(equal(theExchange,"KYBER")){
             price= kyberPrice(toA1, toA2, theSide, amount);
          }
          
@@ -234,25 +194,56 @@ contract PremiumFeedPrices{
     function uniswapPrice(address token1, address token2, string  side, uint256 amount) public constant returns (uint256){
     
             address fromExchange = getUniswapContract(token1);
-            address toExchange = getUniswapContract(token1);
+            address toExchange = getUniswapContract(token2);
             UniswapExchangeInterface usi1 = UniswapExchangeInterface(fromExchange);
             UniswapExchangeInterface usi2 = UniswapExchangeInterface(toExchange);    
         
-            uint256  startingEth;
+            uint256  ethPrice1;
+            uint256 ethPrice2;
             uint256 resultingTokens;
+            uint256 ethBack;
             
-        if(StringUtils.equal(side,"BUY")){
-            startingEth = usi1.getTokenToEthInputPrice(amount);
+        if(equal(side,"BUY")){
+            //startingEth = usi1.getTokenToEthInputPrice(amount);
         
-            resultingTokens = usi2.getTokenToEthOutputPrice(startingEth);
+            if(token2 == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE){
+                resultingTokens = usi1.getTokenToEthOutputPrice(amount);
+                return resultingTokens;
+            }
+            if(token1 == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE){
+                resultingTokens = usi2.getTokenToEthOutputPrice(amount);
+                return resultingTokens;
+            }
+            
+            
+            ethBack = usi2.getTokenToEthOutputPrice(amount);
+            resultingTokens = usi1.getEthToTokenOutputPrice(ethBack);
+            
+            //ethPrice1= usi2.getTokenToEthOutputPrice(amount);
+            
+            //ethPrice2 = usi1.getTokenToEthOutputPrice(amount);
+
+            //resultingTokens = ethPrice1/ethPrice2;
             
             return resultingTokens;
         }
         
         else{
-              startingEth = usi2.getTokenToEthInputPrice(amount);
-              resultingTokens = usi1.getTokenToEthOutputPrice(startingEth);
-              return resultingTokens;
+            
+             if(token2 == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE){
+                resultingTokens = usi1.getEthToTokenOutputPrice(amount);
+                return resultingTokens;
+            }
+            if(token1 == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE){
+                resultingTokens = usi2.getEthToTokenInputPrice(amount);
+                return resultingTokens;
+            }
+            
+              ethBack = usi2.getTokenToEthOutputPrice(amount);
+            resultingTokens = usi1.getTokenToEthInputPrice(ethBack);
+            
+            
+            return resultingTokens;
         }
     
     }
@@ -263,11 +254,13 @@ contract PremiumFeedPrices{
          
          Kyber kyber = Kyber(0xFd9304Db24009694c680885e6aa0166C639727D6);
          uint256 price;
-           if(StringUtils.equal(side,"BUY")){
-               price = kyber.getOutputAmount(ERC20(token1), ERC20(token2), amount);
+           if(equal(side,"BUY")){
+             price = kyber.getOutputAmount(ERC20(token1), ERC20(token2), amount);
            }
            else{
-                price = kyber.getInputAmount(ERC20(token1), ERC20(token2), amount);
+               
+                 price = kyber.getInputAmount(ERC20(token2), ERC20(token1), amount);
+                
            }
          
          return price;
@@ -329,8 +322,62 @@ contract PremiumFeedPrices{
     
 }
 
+
+   function compare(string _a, string _b) returns (int) {
+        bytes memory a = bytes(_a);
+        bytes memory b = bytes(_b);
+        uint minLength = a.length;
+        if (b.length < minLength) minLength = b.length;
+        //@todo unroll the loop into increments of 32 and do full 32 byte comparisons
+        for (uint i = 0; i < minLength; i ++)
+            if (a[i] < b[i])
+                return -1;
+            else if (a[i] > b[i])
+                return 1;
+        if (a.length < b.length)
+            return -1;
+        else if (a.length > b.length)
+            return 1;
+        else
+            return 0;
+    }
+    /// @dev Compares two strings and returns true iff they are equal.
+    function equal(string _a, string _b) returns (bool) {
+        return compare(_a, _b) == 0;
+    }
+    /// @dev Finds the index of the first occurrence of _needle in _haystack
+    function indexOf(string _haystack, string _needle) returns (int)
+    {
+        bytes memory h = bytes(_haystack);
+        bytes memory n = bytes(_needle);
+        if(h.length < 1 || n.length < 1 || (n.length > h.length)) 
+            return -1;
+        else if(h.length > (2**128 -1)) // since we have to be able to return -1 (if the char isn't found or input error), this function must return an "int" type with a max length of (2^128 - 1)
+            return -1;                                  
+        else
+        {
+            uint subindex = 0;
+            for (uint i = 0; i < h.length; i ++)
+            {
+                if (h[i] == n[0]) // found the first char of b
+                {
+                    subindex = 1;
+                    while(subindex < n.length && (i + subindex) < h.length && h[i + subindex] == n[subindex]) // search until the chars don't match or until we reach the end of a or b
+                    {
+                        subindex++;
+                    }   
+                    if(subindex == n.length)
+                        return int(i);
+                }
+            }
+            return -1;
+        }   
+    }
+    
+
     
 }
+
 
 
 
