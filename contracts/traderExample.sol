@@ -1,5 +1,5 @@
 
-//dapp: https://etherscan.io/dapp/0xf397560c2f726718810f8e8d2c56858c473cc484#readContract
+//dapp: https://etherscan.io/dapp/0x1603557c3f7197df2ecded659ad04fa72b1e1114#readContract
 
 
 
@@ -79,12 +79,12 @@ interface KyberNetworkProxyInterface {
 
     function tradeWithHint(ERC20 src, uint srcAmount, ERC20 dest, address destAddress, uint maxDestAmount,
         uint minConversionRate, address walletId, bytes hint) public payable returns(uint);
-        
+
     function swapEtherToToken(ERC20 token, uint minRate) public payable returns (uint);
-    
+
     function swapTokenToEther(ERC20 token, uint tokenQty, uint minRate) public returns (uint);
-    
-  
+
+
 }
 
 interface OrFeedInterface {
@@ -100,28 +100,28 @@ interface OrFeedInterface {
 
 
 contract Trader{
-    
+
     ERC20 constant internal ETH_TOKEN_ADDRESS = ERC20(0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee);
     KyberNetworkProxyInterface public proxy = KyberNetworkProxyInterface(0x818E6FECD516Ecc3849DAf6845e3EC868087B755);
     OrFeedInterface orfeed= OrFeedInterface(0x3c1935ebe06ca18964a5b49b8cd55a4a71081de2);
     address daiAddress = 0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359;
     bytes  PERM_HINT = "PERM";
     address owner;
-    
-      
-      
+
+
+
     modifier onlyOwner() {
         if (msg.sender != owner) {
             throw;
         }
         _;
     }
-    
-    
+
+
     constructor(){
-     owner = msg.sender;   
+     owner = msg.sender;
     }
-    
+
    function swapEtherToToken (KyberNetworkProxyInterface _kyberNetworkProxy, ERC20 token, address destAddress) internal{
 
     uint minRate;
@@ -132,11 +132,11 @@ contract Trader{
 
     //send received tokens to destination address
    require(token.transfer(destAddress, destAmount));
-   
-   
-   
+
+
+
     }
-    
+
     function swapTokenToEther1 (KyberNetworkProxyInterface _kyberNetworkProxy, ERC20 token, uint tokenQty, address destAddress) internal returns (uint) {
 
         uint minRate =1;
@@ -147,12 +147,12 @@ contract Trader{
 
         // Mitigate ERC20 Approve front-running attack, by initially setting
         // allowance to 0
-        
+
        token.approve(proxy, 0);
 
         // Approve tokens so network can take them during the swap
        token.approve(address(proxy), tokenQty);
-      
+
 
        uint destAmount = proxy.tradeWithHint(ERC20(daiAddress), tokenQty, ERC20(0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee), this, 8000000000000000000000000000000000000000000000000000000000000000, 0, 0x0000000000000000000000000000000000000004, PERM_HINT);
 
@@ -167,49 +167,47 @@ contract Trader{
 
         address theAddress = uniSwapContract;
         UniswapExchangeInterface usi = UniswapExchangeInterface(theAddress);
-        
+
         ERC20 address1 = ERC20(fromAddress);
 
        uint ethBack = swapTokenToEther1(proxy, address1 , theAmount, msg.sender);
-       
+
        usi.ethToTokenSwapInput.value(ethBack)(1, block.timestamp);
-     
+
         return true;
     }
 
 
     function () external payable  {
-     
+
     }
-    
-    
-    
+
+
+
     function withdrawETHAndTokens() onlyOwner{
-        
+
         msg.sender.send(address(this).balance);
          ERC20 daiToken = ERC20(daiAddress);
         uint256 currentTokenBalance = daiToken.balanceOf(this);
         daiToken.transfer(msg.sender, currentTokenBalance);
-        
+
     }
-    
-    
-    
+
+
+
     function getKyberSellPrice() constant returns (uint256){
        uint256 currentPrice =  orfeed.getExchangeRate("ETH", "DAI", "SELL-KYBER-EXCHANGE", 1000000000000000000);
         return currentPrice;
     }
-    
-    
+
+
      function getUniswapBuyPrice() constant returns (uint256){
        uint256 currentPrice =  orfeed.getExchangeRate("ETH", "DAI", "BUY-UNISWAP-EXCHANGE", 1000000000000000000);
         return currentPrice;
     }
-    
-    
-    
-    
-    
+
+
+
+
+
 }
-
-

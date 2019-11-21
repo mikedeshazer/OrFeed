@@ -43,7 +43,7 @@ app.use(cors({credentials: true, origin: '*'}));
   //.set('view engine', 'ejs')
   //.get('/', (req, res) => res.render('pages/index'))
  app.get("/", function(req, res) {
-  
+
 
   res.send({ uniswapBuy: saiPriceBuyUniswap, kyberSell: saiPriceSellKyber });
 
