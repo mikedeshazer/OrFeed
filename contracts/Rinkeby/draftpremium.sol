@@ -116,32 +116,32 @@ contract PremiumFeedPrices{
          
         
          //DAI
-         uniswapAddresses[0x6b175474e89094c44da98b954eedeac495271d0f] =  0x2a1530c4c41db0b0b2bb646cb5eb1a67b7158667;
+         uniswapAddresses[0x2448eE2641d78CC42D7AD76498917359D961A783] =  0x77dB9C915809e7BE439D2AB21032B1b8B58F6891;
          
          //SAI
-         uniswapAddresses[0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359] = 0x09cabec1ead1c0ba254b09efb3ee13841712be14;
+         //uniswapAddresses[0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359] = 0x09cabec1ead1c0ba254b09efb3ee13841712be14;
          
          //usdc
-         uniswapAddresses[0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48] = 0x97dec872013f6b5fb443861090ad931542878126;
+         //uniswapAddresses[0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48] = 0x97dec872013f6b5fb443861090ad931542878126;
          
          //MKR
          
-         uniswapAddresses[0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2] = 0x2c4bd064b998838076fa341a83d007fc2fa50957;
+         uniswapAddresses[0xF9bA5210F91D0474bd1e1DcDAeC4C58E359AaD85] = 0x93bB63aFe1E0180d0eF100D774B473034fd60C36;
          
          //BAT
-         uniswapAddresses[0x0d8775f648430679a709e98d2b0cb6250d2887ef] = 0x2e642b8d59b45a1d8c5aef716a84ff44ea665914;
+         uniswapAddresses[0xDA5B056Cfb861282B4b59d29c9B395bcC238D29B] = 0x9B913956036a3462330B0642B20D3879ce68b450;
          
-         //LINK
-         uniswapAddresses[0x514910771af9ca656af840dff83e8264ecf986ca] = 0xf173214c720f58e03e194085b1db28b50acdeead;
+         //OMG
+         uniswapAddresses[0x879884c3C46A24f56089f3bBbe4d5e38dB5788C0] = 0x26C226EBb6104676E593F8A070aD6f25cDa60F8D;
          
          //ZRX
-         uniswapAddresses[0xe41d2489571d322189246dafa5ebde1f4699f498] = 0xae76c84c9262cdb9abc0c2c8888e62db8e22a0bf;
+         uniswapAddresses[0xF22e3F33768354c9805d046af3C0926f27741B43] = 0xaBD44a1D1b9Fb0F39fE1D1ee6b1e2a14916D067D;
      
           //BTC
-         uniswapAddresses[0x2260fac5e5542a773aa44fbcfedf7c193bc2c599] = 0x4d2f5cfba55ae412221182d8475bc85799a5644b;
+         //uniswapAddresses[0x2260fac5e5542a773aa44fbcfedf7c193bc2c599] = 0x4d2f5cfba55ae412221182d8475bc85799a5644b;
          
           //KNC
-         uniswapAddresses[0xdd974d5c2e2928dea5f71b9825b8b646686bd200] =0x49c4f9bc14884f6210f28342ced592a633801a8b;
+         //uniswapAddresses[0xdd974d5c2e2928dea5f71b9825b8b646686bd200] =0x49c4f9bc14884f6210f28342ced592a633801a8b;
          
          
          
@@ -150,21 +150,21 @@ contract PremiumFeedPrices{
          
          
         
-         tokenAddress['DAI'] = 0x6b175474e89094c44da98b954eedeac495271d0f;
-         tokenAddress['SAI'] = 0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359;
-        tokenAddress['USDC'] = 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48;
-        tokenAddress['MKR'] = 0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2;
-        tokenAddress['LINK'] = 0x514910771af9ca656af840dff83e8264ecf986ca;
-        tokenAddress['BAT'] = 0x0d8775f648430679a709e98d2b0cb6250d2887ef;
-        tokenAddress['WBTC'] = 0x2260fac5e5542a773aa44fbcfedf7c193bc2c599;
-        tokenAddress['BTC'] = 0x2260fac5e5542a773aa44fbcfedf7c193bc2c599;
-        tokenAddress['OMG'] = 0xd26114cd6EE289AccF82350c8d8487fedB8A0C07;
-        tokenAddress['ZRX'] = 0xe41d2489571d322189246dafa5ebde1f4699f498;
-        tokenAddress['TUSD'] = 0x0000000000085d4780B73119b644AE5ecd22b376;
+         tokenAddress['DAI'] = 0x2448eE2641d78CC42D7AD76498917359D961A783;
+         //tokenAddress['SAI'] = 0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359;
+        tokenAddress['USDC'] = 0x7d66cde53cc0a169cae32712fc48934e610aef14;
+        tokenAddress['MKR'] = 0xF9bA5210F91D0474bd1e1DcDAeC4C58E359AaD85;
+        tokenAddress['LINK'] = 0x01BE23585060835E02B77ef475b0Cc51aA1e0709;
+        tokenAddress['BAT'] = 0xDA5B056Cfb861282B4b59d29c9B395bcC238D29B;
+        tokenAddress['WBTC'] = 0x577d296678535e4903d59a4c929b718e1d575e0a;
+        tokenAddress['BTC'] = 0x577d296678535e4903d59a4c929b718e1d575e0a;
+        tokenAddress['OMG'] = 0x879884c3C46A24f56089f3bBbe4d5e38dB5788C0;
+        tokenAddress['ZRX'] = 0xF22e3F33768354c9805d046af3C0926f27741B43;
+        tokenAddress['TUSD'] = 0x6f7454cba97fffe10e053187f23925a86f5c20c4;
         tokenAddress['ETH'] = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
-        tokenAddress['WETH'] = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
-         tokenAddress['KNC'] = 0xdd974d5c2e2928dea5f71b9825b8b646686bd200;
-        
+        tokenAddress['WETH'] = 0xc778417e063141139fce010982780140aa0cd5ab;
+         tokenAddress['KNC'] = 0x6FA355a7b6bD2D6bD8b927C489221BFBb6f1D7B2;
+    
      }
      
      function getExchangeRate(string fromSymbol, string toSymbol, string venue, uint256 amount, address requestAddress) public constant returns(uint256){

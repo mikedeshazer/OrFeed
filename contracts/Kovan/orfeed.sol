@@ -345,26 +345,26 @@ contract orfeed {
 
     //free ERC20 rates. Can be changed/updated by ownerDAO
     constructor() public payable {
-        freeRateTokenSymbols['SAI'] = 0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359;
-        freeRateTokenSymbols['DAI'] = 0xc4375b7de8af5a38a93548eb8453a498222c4ff2;
-        freeRateTokenSymbols['USDC'] = 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48;
-        freeRateTokenSymbols['MKR'] = 0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2;
-        freeRateTokenSymbols['LINK'] = 0x514910771af9ca656af840dff83e8264ecf986ca;
-        freeRateTokenSymbols['BAT'] = 0x0d8775f648430679a709e98d2b0cb6250d2887ef;
-        freeRateTokenSymbols['WBTC'] = 0x2260fac5e5542a773aa44fbcfedf7c193bc2c599;
-        freeRateTokenSymbols['BTC'] = 0x2260fac5e5542a773aa44fbcfedf7c193bc2c599;
-        freeRateTokenSymbols['OMG'] = 0xd26114cd6EE289AccF82350c8d8487fedB8A0C07;
-        freeRateTokenSymbols['ZRX'] = 0xe41d2489571d322189246dafa5ebde1f4699f498;
-        freeRateTokenSymbols['TUSD'] = 0x0000000000085d4780B73119b644AE5ecd22b376;
+        freeRateTokenSymbols['SAI'] = 0x2303039ee502ad4d663b83cb4ce1102ff5846457; 
+        freeRateTokenSymbols['DAI'] = 0xc4375b7de8af5a38a93548eb8453a498222c4ff2; 
+        freeRateTokenSymbols['USDC'] = 0x6c27debde8c5fe159c5b6b47f5fa56b7f532247a; 
+        freeRateTokenSymbols['MKR'] = 0xac94ea989f6955c67200dd67f0101e1865a560ea; 
+        freeRateTokenSymbols['LINK'] = 0xad5ce863ae3e4e9394ab43d4ba0d80f419f61789; 
+        freeRateTokenSymbols['BAT'] = 0xec88a5050c63bb9e073afc78b3b9378d0eb53257; 
+        freeRateTokenSymbols['WBTC'] = 0xa1d3eecb76285b4435550e4d963b8042a8bffbf0;
+        freeRateTokenSymbols['BTC'] = 0xa1d3eecb76285b4435550e4d963b8042a8bffbf0;
+        freeRateTokenSymbols['OMG'] = 0xdff868181120da44e8250855a21cdbed2ed039ab;
+        freeRateTokenSymbols['ZRX'] = 0x6ff6c0ff1d68b964901f986d4c9fa3ac68346570;
+        freeRateTokenSymbols['TUSD'] = 0xb41f85973606ceb0ac33316f04311348b6f2f288;
         freeRateTokenSymbols['ETH'] = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
-        freeRateTokenSymbols['WETH'] = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
-        freeRateTokenSymbols['SNX'] = 0xc011a72400e58ecd99ee497cf89e3775d4bd732f;
-        freeRateTokenSymbols['CSAI'] = 0xf5dce57282a584d2746faf1593d3121fcac444dc;
-        freeRateTokenSymbols['CUSDC'] = 0x39aa39c021dfbae8fac545936693ac917d5e7563;
-        freeRateTokenSymbols['KNC'] = 0xdd974d5c2e2928dea5f71b9825b8b646686bd200;
-        freeRateTokenSymbols['USDT'] = 0xdac17f958d2ee523a2206206994597c13d831ec7;
-        freeRateTokenSymbols['GST1'] = 0x88d60255F917e3eb94eaE199d827DAd837fac4cB;
-        freeRateTokenSymbols['GST2'] = 0x0000000000b3F879cb30FE243b4Dfee438691c04;
+        freeRateTokenSymbols['WETH'] = 0xd0a1e359811322d97991e03f863a0c30c2cf029c;
+        freeRateTokenSymbols['SNX'] = 0x0189ce2e2a69423cc736eee1b1bb51cd846d19d7;
+        freeRateTokenSymbols['CSAI'] = 0x63c344bf8651222346dd870be254d4347c9359f7;
+        freeRateTokenSymbols['CUSDC'] = 0x4de5b931c9d4eeb5935711c02292d3a54f146aff;
+        freeRateTokenSymbols['KNC'] = 0xb2f3dd487708ca7794f633d9df57fdb9347a7aff;
+        freeRateTokenSymbols['USDT'] = 0x9e9080008e946bfaad328f5adc18b73c91845a5d;
+        freeRateTokenSymbols['GST1'] = 0x88d60255f917e3eb94eae199d827dad837fac4cb;
+        freeRateTokenSymbols['GST2'] = 0x0000000000170ccc93903185be5a2094c870df62;
         
         
         
@@ -373,11 +373,11 @@ contract orfeed {
         
 
         //free forex rates. Can be changed/updated by ownerDAO        
-        freeRateForexSymbols['USD'] = 0x57ab1e02fee23774580c119740129eac7081e9d3;
-        freeRateForexSymbols['EUR'] = 0xd71ecff9342a5ced620049e616c5035f1db98620;
-        freeRateForexSymbols['CHF'] = 0x0f83287ff768d1c1e17a42f44d644d7f22e8ee1d;
-        freeRateForexSymbols['JPY'] = 0xf6b1c627e95bfc3c1b4c9b825a032ff0fbf3e07d;
-        freeRateForexSymbols['GBP'] = 0x97fe22e7341a0cd8db6f6c021a24dc8f4dad855f;
+        freeRateForexSymbols['USD'] = 0x559e848a1b6a7afc69ee27f8d20280a42628b2cf;
+        freeRateForexSymbols['EUR'] = 0xb03dfc4b9c9756b6d4fbc12dade7732149fcf00d;
+        freeRateForexSymbols['CHF'] = 0x1e57befe49b5f02f91be0d3bf4407d70bd2e0da4;
+        freeRateForexSymbols['JPY'] = 0x112d5fa64e4902b6ff1a35495a0f878c210a5601;
+        freeRateForexSymbols['GBP'] = 0xa10d76871fe5fe55db1502a2003c28092dfcb310;
 
         freeRateForexBytes['USD'] = 0x7355534400000000000000000000000000000000000000000000000000000000;
         freeRateForexBytes['EUR'] = 0x7345555200000000000000000000000000000000000000000000000000000000;
