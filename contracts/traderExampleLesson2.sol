@@ -103,7 +103,7 @@ contract Trader{
 
     ERC20 constant internal ETH_TOKEN_ADDRESS = ERC20(0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee);
     KyberNetworkProxyInterface public proxy = KyberNetworkProxyInterface(0x818E6FECD516Ecc3849DAf6845e3EC868087B755);
-    OrFeedInterface orfeed= OrFeedInterface(0x3c1935ebe06ca18964a5b49b8cd55a4a71081de2);
+    OrFeedInterface orfeed= OrFeedInterface(0xb215bf00e18825667f696833d13368092cf62e66);
     address daiAddress = 0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359;
     bytes  PERM_HINT = "PERM";
     address owner;

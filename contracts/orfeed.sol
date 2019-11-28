@@ -1,6 +1,6 @@
-//Latest Cotnract Address: 0x3c1935ebe06ca18964a5b49b8cd55a4a71081de2
+//0xb215bf00e18825667f696833d13368092cf62e66
+//orfeed.org oracle aggregator
 
-//orfeed.org alpha contract
 pragma solidity ^ 0.4 .26;
 
 interface IKyberNetworkProxy {
@@ -43,6 +43,24 @@ interface premiumSubInterface {
     function getExchangeRate(string fromSymbol, string toSymbol, string venue, uint256 amount, address requestAddress) external view returns(uint256);
 
 }
+
+
+interface priceAsyncInterface {
+    function requestPriceResult(string fromSymbol, string toSymbol, string venue, uint256 amount) external returns(string);
+    function getRequestedPriceResult(string fromSymbol, string toSymbol, string venue, uint256 amount, string referenceId) external view returns(uint256);
+}
+
+interface eventsAsyncInterface {
+    function requestEventResult(string eventName, string source) external returns(string);
+    function getRequestedEventResult(string eventName, string source, string referenceId) external view returns(string);
+
+}
+
+interface eventsSyncInterface {
+    function getEventResult(string eventName, string source) external view returns(string);
+
+}
+
 interface synthetixMain {
     function getOutputAmount(bytes32 from, bytes32 to, uint256 amount) external view returns(uint256);
 
@@ -294,6 +312,16 @@ contract orfeed {
 
     //premium price oracle address. Can be changed by DAO
     address premiumSubPriceOracleAddress;
+    
+    //external async price oracle 
+    address asyncProxyContractAddress;
+    
+    //events (no price oracle)
+    address eventsProxySyncContractAddress;
+    
+    //events ( async, no price oracle)
+    address eventsProxyAsyncContractAddress;
+    
 
     premiumSubInterface psi;
     IKyberNetworkProxy ki;
@@ -305,38 +333,9 @@ contract orfeed {
     Uniswap uniswap;
     ERC20 ethToken;
 
-    /*
+   
 
-    ----
-
-
-    Below is referenced for understanding for how flow works
-
-
-    ----
-
-    This will be set in external premium sub contract
-    mapping(string => address) feedOwners;
-    mapping(string => uint256) feedOwnerDeposits;
-    mapping(string => address[]) feedSubscribers;
-
-    //normalsubfee should always remain zero
-    uint256 normalSubscriptionFee = 0;
-
- 
-    
-    //voted on by owner DAO
-    uint256 premiumSubscriptionFee = 1;
-
-    //vote on by ownerDAO
-    uint256 purchaseUntakenFeedFee = 1;
-
-    //voted on by ownerDAO
-    uint256 houseTransactionPercentage = 1;
-
-    */
-
-    // Functions with this modifier can only be executed by the owner
+    // Functions with this modifier can only be executed by the owner DAO
     modifier onlyOwner() {
         if (msg.sender != owner) {
             throw;
@@ -346,7 +345,8 @@ contract orfeed {
 
     //free ERC20 rates. Can be changed/updated by ownerDAO
     constructor() public payable {
-        freeRateTokenSymbols['DAI'] = 0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359;
+        freeRateTokenSymbols['SAI'] = 0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359;
+        freeRateTokenSymbols['DAI'] = 0x6b175474e89094c44da98b954eedeac495271d0f;
         freeRateTokenSymbols['USDC'] = 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48;
         freeRateTokenSymbols['MKR'] = 0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2;
         freeRateTokenSymbols['LINK'] = 0x514910771af9ca656af840dff83e8264ecf986ca;
@@ -358,6 +358,19 @@ contract orfeed {
         freeRateTokenSymbols['TUSD'] = 0x0000000000085d4780B73119b644AE5ecd22b376;
         freeRateTokenSymbols['ETH'] = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
         freeRateTokenSymbols['WETH'] = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
+        freeRateTokenSymbols['SNX'] = 0xc011a72400e58ecd99ee497cf89e3775d4bd732f;
+        freeRateTokenSymbols['CSAI'] = 0xf5dce57282a584d2746faf1593d3121fcac444dc;
+        freeRateTokenSymbols['CUSDC'] = 0x39aa39c021dfbae8fac545936693ac917d5e7563;
+        freeRateTokenSymbols['KNC'] = 0xdd974d5c2e2928dea5f71b9825b8b646686bd200;
+        freeRateTokenSymbols['USDT'] = 0xdac17f958d2ee523a2206206994597c13d831ec7;
+        freeRateTokenSymbols['GST1'] = 0x88d60255F917e3eb94eaE199d827DAd837fac4cB;
+        freeRateTokenSymbols['GST2'] = 0x0000000000b3F879cb30FE243b4Dfee438691c04;
+        
+        
+        
+  
+        
+        
 
         //free forex rates. Can be changed/updated by ownerDAO        
         freeRateForexSymbols['USD'] = 0x57ab1e02fee23774580c119740129eac7081e9d3;
@@ -395,14 +408,16 @@ contract orfeed {
         forexPriceOracleAddress = 0xE86C848De6e4457720A1eb7f37B519010CD26d35;
 
         //premium price oracle address. Can be changed by DAO
-        premiumSubPriceOracleAddress = 0xc011a72400e58ecd99ee497cf89e3775d4bd732f;
+        premiumSubPriceOracleAddress = 0x1603557c3f7197df2ecded659ad04fa72b1e1114;
+        
+        
 
         ethTokenAddress = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 
 
         ethToken = ERC20(ethTokenAddress);
 
-        psi = premiumSubInterface(premiumSubPriceOracleAddress);
+        
 
         ki = IKyberNetworkProxy(tokenPriceOracleAddress);
         se = SynthetixExchange(synthetixExchangeAddress);
@@ -422,14 +437,20 @@ contract orfeed {
     }
 
     function getTokenToSynthOutputAmount(ERC20 token, bytes32 synth, uint256 inputAmount) returns(uint256) {
+        kyber = Kyber(tokenPriceOracleAddress); 
         uint256 ethAmount = kyber.getOutputAmount(token, ethToken, inputAmount);
+        uniswap = Uniswap(tokenPriceOracleAddress2);
         uint256 sethAmount = uniswap.getEthToTokenInputPrice(ethAmount);
+        synthetix = Synthetix(forexPriceOracleAddress);
         uint256 outputAmount = synthetix.getOutputAmount('sETH', synth, sethAmount);
         return outputAmount;
     }
 
     function getSynthToTokenOutputAmount(bytes32 synth, ERC20 token, uint256 inputAmount) returns(uint256) {
+         kyber = Kyber(tokenPriceOracleAddress); 
+        synthetix = Synthetix(forexPriceOracleAddress);
         uint256 sethAmount = synthetix.getOutputAmount(synth, 'sETH', inputAmount);
+        uniswap = Uniswap(tokenPriceOracleAddress2);
         uint256 ethAmount = uniswap.getTokenToEthInputPrice(sethAmount);
         uint256 outputAmount = kyber.getOutputAmount(ethToken, token, ethAmount);
         return outputAmount;
@@ -496,6 +517,23 @@ contract orfeed {
         premiumSubPriceOracleAddress = newOracle;
         return true;
     }
+    
+      //this will go to a DAO
+    function updateAsyncOracleAddress (address newOracle) onlyOwner external returns(bool) {
+        asyncProxyContractAddress = newOracle;
+        return true;
+    }
+    
+     function updateAsyncEventsAddress (address newOracle) onlyOwner external returns(bool) {
+        eventsProxyAsyncContractAddress = newOracle;
+        return true;
+    }
+    
+     function updateSyncEventsAddress (address newOracle) onlyOwner external returns(bool) {
+        eventsProxySyncContractAddress = newOracle;
+        return true;
+    }
+    
 
     //this will go to a DAO
     function addFreeToken(string symb, address tokenAddress) onlyOwner external returns(bool) {
@@ -541,11 +579,55 @@ contract orfeed {
             rate = getFreeExchangeRate(fromSymbol, toSymbol, amount);
             return rate;
         } else {
+            psi = premiumSubInterface(premiumSubPriceOracleAddress);
             //init.sender and msg.sender must have premium
             rate = psi.getExchangeRate(fromSymbol, toSymbol, venue, amount, msg.sender);
             return rate;
         }
     }
+    
+    function requestAsyncExchangeRate(string fromSymbol, string toSymbol, string venue, uint256 amount)  external returns(string) {
+    
+        priceAsyncInterface api = priceAsyncInterface(asyncProxyContractAddress);
+        string memory resString = api.requestPriceResult(fromSymbol, toSymbol, venue, amount);
+        //resString ideally is a reference id
+        return resString;
+    }
+    
+     function requestAsyncExchangeRateResult(string fromSymbol, string toSymbol, string venue, uint256 amount, string referenceId) constant  external returns(uint256) {
+    
+        priceAsyncInterface api = priceAsyncInterface(asyncProxyContractAddress);
+        uint256 resPrice = api.getRequestedPriceResult(fromSymbol, toSymbol, venue, amount,referenceId);
+        return resPrice;
+    }
+    
+    
+    function getEventResult(string eventName, string source)  constant external returns(string) {
+    
+        eventsSyncInterface epiSync = eventsSyncInterface(eventsProxySyncContractAddress);
+        string memory resString = epiSync.getEventResult(eventName, source);
+        return resString;
+    }
+    
+    
+   
+    
+    function requestAsyncEvent(string eventName, string source)  external returns(string) {
+    
+        eventsAsyncInterface epi = eventsAsyncInterface(eventsProxyAsyncContractAddress);
+        string memory resString = epi.requestEventResult(eventName, source);
+        return resString;
+    }
+    
+    function getAsyncEventResult(string eventName, string source, string referenceId) constant  external returns(string) {
+    
+        eventsAsyncInterface epi = eventsAsyncInterface(eventsProxyAsyncContractAddress);
+        string memory resString = epi.getRequestedEventResult(eventName, source, referenceId);
+        return resString;
+    }
+    
+
+
 
 
 
@@ -574,9 +656,17 @@ contract orfeed {
 
     function isFreeVenueCheck(string venueToCheck) returns(bool) {
         string memory blankString = '';
+        string memory defaultString = 'DEFAULT';
+        
         if (compareStrings(venueToCheck, blankString)) {
             return true;
-        } else {
+        } 
+        
+        if (compareStrings(venueToCheck, defaultString)) {
+            return true;
+        } 
+    
+        else {
             return false;
         }
     }
@@ -602,6 +692,7 @@ contract orfeed {
          //token to token
         if (freeRateTokenSymbols[fromSymb] != 0x0 && freeRateTokenSymbols[toSymb] != 0x0) {
            
+             kyber = Kyber(tokenPriceOracleAddress); 
             uint256 toRate = kyber.getOutputAmount(ERC20(freeRateTokenSymbols[fromSymb]), ERC20(freeRateTokenSymbols[toSymb]), amount);
            
         } 
