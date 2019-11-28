@@ -1,8 +1,6 @@
+//Dapp test 0x5e00a16eb51157fb192bd4fcaef4f79a4f16f480
 
-//Dapp: https://etherscan.io/dapp/0x1603557c3f7197df2ecded659ad04fa72b1e1114#readContract
-
-
-
+pragma solidity ^0.4.26;
 contract UniswapExchangeInterface {
     // Address of ERC20 token sold on this exchange
     function tokenAddress() external view returns (address token);
@@ -61,31 +59,6 @@ interface ERC20 {
     event Approval(address indexed _owner, address indexed _spender, uint _value);
 }
 
-
-
-
-
-/// @title Kyber Network interface
-interface KyberNetworkProxyInterface {
-    function maxGasPrice() public view returns(uint);
-    function getUserCapInWei(address user) public view returns(uint);
-    function getUserCapInTokenWei(address user, ERC20 token) public view returns(uint);
-    function enabled() public view returns(bool);
-    function info(bytes32 id) public view returns(uint);
-
-    function getExpectedRate(ERC20 src, ERC20 dest, uint srcQty) public view
-        returns (uint expectedRate, uint slippageRate);
-
-    function tradeWithHint(ERC20 src, uint srcAmount, ERC20 dest, address destAddress, uint maxDestAmount,
-        uint minConversionRate, address walletId, bytes hint) public payable returns(uint);
-        
-    function swapEtherToToken(ERC20 token, uint minRate) public payable returns (uint);
-    
-    function swapTokenToEther(ERC20 token, uint tokenQty, uint minRate) public returns (uint);
-    
-  
-}
-
 interface OrFeedInterface {
   function getExchangeRate ( string fromSymbol, string toSymbol, string venue, uint256 amount ) external view returns ( uint256 );
   function getTokenDecimalCount ( address tokenAddress ) external view returns ( uint256 );
@@ -94,116 +67,313 @@ interface OrFeedInterface {
   function getForexAddress ( string symbol ) external view returns ( address );
 }
 
+interface Kyber {
+    function getOutputAmount(ERC20 from, ERC20 to, uint256 amount) external view returns(uint256);
+
+    function getInputAmount(ERC20 from, ERC20 to, uint256 amount) external view returns(uint256);
+}
+
+
+library SafeMath {
+    function mul(uint256 a, uint256 b) internal constant returns(uint256) {
+        uint256 c = a * b;
+        assert(a == 0 || c / a == b);
+        return c;
+    }
+
+    function div(uint256 a, uint256 b) internal constant returns(uint256) {
+        assert(b > 0); // Solidity automatically throws when dividing by 0
+        uint256 c = a / b;
+        assert(a == b * c + a % b); // There is no case in which this doesn't hold
+        return c;
+    }
+
+    function sub(uint256 a, uint256 b) internal constant returns(uint256) {
+        assert(b <= a);
+        return a - b;
+    }
+
+    function add(uint256 a, uint256 b) internal constant returns(uint256) {
+        uint256 c = a + b;
+        assert(c >= a);
+        return c;
+    }
+}
 
 
 
 
-contract Trader{
+
+
+contract PremiumFeedPrices{
     
-    ERC20 constant internal ETH_TOKEN_ADDRESS = ERC20(0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee);
-    KyberNetworkProxyInterface public proxy = KyberNetworkProxyInterface(0x818E6FECD516Ecc3849DAf6845e3EC868087B755);
-    OrFeedInterface orfeed= OrFeedInterface(0x3c1935ebe06ca18964a5b49b8cd55a4a71081de2);
-    address daiAddress = 0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359;
-    bytes  PERM_HINT = "PERM";
-    address owner;
+    mapping (address=>address) uniswapAddresses;
+    mapping (string=>address) tokenAddress;
     
-      
-      
-    modifier onlyOwner() {
-        if (msg.sender != owner) {
-            throw;
+    
+     constructor() public  {
+         
+         
+        
+         //DAI
+         uniswapAddresses[0x6b175474e89094c44da98b954eedeac495271d0f] =  0x2a1530c4c41db0b0b2bb646cb5eb1a67b7158667;
+         
+         //SAI
+         uniswapAddresses[0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359] = 0x09cabec1ead1c0ba254b09efb3ee13841712be14;
+         
+         //usdc
+         uniswapAddresses[0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48] = 0x97dec872013f6b5fb443861090ad931542878126;
+         
+         //MKR
+         
+         uniswapAddresses[0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2] = 0x2c4bd064b998838076fa341a83d007fc2fa50957;
+         
+         //BAT
+         uniswapAddresses[0x0d8775f648430679a709e98d2b0cb6250d2887ef] = 0x2e642b8d59b45a1d8c5aef716a84ff44ea665914;
+         
+         //LINK
+         uniswapAddresses[0x514910771af9ca656af840dff83e8264ecf986ca] = 0xf173214c720f58e03e194085b1db28b50acdeead;
+         
+         //ZRX
+         uniswapAddresses[0xe41d2489571d322189246dafa5ebde1f4699f498] = 0xae76c84c9262cdb9abc0c2c8888e62db8e22a0bf;
+     
+          //BTC
+         uniswapAddresses[0x2260fac5e5542a773aa44fbcfedf7c193bc2c599] = 0x4d2f5cfba55ae412221182d8475bc85799a5644b;
+         
+          //KNC
+         uniswapAddresses[0xdd974d5c2e2928dea5f71b9825b8b646686bd200] =0x49c4f9bc14884f6210f28342ced592a633801a8b;
+         
+         
+         
+         
+         
+         
+         
+        
+         tokenAddress['DAI'] = 0x6b175474e89094c44da98b954eedeac495271d0f;
+         tokenAddress['SAI'] = 0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359;
+        tokenAddress['USDC'] = 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48;
+        tokenAddress['MKR'] = 0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2;
+        tokenAddress['LINK'] = 0x514910771af9ca656af840dff83e8264ecf986ca;
+        tokenAddress['BAT'] = 0x0d8775f648430679a709e98d2b0cb6250d2887ef;
+        tokenAddress['WBTC'] = 0x2260fac5e5542a773aa44fbcfedf7c193bc2c599;
+        tokenAddress['BTC'] = 0x2260fac5e5542a773aa44fbcfedf7c193bc2c599;
+        tokenAddress['OMG'] = 0xd26114cd6EE289AccF82350c8d8487fedB8A0C07;
+        tokenAddress['ZRX'] = 0xe41d2489571d322189246dafa5ebde1f4699f498;
+        tokenAddress['TUSD'] = 0x0000000000085d4780B73119b644AE5ecd22b376;
+        tokenAddress['ETH'] = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
+        tokenAddress['WETH'] = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
+         tokenAddress['KNC'] = 0xdd974d5c2e2928dea5f71b9825b8b646686bd200;
+        
+     }
+     
+     function getExchangeRate(string fromSymbol, string toSymbol, string venue, uint256 amount, address requestAddress) public constant returns(uint256){
+         
+         address toA1 = tokenAddress[fromSymbol];
+         address toA2 = tokenAddress[toSymbol];
+         
+         
+         
+         string memory theSide = determineSide(venue);
+         string memory theExchange = determineExchange(venue);
+         
+         uint256 price = 0;
+         
+         if(equal(theExchange,"UNISWAP")){
+            price= uniswapPrice(toA1, toA2, theSide, amount);
+         }
+         
+         if(equal(theExchange,"KYBER")){
+            price= kyberPrice(toA1, toA2, theSide, amount);
+         }
+         
+         
+         return price;
+     }
+    
+    function uniswapPrice(address token1, address token2, string  side, uint256 amount) public constant returns (uint256){
+    
+            address fromExchange = getUniswapContract(token1);
+            address toExchange = getUniswapContract(token2);
+            UniswapExchangeInterface usi1 = UniswapExchangeInterface(fromExchange);
+            UniswapExchangeInterface usi2 = UniswapExchangeInterface(toExchange);    
+        
+            uint256  ethPrice1;
+            uint256 ethPrice2;
+            uint256 resultingTokens;
+            uint256 ethBack;
+            
+        if(equal(side,"BUY")){
+            //startingEth = usi1.getTokenToEthInputPrice(amount);
+        
+            if(token2 == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE){
+                resultingTokens = usi1.getTokenToEthOutputPrice(amount);
+                return resultingTokens;
+            }
+            if(token1 == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE){
+                resultingTokens = usi2.getTokenToEthOutputPrice(amount);
+                return resultingTokens;
+            }
+            
+            
+            ethBack = usi2.getTokenToEthOutputPrice(amount);
+            resultingTokens = usi1.getEthToTokenOutputPrice(ethBack);
+            
+            //ethPrice1= usi2.getTokenToEthOutputPrice(amount);
+            
+            //ethPrice2 = usi1.getTokenToEthOutputPrice(amount);
+
+            //resultingTokens = ethPrice1/ethPrice2;
+            
+            return resultingTokens;
         }
-        _;
-    }
-    
-    
-    constructor(){
-     owner = msg.sender;   
-    }
-    
-   function swapEtherToToken (KyberNetworkProxyInterface _kyberNetworkProxy, ERC20 token, address destAddress) internal{
-
-    uint minRate;
-    (, minRate) = _kyberNetworkProxy.getExpectedRate(ETH_TOKEN_ADDRESS, token, msg.value);
-
-    //will send back tokens to this contract's address
-    uint destAmount = _kyberNetworkProxy.swapEtherToToken.value(msg.value)(token, minRate);
-
-    //send received tokens to destination address
-   require(token.transfer(destAddress, destAmount));
-   
-   
-   
-    }
-    
-    function swapTokenToEther1 (KyberNetworkProxyInterface _kyberNetworkProxy, ERC20 token, uint tokenQty, address destAddress) internal returns (uint) {
-
-        uint minRate =1;
-        //(, minRate) = _kyberNetworkProxy.getExpectedRate(token, ETH_TOKEN_ADDRESS, tokenQty);
-
-        // Check that the token transferFrom has succeeded
-      
-
-        // Approve tokens so network can take them during the swap
-       token.approve(address(proxy), tokenQty);
-      
-
-       uint destAmount = proxy.tradeWithHint(ERC20(daiAddress), tokenQty, ERC20(0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee), this, 8000000000000000000000000000000000000000000000000000000000000000, 0, 0x0000000000000000000000000000000000000004, PERM_HINT);
-
-    return destAmount;
-      //uint destAmount = proxy.swapTokenToEther(token, tokenQty, minRate);
-
-        // Send received ethers to destination address
-     //  destAddress.transfer(destAmount);
-    }
-
-     function kyberToUniSwapArb(address fromAddress, address uniSwapContract, uint theAmount) public payable onlyOwner returns (bool){
-
-        address theAddress = uniSwapContract;
-        UniswapExchangeInterface usi = UniswapExchangeInterface(theAddress);
         
-        ERC20 address1 = ERC20(fromAddress);
-
-       uint ethBack = swapTokenToEther1(proxy, address1 , theAmount, msg.sender);
-       
-       usi.ethToTokenSwapInput.value(ethBack)(1, block.timestamp);
-     
-        return true;
+        else{
+            
+             if(token2 == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE){
+                resultingTokens = usi1.getEthToTokenOutputPrice(amount);
+                return resultingTokens;
+            }
+            if(token1 == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE){
+                resultingTokens = usi2.getEthToTokenInputPrice(amount);
+                return resultingTokens;
+            }
+            
+              ethBack = usi2.getTokenToEthOutputPrice(amount);
+            resultingTokens = usi1.getTokenToEthInputPrice(ethBack);
+            
+            
+            return resultingTokens;
+        }
+    
     }
-
-
-    function () external payable  {
-     
+    
+    
+    
+     function kyberPrice(address token1, address token2, string  side, uint256 amount) public constant returns (uint256){
+         
+         Kyber kyber = Kyber(0xFd9304Db24009694c680885e6aa0166C639727D6);
+         uint256 price;
+           if(equal(side,"BUY")){
+            price = kyber.getInputAmount(ERC20(token2), ERC20(token1), amount);
+           }
+           else{
+                price = kyber.getOutputAmount(ERC20(token1), ERC20(token2), amount);
+                 
+                
+           }
+         
+         return price;
+     }
+    
+    
+    
+    function getUniswapContract(address tokenAddress) public constant returns (address){
+        return uniswapAddresses[tokenAddress];
     }
     
-    
-    
-    function withdrawETHAndTokens() onlyOwner{
+    function determineSide(string sideString) public constant returns (string){
+            
+        if(contains("SELL", sideString ) == false){
+            return "BUY";
+        }
         
-        msg.sender.send(address(this).balance);
-         ERC20 daiToken = ERC20(daiAddress);
-        uint256 currentTokenBalance = daiToken.balanceOf(this);
-        daiToken.transfer(msg.sender, currentTokenBalance);
+        else{
+            return "SELL";
+        }
+    }
+    
+    
+    
+    function determineExchange(string exString) constant returns (string){
+            
+        if(contains("UNISWA", exString ) == true){
+            return "UNISWAP";
+        }
         
+        else if(contains("KYBE", exString ) == true){
+            return "KYBER";
+        }
+        else{
+            return "NONE";
+        }
     }
     
     
-    
-    function getKyberSellPrice() constant returns (uint256){
-       uint256 currentPrice =  orfeed.getExchangeRate("ETH", "SAI", "SELL-KYBER-EXCHANGE", 1000000000000000000);
-        return currentPrice;
+    function contains (string memory what, string memory where)  constant returns(bool){
+    bytes memory whatBytes = bytes (what);
+    bytes memory whereBytes = bytes (where);
+
+    bool found = false;
+    for (uint i = 0; i < whereBytes.length - whatBytes.length; i++) {
+        bool flag = true;
+        for (uint j = 0; j < whatBytes.length; j++)
+            if (whereBytes [i + j] != whatBytes [j]) {
+                flag = false;
+                break;
+            }
+        if (flag) {
+            found = true;
+            break;
+        }
     }
-    
-    
-     function getUniswapBuyPrice() constant returns (uint256){
-       uint256 currentPrice =  orfeed.getExchangeRate("ETH", "SAI", "BUY-UNISWAP-EXCHANGE", 1000000000000000000);
-        return currentPrice;
-    }
-    
-    
-    
-    
+  
+    return found;
     
 }
 
 
+   function compare(string _a, string _b) returns (int) {
+        bytes memory a = bytes(_a);
+        bytes memory b = bytes(_b);
+        uint minLength = a.length;
+        if (b.length < minLength) minLength = b.length;
+        //@todo unroll the loop into increments of 32 and do full 32 byte comparisons
+        for (uint i = 0; i < minLength; i ++)
+            if (a[i] < b[i])
+                return -1;
+            else if (a[i] > b[i])
+                return 1;
+        if (a.length < b.length)
+            return -1;
+        else if (a.length > b.length)
+            return 1;
+        else
+            return 0;
+    }
+    /// @dev Compares two strings and returns true iff they are equal.
+    function equal(string _a, string _b) returns (bool) {
+        return compare(_a, _b) == 0;
+    }
+    /// @dev Finds the index of the first occurrence of _needle in _haystack
+    function indexOf(string _haystack, string _needle) returns (int)
+    {
+        bytes memory h = bytes(_haystack);
+        bytes memory n = bytes(_needle);
+        if(h.length < 1 || n.length < 1 || (n.length > h.length)) 
+            return -1;
+        else if(h.length > (2**128 -1)) // since we have to be able to return -1 (if the char isn't found or input error), this function must return an "int" type with a max length of (2^128 - 1)
+            return -1;                                  
+        else
+        {
+            uint subindex = 0;
+            for (uint i = 0; i < h.length; i ++)
+            {
+                if (h[i] == n[0]) // found the first char of b
+                {
+                    subindex = 1;
+                    while(subindex < n.length && (i + subindex) < h.length && h[i + subindex] == n[subindex]) // search until the chars don't match or until we reach the end of a or b
+                    {
+                        subindex++;
+                    }   
+                    if(subindex == n.length)
+                        return int(i);
+                }
+            }
+            return -1;
+        }   
+    }
+    
+
+    
+}
