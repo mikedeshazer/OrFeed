@@ -1,4 +1,4 @@
-//Contract: 0x0x73f5022bec0e01c0859634b0c7186301c5464b46
+//Contract: 0x73f5022bec0e01c0859634b0c7186301c5464b46
 //orfeed.org oracle aggregator
 
 //pragma solidity ^ 0.4 .26;
