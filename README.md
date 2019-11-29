@@ -9,9 +9,9 @@ A highly reliable oracle for Ethereum-based DeFi apps that need financial data f
 
 Website: [orfeed.org](https://www.orfeed.org)
 
-[The Reality Stone on the Blockchain] (https://medium.com/proof-of-fintech/the-reality-stone-on-the-blockchain-accessible-to-all-1654a3ec71a7) blog post
+[The Reality Stone on the Blockchain](https://medium.com/proof-of-fintech/the-reality-stone-on-the-blockchain-accessible-to-all-1654a3ec71a7) blog post
 
-[How OrFeed Was Conceived] (https://medium.com/proof-of-fintech/introducing-orfeed-aa323342d34c) blog post
+[How OrFeed Was Conceived](https://medium.com/proof-of-fintech/introducing-orfeed-aa323342d34c) blog post
 
 Demo: [https://etherscan.io/dapp/0x0x73f5022bec0e01c0859634b0c7186301c5464b46](https://etherscan.io/dapp/0x0x73f5022bec0e01c0859634b0c7186301c5464b46)
 
