@@ -1,4 +1,4 @@
-//Contract: 0x55ec371b3168b701797c2c5779ba717c5e7f85a5
+//Contract: 0x0b15915a20adf88aad6b22f9cbe44c14b2783d30
 //orfeed.org oracle aggregator
 
 //pragma solidity ^ 0.4 .26;
@@ -741,6 +741,7 @@ contract orfeed {
            
              kyber = Kyber(tokenPriceOracleAddress); 
             uint256 toRate = kyber.getOutputAmount(ERC20(freeRateTokenSymbols[fromSymb]), ERC20(freeRateTokenSymbols[toSymb]), amount);
+            return toRate;
            
         } 
 
