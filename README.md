@@ -9,7 +9,7 @@ A highly reliable oracle for Ethereum-based DeFi apps that need financial data f
 
 Website: [orfeed.org](https://www.orfeed.org)
 
-Demo: [https://etherscan.io/dapp/0xb215bf00e18825667f696833d13368092cf62e66](https://etherscan.io/dapp/0xb215bf00e18825667f696833d13368092cf62e66)
+Demo: [https://etherscan.io/dapp/0x55ec371b3168b701797c2c5779ba717c5e7f85a5](https://etherscan.io/dapp/0x55ec371b3168b701797c2c5779ba717c5e7f85a5)
 
 [Youtube video tutorial](https://youtu.be/LK1BiSveEI4)
 
@@ -32,7 +32,7 @@ interface OrFeedInterface {
 To Initialize OrFeed, simply include this code:
 
 ```javascript
-OrFeedInterface orfeed= OrFeedinterface(0xb215bf00e18825667f696833d13368092cf62e66);
+OrFeedInterface orfeed= OrFeedinterface(0x55ec371b3168b701797c2c5779ba717c5e7f85a5);
 
 ```
 

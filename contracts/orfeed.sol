@@ -1,7 +1,9 @@
-//0xb215bf00e18825667f696833d13368092cf62e66
+//Contract: 0x55ec371b3168b701797c2c5779ba717c5e7f85a5
 //orfeed.org oracle aggregator
 
-pragma solidity ^ 0.4 .26;
+//pragma solidity ^ 0.4 .26;
+pragma experimental ABIEncoderV2;
+ 
 
 interface IKyberNetworkProxy {
     function maxGasPrice() external view returns(uint);
@@ -44,6 +46,10 @@ interface premiumSubInterface {
 
 }
 
+interface arbInterface {
+    function arb(address fundsReturnToAddress, address liquidityProviderContractAddress, string[] tokens,  uint256 amount, string[] exchanges) external payable returns(bool);
+    function extraFunction(string param1, string param2, string param3, string param4) external  returns(string);
+}
 
 interface priceAsyncInterface {
     function requestPriceResult(string fromSymbol, string toSymbol, string venue, uint256 amount) external returns(string);
@@ -322,6 +328,9 @@ contract orfeed {
     //events ( async, no price oracle)
     address eventsProxyAsyncContractAddress;
     
+    //arb contract
+    address arbContractAddress;
+    
 
     premiumSubInterface psi;
     IKyberNetworkProxy ki;
@@ -400,7 +409,7 @@ contract orfeed {
 
         //erc20 price oracle address. Can be changed by DAO
         tokenPriceOracleAddress = 0xFd9304Db24009694c680885e6aa0166C639727D6;
-        synthetixExchangeAddress = 0x99a46c42689720d9118FF7aF7ce80C2a92fC4f97;
+        synthetixExchangeAddress = 0x22a67ecd108f7a6fc52da9e2655ddfe88eccd9ca;
 
         tokenPriceOracleAddress2 = 0xe9Cf7887b93150D4F2Da7dFc6D502B216438F244;
 
@@ -408,8 +417,10 @@ contract orfeed {
         forexPriceOracleAddress = 0xE86C848De6e4457720A1eb7f37B519010CD26d35;
 
         //premium price oracle address. Can be changed by DAO
-        premiumSubPriceOracleAddress = 0x1603557c3f7197df2ecded659ad04fa72b1e1114;
+        premiumSubPriceOracleAddress = 0x5e00a16eb51157fb192bd4fcaef4f79a4f16f480;
         
+        //arb proxy contract address. Can be cahnged... will be changed by DAO
+        arbContractAddress = 0x0;
         
 
         ethTokenAddress = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
@@ -534,6 +545,12 @@ contract orfeed {
         return true;
     }
     
+    
+    function updateArbContractAddress (address newAddress) onlyOwner external returns(bool) {
+        arbContractAddress = newAddress;
+        return true;
+    }
+    
 
     //this will go to a DAO
     function addFreeToken(string symb, address tokenAddress) onlyOwner external returns(bool) {
@@ -628,12 +645,42 @@ contract orfeed {
     
 
 
+    function arb(address fundsReturnToAddress, address liquidityProviderContractAddress, string[] tokens,  uint256 amount, string[] exchanges) payable returns (bool){
+       
+        arbInterface arbContract = arbInterface(arbContractAddress);
+       address tokenAddress = getTokenAddress(tokens[0]);
+       if(tokenAddress != getTokenAddress("ETH")){
+           require(ERC20(tokenAddress).transferFrom(msg.sender, arbContractAddress, amount));
+       }
+       
+        bool arbResp = arbContract.arb.value(msg.value)(fundsReturnToAddress, liquidityProviderContractAddress, tokens, amount, exchanges);
+        if(arbResp != true){
+            throw;
+        }
+        return arbResp;
+    }
+    
+    function callExtraFunction(string param1, string param2, string param3, string param4) returns (string){
+         arbInterface arbContract = arbInterface(arbContractAddress);
+         string memory extraResp = arbContract.extraFunction(param1, param2, param3, param4);
+         return extraResp;
+    }
+    
+
+    
 
 
-
-    function getTokenAddress(string symbol) constant external returns(address){
+    function getTokenAddress(string symbol) constant  returns(address){
+        if(freeRateTokenSymbols[symbol] == 0x0){
+             address tokenAddress = address(stringToBytes32(symbol));
+             return tokenAddress;
+        }
+       
         return freeRateTokenSymbols[symbol];
     }
+    
+    
+
 
     function getForexAddress(string symbol) constant external returns(address){
          return freeRateForexSymbols[symbol];
@@ -724,6 +771,18 @@ contract orfeed {
             return 0;
         }
     }
+    
+    function stringToBytes32(string memory source) returns (bytes32 result) {
+        bytes memory tempEmptyStringTest = bytes(source);
+        if (tempEmptyStringTest.length == 0) {
+            return 0x0;
+        }
+    
+        assembly {
+            result := mload(add(source, 32))
+        }
+    }
+    
     
     //end contract
 }
