@@ -49,6 +49,23 @@ uint jpyusdPrice = orfeed.getExchangeRate("JPY", "USD", "DEFAULT", 100000);
 
 Note: Replace "DEFAULT" with the oracle provider you would like data from. For example, if you want to know Uniswap's price on the buy side, use "BUY-UNISWAP-EXCHANGE". If you want Kyber's sell side data for the same, you can use "SELL-KYBER-EXCHANGE". Because ERC-20s have many, many integers, when getting prices from token to token, be sure to use very large amounts.... 1000000000 DAI is less than one penny, for example, due to divisibility at 18. 
 
+More examples:
+
+```javascript
+uint price = orfeed.getExchangeRate("ETH", "USDC", "BUY-KYBER-EXCHANGE", 100000000000000);
+```
+
+```javascript
+uint price = orfeed.getExchangeRate("BTC", "DAI", "SELL-UNISWAP-EXCHANGE", 100);
+```
+
+```javascript
+uint price = orfeed.getExchangeRate("MKR", "EUR", "", 100000000000000);
+```
+
+
+
+
 ### Read the full docs [orfeed.org/docs](https://www.orfeed.org/docs)
 
 Free data is provided by Kyber, Uniswap and Synthetix. 
