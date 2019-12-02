@@ -304,7 +304,8 @@ contract PremiumFeedPrices{
 
     //Below does not work.... need to work out bancor's pathing system for various tokens and how one would use it here...
      function bancorPrice(address token1, address token2, string side, uint256 amount) constant returns (uint256){
-        IBancorNetwork bancorNetwork = IBancorNetwork(0x0e936B11c2e7b601055e58c7E32417187aF4de4a);
+        // updated with the address of the MyBancorNetwork contract deployed under the circumstances of old versions of `getReturnByPath`
+        IBancorNetwork bancorNetwork = IBancorNetwork(0x7A9b986420D734bB3Fe98439a2D945aB97757595);
         IBancorConverterRegistry bancorConverterRegistry = IBancorConverterRegistry(0xc1933ed6a18c175A7C2058807F25e55461Cd92F5);
         uint256 price;
         IERC20Token[] memory path = new IERC20Token[](5);
