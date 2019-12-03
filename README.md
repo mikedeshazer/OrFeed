@@ -95,11 +95,11 @@ the OrFeed demo already deployed to testnets
 
 ### Works Provided As Inspiration Of Thought Through Development:
 
-[Smart Contract Oracle for Approximating Real-World, Real Number Values](http://drops.dagstuhl.de/opus/volltexte/2019/11396/pdf/OASIcs-Tokenomics-2019-6.pdf)
+[William George, Clément Lesaege: Smart Contract Oracle for Approximating Real-World, Real Number Values](http://drops.dagstuhl.de/opus/volltexte/2019/11396/pdf/OASIcs-Tokenomics-2019-6.pdf)
 
 [Aragon Network Whitepaper](https://github.com/aragon/whitepaper)
 
-
+[Vitalik Buterin: Minimal Anti-Collusion Infrastructure ](https://ethresear.ch/t/minimal-anti-collusion-infrastructure/5413)
 
 
 
