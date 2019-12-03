@@ -92,3 +92,14 @@ the OrFeed demo already deployed to testnets
 **Kovan**: [0x31a29958301c407d4b4bf0d53dac1f2d154d9d8d](https://kovan.etherscan.io/address/0x31a29958301c407d4b4bf0d53dac1f2d154d9d8d)  
 **Rinkeby**: [0x97875355ef55ae35613029df8b1c8cf8f89c9066](https://rinkeby.etherscan.io/address/0x97875355ef55ae35613029df8b1c8cf8f89c9066) 
 
+
+### Works Provided As Inspiration Of Thought Through Development:
+
+[Smart Contract Oracle for Approximating Real-World, Real Number Values](http://drops.dagstuhl.de/opus/volltexte/2019/11396/pdf/OASIcs-Tokenomics-2019-6.pdf)
+
+[Aragon Network Whitepaper](https://github.com/aragon/whitepaper)
+
+
+
+
+
