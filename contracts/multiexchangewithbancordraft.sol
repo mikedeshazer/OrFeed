@@ -309,6 +309,7 @@ contract PremiumFeedPrices{
         IBancorConverterRegistry bancorConverterRegistry = IBancorConverterRegistry(0xc1933ed6a18c175A7C2058807F25e55461Cd92F5);
         uint256 price;
         IERC20Token[] memory path = new IERC20Token[](5);
+        address bnt = 0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c;
         address token1ToBancor = token1;
         address token2ToBancor = token2;
         // in case of Ether (or Weth), we need to provide the address of the EtherToken to the BancorNetwork
@@ -319,17 +320,42 @@ contract PremiumFeedPrices{
         if (token2 == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE || token2 == 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2){
             token2ToBancor = 0xc0829421C1d260BD3cB3E0F06cfE2D52db2cE315;
         }
-        if(equal(side, "BUY")){
+        // If token1 is BNT
+        if (token1 == bnt) {
+            if(equal(side, "BUY")){
+                path[0] = IERC20Token(bnt);
+                path[1] = IERC20Token(bancorConverterRegistry.latestConverterAddress(token2ToBancor));
+                path[2] = IERC20Token(token2ToBancor);
+                (price, ) = bancorNetwork.getReturnByPath(path, amount);
+            } else {
+                path[0] = IERC20Token(token2ToBancor);
+                path[1] = IERC20Token(bancorConverterRegistry.latestConverterAddress(bnt));
+                path[2] = IERC20Token(bnt);
+                (price, ) = bancorNetwork.getReturnByPath(path, amount);
+            }
+        } else if (token2 == bnt) {
+            if(equal(side, "BUY")){
+                path[0] = IERC20Token(token1ToBancor);
+                path[1] = IERC20Token(bancorConverterRegistry.latestConverterAddress(bnt));
+                path[2] = IERC20Token(bnt);
+                (price, ) = bancorNetwork.getReturnByPath(path, amount);
+            } else {
+                path[0] = IERC20Token(bnt);
+                path[1] = IERC20Token(bancorConverterRegistry.latestConverterAddress(token1ToBancor));
+                path[2] = IERC20Token(token1ToBancor);
+                (price, ) = bancorNetwork.getReturnByPath(path, amount);
+            }
+        } else if(equal(side, "BUY")){
             path[0] = IERC20Token(token1ToBancor);
-            path[1] = IERC20Token(bancorConverterRegistry.latestConverterAddress(0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c));
-            path[2] = IERC20Token(0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c);
+            path[1] = IERC20Token(bancorConverterRegistry.latestConverterAddress(bnt));
+            path[2] = IERC20Token(bnt);
             path[3] = IERC20Token(bancorConverterRegistry.latestConverterAddress(token2ToBancor));
             path[4] = IERC20Token(token2ToBancor);
             (price, ) = bancorNetwork.getReturnByPath(path, amount);
         } else {
             path[0] = IERC20Token(token2ToBancor);
-            path[1] = IERC20Token(bancorConverterRegistry.latestConverterAddress(0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c));
-            path[2] = IERC20Token(0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c);
+            path[1] = IERC20Token(bancorConverterRegistry.latestConverterAddress(bnt));
+            path[2] = IERC20Token(bnt);
             path[3] = IERC20Token(bancorConverterRegistry.latestConverterAddress(token1ToBancor));
             path[4] = IERC20Token(token1ToBancor);
             (price, ) = bancorNetwork.getReturnByPath(path, amount);
