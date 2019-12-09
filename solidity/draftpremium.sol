@@ -1,6 +1,6 @@
 //Example: https://etherscan.io/address/0x9b80013caff912149525c1bc1d264939a1a573a7#readContract
 
-pragma solidity ^0.4.26;
+pragma solidity >=0.4.26;
 contract UniswapExchangeInterface {
     // Address of ERC20 token sold on this exchange
     function tokenAddress() external view returns (address token);
