@@ -77,7 +77,65 @@ Stocks and ETFs are provided by a centralized oracle and we are currently workin
 You can run you own oracle by deploying a Node app with the example code in /examples/oracleNodeExampleApp (contract code is in contacts/stockETFPriceContract.sol) and provide as many stocks at the update frequency of your choice. We recommend buying GAS token (we are in no way affiliated and not shilling) to lower your Ethereum fee risk (and so you can pay a reasonable gas price f you plan to run an oracle for a long period of time). Otherwise, you will be exposed to gas fee price risk, or your prices might not update at the frequency you would like.
 
 
+## Source and Asset Examples (Currently Live)
 
+
+| Asset       | Example Provider (Venue)           | Type  |
+| ------------- |:-------------:| -----:|
+| ETH      | DEFAULT | Cryptocurrency |
+| BTC      | DEFAULT | Cryptocurrency |
+| DAI      | BUY-KYBER-EXCHANGE      |   Token |
+| USDC | SELL-UNISWAP-EXCHANGE    |    Token |
+| MKR      | DEFAULT | Token |
+| KNC      | DEFAULT      |   Token |
+| ZRX | DEFAULT    |    Token |
+| TUSD | DEFAULT    |    Token |
+| SNX | DEFAULT    |    Token |
+| CUSDC | DEFAULT    |    Token |
+| BAT | DEFAULT    |    Token |
+| OMG | DEFAULT    |    Token |
+| SAI | DEFAULT    |    Token |
+| JPY | DEFAULT    |    Forex |
+| EUR | DEFAULT    |    Forex |
+| CHF | DEFAULT    |    Forex |
+| USD | DEFAULT    |    Forex |
+| GBP | DEFAULT    |    Forex |
+| AAPL | PROVIDER1    |    Equity |
+| MSFT | PROVIDER1    |    Equity |
+| GOOGL | PROVIDER1    |    Equity |
+| NFLX | PROVIDER1    |    Equity |
+| BRK.A | PROVIDER1    |    Equity |
+| FB | PROVIDER1    |    Equity |
+| BABA | PROVIDER1    |    Equity |
+| V | PROVIDER1    |    Equity |
+| JNJ | PROVIDER1    |    Equity |
+| TSLA | PROVIDER1    |    Equity |
+| JPM | PROVIDER1    |    Equity |
+| DIS | PROVIDER1    |    Equity |
+| SPX | PROVIDER1    |    ETF |
+| VOO | PROVIDER1    |    ETF |
+| QQQ | PROVIDER1    |    ETF |
+| GLD | PROVIDER1    |    ETF |
+| VXX | PROVIDER1    |    ETF |
+
+
+
+contracts/pegTokenExample.sol contains a template code and live contract reference for a token using OrFeed data that is pegged to the value of an off-chain asset (Alibaba Stock in the example). We are looking forward to less primitive examples that leverage DAOs, advanced collateralization techniques, etc.
+
+
+## Testing
+
+To test that the contracts are working well in the respective networks, please do the following
+
+1. Install `node.js` in your system/environment, if it is not installed already.
+2. Install truffle globall, once `node.js` is done installing i.e. `yarn global add truffle` and then install the project dev-dependencies too i.e. `yarn install`
+3. Create a `.secrets` file in the root folder of this project, and paste into it the `mnemonic phrase` of the the wallet you want to use for testing in the respective network i.e. mainnet, kovan or rinkeby.
+4. Enter the infura `project-ID` for the infura project you are using to test in either of the networks, in the file `truffle-config.js`.
+5. Make sure the wallet has enough eth for testing. Atleast `$5` should be enough for both contract deployment and testing.
+6. Finally run either of the following commands to test the contracts, depending on the network,
+  - `truffle test --mainnet` for the main ethereum network, be careful though as this will cost you real money.
+  - `truffle test --kovan` for the kovan test network.
+  - `truffle test --rinkeby` for the rinkeby test network.
 
 ### Read the full docs [orfeed.org/docs](https://www.orfeed.org/docs)
 

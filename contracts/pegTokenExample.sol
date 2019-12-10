@@ -1,4 +1,5 @@
-//Example: https://etherscan.io/address/0x9b80013caff912149525c1bc1d264939a1a573a7#readContract
+//Example: https://etherscan.io/address/0xb89a981a6bb48bbb723c524463d75ab166eca035#code
+//Example is a PegToken tied to the value (mints token at the rate of ) Alibaba stock, using an oracle provider on OrFeed for the reference price
 
 pragma solidity >=0.4.26;
 contract UniswapExchangeInterface {

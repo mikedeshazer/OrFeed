@@ -2,7 +2,7 @@
 //dapp: https://etherscan.io/dapp/0x1603557c3f7197df2ecded659ad04fa72b1e1114#readContract
 //
 
-
+pragma solidity >=0.4.26;
 
 contract UniswapExchangeInterface {
     // Address of ERC20 token sold on this exchange
