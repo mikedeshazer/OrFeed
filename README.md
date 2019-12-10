@@ -86,7 +86,7 @@ You can run you own oracle by deploying a Node app with the example code in /exa
 | BTC      | DEFAULT | Cryptocurrency |
 | DAI      | BUY-KYBER-EXCHANGE      |   Token |
 | USDC | SELL-UNISWAP-EXCHANGE    |    Token |
-| MKR      | DEFAULT | Cryptocurrency |
+| MKR      | DEFAULT | Token |
 | KNC      | DEFAULT      |   Token |
 | ZRX | DEFAULT    |    Token |
 | TUSD | DEFAULT    |    Token |
@@ -99,6 +99,7 @@ You can run you own oracle by deploying a Node app with the example code in /exa
 | EUR | DEFAULT    |    Forex |
 | CHF | DEFAULT    |    Forex |
 | USD | DEFAULT    |    Forex |
+| GBP | DEFAULT    |    Forex |
 | AAPL | PROVIDER1    |    Equity |
 | MSFT | PROVIDER1    |    Equity |
 | GOOGL | PROVIDER1    |    Equity |
