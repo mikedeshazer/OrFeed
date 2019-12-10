@@ -46,7 +46,7 @@ uint jpyusdPrice = orfeed.getExchangeRate("JPY", "USD", "DEFAULT", 100000);
 // returns 920 (or $920.00)
 ```
 
-注意:用您希望从中获取数据的oracle提供程序替换“DEFAULT”。例如，如果你想知道购买方的Uniswap价格，使用“BUY-UNISWAP-EXCHANGE”。如果你希望Kyber销售相同的辅助数据，你可以使用“SELL-Kyber-EXchange”。 因为ERC-20s有很多整数，所以在从一个令牌到另一个令牌获取价格时，一定要使用非常大的数量....举例来说，1000000000 DAI不到一便士，因为18岁时可以分开。
+注意:用您希望从中获取数据的oracle提供程序替换“DEFAULT”。例如，如果你想知道购买方的Uniswap价格，使用“BUY-UNISWAP-EXCHANGE”。如果你希望Kyber销售相同的辅助数据，你可以使用“SELL-Kyber-EXchange”。 因为ERC-20s有很多整数，所以在从一个令牌到另一个令牌获取价格时，一定要使用非常大的数量....举例来说，1000000000 DAI不到一便士，因为可以被18整除。
 
 更多示例:
 
