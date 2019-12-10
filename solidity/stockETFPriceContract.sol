@@ -1,7 +1,7 @@
 //example contract: 0x7556fccfb056ada7aa10c6ed88b5def40d66c591
 
 
-pragma solidity ^0.4.26;
+pragma solidity >=0.4.26;
 pragma experimental ABIEncoderV2;
 
 interface ERC20 {
@@ -16,14 +16,13 @@ interface ERC20 {
 }
 
 contract OffChainOrFeedPriceFeed{
-    
-    address owner; 
+    address owner;
     mapping(string => uint256) quotes;
     mapping(string => uint256) quoteTimes;
-    
+
     constructor() public {
          owner = msg.sender;
-     }
+    }
      
     modifier onlyOwner() {
         if (msg.sender != owner) {
@@ -38,7 +37,6 @@ contract OffChainOrFeedPriceFeed{
         return true;
     }
     
-    
     function getLastPrice (string symbol) constant returns (uint256){
         return quotes[symbol];
     }
@@ -52,15 +50,14 @@ contract OffChainOrFeedPriceFeed{
     function updatePrices(string[] symbols, uint256[] prices) public onlyOwner  returns (bool){
         uint256 arrayLength = symbols.length;
         
-        for (uint i=0; i<arrayLength; i++) {
+        for (uint i=0; i < arrayLength; i++) {
             string memory thisQuote = symbols[i];
             quotes[thisQuote] = prices[i];
             quoteTimes[thisQuote] = block.timestamp;
         }
         return true;
     }
-    
-    
+
     //if donations were sent to operator to keep feed going
     function withdrawETHAndTokens(address tokenAddress) onlyOwner{
 
