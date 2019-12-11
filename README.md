@@ -1,8 +1,8 @@
 # OrFeed Smart Contract
 
-## Decentralized Price Feed for Crypto, Forex, Stocks, ETFs and more.
+## Decentralized Price Feed and Website Data Provider for Smart Contracts That Need Finance, Sports and Other Miscellaneous Information, Both On- and Off-Chain.
 
-A highly reliable oracle for Ethereum-based DeFi apps that need financial data from the outside world.
+A highly reliable oracle aggregator for Ethereum-based DeFi apps that need financial data from the outside world.
 
 ![OrFeed Logo](https://www.orfeed.org/images/orfeed.png)
 
@@ -87,10 +87,13 @@ Now you are ready!
 string status = orfeed.requestAsyncEvent("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD", "CHAINLINK");
 ```
 
+After 1 to 3 blocks, Chainlink will send the website data to OrFeed and you can access that data without making a transaction (synchronously). Additionally, you can access data from websites that others have already paid for by inputting their the URL.
+
 ```javascript
 string result = orfeed.getAsyncEventResult("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD", "CHAINLINK", "");
 ```
 
+Similar integrations with Augur, Provable and Band Protocol are coming soon.
 
 
 Once your transaction has been confirmed on the blockchain, Chainlink then waits 1-3 blocks and sends the response from their smart contract. You can retrieve the result like this:
