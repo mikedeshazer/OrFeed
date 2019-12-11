@@ -1,6 +1,6 @@
-# OrFeed Smart Contract
+# OrFeed
 
-## Decentralized Price Feed and Website Data Provider for Smart Contracts That Need Finance, Sports and Other Miscellaneous Information, Both On- and Off-Chain.
+## Decentralized Price Feed and Website Data Provider for Smart Contracts That Need Finance, Sports and Other Miscellaneous Information That Resides On- and/or Off-Chain.
 
 A highly reliable oracle aggregator for Ethereum-based DeFi apps that need financial data from the outside world.
 
