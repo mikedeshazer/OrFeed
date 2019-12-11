@@ -72,7 +72,7 @@ uint price = orfeed.getExchangeRate("AAPL", "USD", "PROVIDER1", 1);
 ```
 
 
-## Getting Data From [Chainlink](https://chain.link/) via OrFeed
+## [Getting Data From [Chainlink](https://chain.link/) via OrFeed](#chainlink)
 
 You can retrieve data from a website (off-chain) asynchronously via the Chainlink integration. To use this feature, please follow these steps:
 
