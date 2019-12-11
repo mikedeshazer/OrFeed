@@ -1,8 +1,8 @@
-# OrFeed Smart Contract
+# OrFeed
 
-## Decentralized Price Feed for Crypto, Forex, Stocks, ETFs and more.
+## Decentralized Price Feed and Website Data Provider for Smart Contracts That Need Finance, Sports and Other Miscellaneous Information That Resides On- and/or Off-Chain.
 
-A highly reliable oracle for Ethereum-based DeFi apps that need financial data from the outside world.
+A highly reliable oracle aggregator for Ethereum-based DeFi apps that need financial data from the outside world.
 
 ![OrFeed Logo](https://www.orfeed.org/images/orfeed.png)
 
@@ -72,11 +72,11 @@ uint price = orfeed.getExchangeRate("AAPL", "USD", "PROVIDER1", 1);
 ```
 
 
-## Getting Data From Chainlink via OrFeed
+## Getting Data From [Chainlink](https://chain.link/) via OrFeed
 
-You can retrieve data from a website asynchronously via the Chainlink integration. To use this feature, please follow these steps:
+You can retrieve data from a website (off-chain) asynchronously via the Chainlink integration. To use this feature, please follow these steps:
 
-1. Make sure you have LINK coins in your wallet that you are making the request from. If you don't have link, you can visit Uniswap.io or Kyberswap to convert Ether to LINK. You will need .1 LINK per request. 
+1. Make sure you have [LINK](https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca) coins in your wallet that you are making the request from. If you don't have LINK, you can visit Uniswap.io or Kyberswap to convert Ether to LINK. You will need .1 LINK per request. 
 
 2. Approve the OrFeed Chainlink proxy contract to use your LINK coins to pay the Chainlink fees. Visit [https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca#writeContract](https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca#writeContract) and use the "Approve" function. In the "_spender" field, paste this address: 0xa0f806d435f6acaf57c60d034e57666d21294c47. In the "_amount" field, input: 100000000000000000000000000. Additionally, at the top of the page, right above the approve function, make sure to click Connect to Web3.
 
@@ -87,10 +87,13 @@ Now you are ready!
 string status = orfeed.requestAsyncEvent("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD", "CHAINLINK");
 ```
 
+After 1 to 3 blocks, Chainlink will send the website data to OrFeed and you can access that data without making a transaction (synchronously). Additionally, you can access data from websites that others have already paid for by inputting their the URL.
+
 ```javascript
 string result = orfeed.getAsyncEventResult("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD", "CHAINLINK", "");
 ```
 
+Similar integrations with Augur, Provable and Band Protocol are coming soon.
 
 
 Once your transaction has been confirmed on the blockchain, Chainlink then waits 1-3 blocks and sends the response from their smart contract. You can retrieve the result like this:
