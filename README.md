@@ -72,7 +72,33 @@ uint price = orfeed.getExchangeRate("AAPL", "USD", "PROVIDER1", 1);
 ```
 
 
-Stocks and ETFs are provided by a centralized oracle and we are currently working on a register in which requests can go to any provider (centralized or decentralized)... or of course, aggregated with the removal of outliers (recommended). The current contract supports the top 10 equities by market cap (AAPL, AMZN, JNJ etc) and the top 5 ETFs (SPY, etc)
+## Getting Data From Chainlink via OrFeed
+
+You can retrieve data from a website asynchronously via the Chainlink integration. To use this feature, please follow these steps:
+
+1. Make sure you have LINK coins in your wallet that you are making the request from. If you don't have link, you can visit Uniswap.io or Kyberswap to convert Ether to LINK. You will need .1 LINK per request. 
+
+2. Approve the OrFeed Chainlink proxy contract to use your LINK coins to pay the Chainlink fees. Visit [https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca#writeContract](https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca#writeContract) and use the "Approve" function. In the "_spender" field, paste this address: 0xa0f806d435f6acaf57c60d034e57666d21294c47. In the "_amount" field, input: 100000000000000000000000000. Additionally, at the top of the page, right above the approve function, make sure to click Connect to Web3.
+
+
+Now you are ready!
+
+```javascript
+string status = orfeed.requestAsyncEvent("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD", "CHAINLINK");
+```
+
+```javascript
+string result = orfeed.getAsyncEventResult("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD", "CHAINLINK", "");
+```
+
+
+
+Once your transaction has been confirmed on the blockchain, Chainlink then waits 1-3 blocks and sends the response from their smart contract. You can retrieve the result like this:
+
+
+### Note:
+
+Stocks and ETFs are provided by a centralized oracle and we are currently working on a registry in which requests can go to any provider (centralized or decentralized)... or of course, aggregated with the removal of outliers (recommended). The current contract supports the top 10 equities by market cap (AAPL, AMZN, JNJ etc) and the top 5 ETFs (SPY, etc)
 
 You can run you own oracle by deploying a Node app with the example code in /examples/oracleNodeExampleApp (contract code is in contacts/stockETFPriceContract.sol) and provide as many stocks at the update frequency of your choice. We recommend buying GAS token (we are in no way affiliated and not shilling) to lower your Ethereum fee risk (and so you can pay a reasonable gas price f you plan to run an oracle for a long period of time). Otherwise, you will be exposed to gas fee price risk, or your prices might not update at the frequency you would like.
 
