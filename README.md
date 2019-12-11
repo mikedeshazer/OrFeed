@@ -72,11 +72,11 @@ uint price = orfeed.getExchangeRate("AAPL", "USD", "PROVIDER1", 1);
 ```
 
 
-## Getting Data From Chainlink via OrFeed
+## Getting Data From [Chainlink](https://chain.link/) via OrFeed
 
-You can retrieve data from a website asynchronously via the Chainlink integration. To use this feature, please follow these steps:
+You can retrieve data from a website (off-chain) asynchronously via the Chainlink integration. To use this feature, please follow these steps:
 
-1. Make sure you have LINK coins in your wallet that you are making the request from. If you don't have link, you can visit Uniswap.io or Kyberswap to convert Ether to LINK. You will need .1 LINK per request. 
+1. Make sure you have [LINK](https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca) coins in your wallet that you are making the request from. If you don't have LINK, you can visit Uniswap.io or Kyberswap to convert Ether to LINK. You will need .1 LINK per request. 
 
 2. Approve the OrFeed Chainlink proxy contract to use your LINK coins to pay the Chainlink fees. Visit [https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca#writeContract](https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca#writeContract) and use the "Approve" function. In the "_spender" field, paste this address: 0xa0f806d435f6acaf57c60d034e57666d21294c47. In the "_amount" field, input: 100000000000000000000000000. Additionally, at the top of the page, right above the approve function, make sure to click Connect to Web3.
 
