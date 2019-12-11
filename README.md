@@ -29,6 +29,8 @@ interface OrFeedInterface {
   function getTokenAddress ( string symbol ) external view returns ( address );
   function getSynthBytes32 ( string symbol ) external view returns ( bytes32 );
   function getForexAddress ( string symbol ) external view returns ( address );
+  function requestAsyncEvent(string eventName, string source)  external returns(string);
+  function getAsyncEventResult(string eventName, string source, string referenceId) external view returns (string);
 }
 ```
 
