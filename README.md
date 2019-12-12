@@ -98,7 +98,7 @@ string result = orfeed.getAsyncEventResult("https://min-api.cryptocompare.com/da
 Similar integrations with Augur, Provable and Band Protocol are coming soon.
 
 
-Once your transaction has been confirmed on the blockchain, Chainlink then waits 1-3 blocks and sends the response from their smart contract. You can retrieve the result like this:
+Once your transaction has been confirmed on the blockchain, Chainlink then waits 1-3 blocks and sends the response from their smart contract.
 
 
 ### Note:
