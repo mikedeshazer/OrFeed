@@ -1,7 +1,8 @@
 
 
-// Currently deployed to: https://etherscan.io/address/0xa0f806d435f6acaf57c60d034e57666d21294c47
-//Be sure to approve your LINK tokens (https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca#writeContract) to this contract in order to make chainlink requests.  Approve 1000000000000000000000000, so the contract can use your link tokens without you having to reapprove many times.
+// Currently deployed to: https://etherscan.io/address/0xbd3a7ed837a30c6f36dbc4d2ff457f27e5a00e49
+//Be sure to approve your LINK tokens (https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca#writeContract) to this contract in order to make chainlink requests.  Approve 1000000000000000000000000, so the contract can use your link tokens without you having to reapprove many times. Optionally, you can use PRFT tokens in the same way: https://etherscan.io/token/0xc5cea8292e514405967d958c2325106f2f48da77#writeContract
+
 
 
 pragma solidity >=0.4.21 <0.6.0;
@@ -1015,8 +1016,16 @@ contract ChainlinkProxy is ChainlinkClient {
       dataSources[eventName] = source;
       if(equal(source, "CHAINLINK")){
         ERC20 chainToken = ERC20(0x514910771af9ca656af840dff83e8264ecf986ca);
+        ERC20 proofToken = ERC20(0xc5cea8292e514405967d958c2325106f2f48da77);
         
-        chainToken.transferFrom(tx.origin, this, 100000000000000000 );
+        if(proofToken.allowance(tx.origin, this) >= 10000000000000000 && proofToken.balanceOf(tx.origin) >= 10000000000000000){
+            proofToken.transferFrom(tx.origin, this, 10000000000000000);
+            Notice("Used PRFT tokens to pay LINK fees at discount");
+        }
+        else{
+            require(chainToken.transferFrom(tx.origin, this, 100000000000000000 ), "Not enough LINK tokens to make this transaction. You can also try with PRFT tokens. See docs");
+        }
+        
         
         requestData(0x89f70fA9F439dbd0A1BC22a09BEFc56adA04d9b4, 0x3031336632353936333631333431316261646332656365336139326430383030, 100000000000000000, eventName, "NONE");
         
@@ -1070,6 +1079,12 @@ contract ChainlinkProxy is ChainlinkClient {
   {
     LinkTokenInterface link = LinkTokenInterface(chainlinkTokenAddress());
     require(link.transfer(tx.origin, link.balanceOf(address(this))), "Unable to transfer");
+  }
+  
+  function withdrawPRFT() public onlyOwner{
+      
+       ERC20 proofToken = ERC20(0xc5cea8292e514405967d958c2325106f2f48da77);
+       proofToken.transfer(msg.sender, proofToken.balanceOf(this));
   }
   
   modifier onlyOwner() {
@@ -1168,5 +1183,8 @@ contract ChainlinkProxy is ChainlinkClient {
     }
     return string(bytesStringTrimmed);
 }
+
+event Notice(string noticeString);
+
     
 }

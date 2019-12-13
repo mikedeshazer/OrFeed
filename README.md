@@ -82,6 +82,10 @@ You can retrieve data from a website (off-chain) asynchronously via the Chainlin
 
 2. Approve the OrFeed Chainlink proxy contract to use your LINK coins to pay the Chainlink fees. Visit [https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca#writeContract](https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca#writeContract) and use the "Approve" function. In the "_spender" field, paste this address: 0xa0f806d435f6acaf57c60d034e57666d21294c47. In the "_amount" field, input: 100000000000000000000000000. Additionally, at the top of the page, right above the approve function, make sure to click Connect to Web3.
 
+Optionally, for subsidized LINK fees, you can use PRFT token to pay for fees (.01 PRFT per request). Visit [https://etherscan.io/token/0xc5cea8292e514405967d958c2325106f2f48da77#writeContract](https://etherscan.io/token/0xc5cea8292e514405967d958c2325106f2f48da77#writeContract) and use the "Approve" function in the same way you would do for LINK described above.
+
+
+
 
 Now you are ready!
 
