@@ -49,27 +49,40 @@ contract UniswapExchangeInterface {
 }
 
 interface ERC20 {
-    function totalSupply() public view returns (uint supply);
-    function balanceOf(address _owner) public view returns (uint balance);
-    function transfer(address _to, uint _value) public returns (bool success);
-    function transferFrom(address _from, address _to, uint _value) public returns (bool success);
-    function approve(address _spender, uint _value) public returns (bool success);
-    function allowance(address _owner, address _spender) public view returns (uint remaining);
-    function decimals() public view returns(uint digits);
+    function totalSupply() external view returns (uint supply);
+    function balanceOf(address _owner) external view returns (uint balance);
+    function transfer(address _to, uint _value) external returns (bool success);
+    function transferFrom(address _from, address _to, uint _value) external returns (bool success);
+    function approve(address _spender, uint _value) external returns (bool success);
+    function allowance(address _owner, address _spender) external view returns (uint remaining);
+    function decimals() external view returns(uint digits);
     event Approval(address indexed _owner, address indexed _spender, uint _value);
 }
 
+contract IERC20Token {
+    function name() public view returns (string memory) {this;}
+    function symbol() public view returns (string memory) {this;}
+    function decimals() public view returns (uint8) {this;}
+    function totalSupply() public view returns (uint256) {this;}
+    function balanceOf(address _owner) public view returns (uint256) {_owner; this;}
+    function allowance(address _owner, address _spender) public view returns (uint256) {_owner; _spender; this;}
+
+    function transfer(address _to, uint256 _value) public returns (bool success);
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);
+    function approve(address _spender, uint256 _value) public returns (bool success);
+}
+
 interface OrFeedInterface {
-  function getExchangeRate ( string fromSymbol, string toSymbol, string venue, uint256 amount ) external view returns ( uint256 );
+  function getExchangeRate ( string calldata fromSymbol, string calldata toSymbol, string calldata venue, uint256 amount ) external view returns ( uint256 );
   function getTokenDecimalCount ( address tokenAddress ) external view returns ( uint256 );
-  function getTokenAddress ( string symbol ) external view returns ( address );
-  function getSynthBytes32 ( string symbol ) external view returns ( bytes32 );
-  function getForexAddress ( string symbol ) external view returns ( address );
+  function getTokenAddress ( string calldata symbol ) external view returns ( address );
+  function getSynthBytes32 ( string calldata symbol ) external view returns ( bytes32 );
+  function getForexAddress ( string calldata symbol ) external view returns ( address );
 }
 
 interface StockETFPrice{
-    function getLastPrice (string symbol) constant returns (uint256);
-    function getTimeUpdated (string symbol) constant returns (uint256);
+    function getLastPrice (string calldata symbol) external returns (uint256);
+    function getTimeUpdated (string calldata symbol) external returns (uint256);
 }
 
 interface Kyber {
@@ -78,27 +91,39 @@ interface Kyber {
     function getInputAmount(ERC20 from, ERC20 to, uint256 amount) external view returns(uint256);
 }
 
+interface IContractRegistry {
+    function addressOf(bytes32 _contractName) external view returns (address);
+}
+
+interface IBancorNetwork {
+    function getReturnByPath(IERC20Token[] calldata _path, uint256 _amount) external view returns (uint256, uint256);
+}
+
+interface IBancorNetworkPathFinder {
+    function generatePath(address _sourceToken, address _targetToken) external view returns (address[] memory);
+}
+
 
 library SafeMath {
-    function mul(uint256 a, uint256 b) internal constant returns(uint256) {
+    function mul(uint256 a, uint256 b) internal view returns(uint256) {
         uint256 c = a * b;
         assert(a == 0 || c / a == b);
         return c;
     }
 
-    function div(uint256 a, uint256 b) internal constant returns(uint256) {
+    function div(uint256 a, uint256 b) internal view returns(uint256) {
         assert(b > 0); // Solidity automatically throws when dividing by 0
         uint256 c = a / b;
         assert(a == b * c + a % b); // There is no case in which this doesn't hold
         return c;
     }
 
-    function sub(uint256 a, uint256 b) internal constant returns(uint256) {
+    function sub(uint256 a, uint256 b) internal view returns(uint256) {
         assert(b <= a);
         return a - b;
     }
 
-    function add(uint256 a, uint256 b) internal constant returns(uint256) {
+    function add(uint256 a, uint256 b) internal view returns(uint256) {
         uint256 c = a + b;
         assert(c >= a);
         return c;
@@ -121,58 +146,51 @@ contract PremiumFeedPrices{
          
         
          //DAI
-         uniswapAddresses[0x6b175474e89094c44da98b954eedeac495271d0f] =  0x2a1530c4c41db0b0b2bb646cb5eb1a67b7158667;
+         uniswapAddresses[0x6B175474E89094C44Da98b954EedeAC495271d0F] =  0x2a1530C4C41db0B0b2bB646CB5Eb1A67b7158667;
          
          //SAI
-         uniswapAddresses[0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359] = 0x09cabec1ead1c0ba254b09efb3ee13841712be14;
+         uniswapAddresses[0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359] = 0x09cabEC1eAd1c0Ba254B09efb3EE13841712bE14;
          
          //usdc
-         uniswapAddresses[0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48] = 0x97dec872013f6b5fb443861090ad931542878126;
+         uniswapAddresses[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48] = 0x97deC872013f6B5fB443861090ad931542878126;
          
          //MKR
          
-         uniswapAddresses[0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2] = 0x2c4bd064b998838076fa341a83d007fc2fa50957;
+         uniswapAddresses[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2] = 0x2C4Bd064b998838076fa341A83d007FC2FA50957;
          
          //BAT
-         uniswapAddresses[0x0d8775f648430679a709e98d2b0cb6250d2887ef] = 0x2e642b8d59b45a1d8c5aef716a84ff44ea665914;
+         uniswapAddresses[0x0D8775F648430679A709E98d2b0Cb6250d2887EF] = 0x0D8775F648430679A709E98d2b0Cb6250d2887EF;
          
          //LINK
-         uniswapAddresses[0x514910771af9ca656af840dff83e8264ecf986ca] = 0xf173214c720f58e03e194085b1db28b50acdeead;
+         uniswapAddresses[0x514910771AF9Ca656af840dff83E8264EcF986CA] = 0xF173214C720f58E03e194085B1DB28B50aCDeeaD;
          
          //ZRX
-         uniswapAddresses[0xe41d2489571d322189246dafa5ebde1f4699f498] = 0xae76c84c9262cdb9abc0c2c8888e62db8e22a0bf;
-     
+         uniswapAddresses[0xF173214C720f58E03e194085B1DB28B50aCDeeaD] = 0xF173214C720f58E03e194085B1DB28B50aCDeeaD;
+
           //BTC
-         uniswapAddresses[0x2260fac5e5542a773aa44fbcfedf7c193bc2c599] = 0x4d2f5cfba55ae412221182d8475bc85799a5644b;
-         
+         uniswapAddresses[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599] = 0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599;
+
           //KNC
-         uniswapAddresses[0xdd974d5c2e2928dea5f71b9825b8b646686bd200] =0x49c4f9bc14884f6210f28342ced592a633801a8b;
-         
-         
-         
-         
-         
-         
-         
-        
-         tokenAddress['DAI'] = 0x6b175474e89094c44da98b954eedeac495271d0f;
-         tokenAddress['SAI'] = 0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359;
-        tokenAddress['USDC'] = 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48;
-        tokenAddress['MKR'] = 0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2;
-        tokenAddress['LINK'] = 0x514910771af9ca656af840dff83e8264ecf986ca;
-        tokenAddress['BAT'] = 0x0d8775f648430679a709e98d2b0cb6250d2887ef;
-        tokenAddress['WBTC'] = 0x2260fac5e5542a773aa44fbcfedf7c193bc2c599;
-        tokenAddress['BTC'] = 0x2260fac5e5542a773aa44fbcfedf7c193bc2c599;
+         uniswapAddresses[0xdd974D5C2e2928deA5F71b9825b8b646686BD200] = 0xdd974D5C2e2928deA5F71b9825b8b646686BD200;
+
+        tokenAddress['DAI'] = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
+        tokenAddress['SAI'] = 0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359;
+        tokenAddress['USDC'] = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
+        tokenAddress['MKR'] = 0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2;
+        tokenAddress['LINK'] = 0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2;
+        tokenAddress['BAT'] = 0x0D8775F648430679A709E98d2b0Cb6250d2887EF;
+        tokenAddress['WBTC'] = 0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599;
+        tokenAddress['BTC'] = 0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599;
         tokenAddress['OMG'] = 0xd26114cd6EE289AccF82350c8d8487fedB8A0C07;
-        tokenAddress['ZRX'] = 0xe41d2489571d322189246dafa5ebde1f4699f498;
+        tokenAddress['ZRX'] = 0xE41d2489571d322189246DaFA5ebDe1F4699F498;
         tokenAddress['TUSD'] = 0x0000000000085d4780B73119b644AE5ecd22b376;
         tokenAddress['ETH'] = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
-        tokenAddress['WETH'] = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
-         tokenAddress['KNC'] = 0xdd974d5c2e2928dea5f71b9825b8b646686bd200;
+        tokenAddress['WETH'] = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
+         tokenAddress['KNC'] = 0xdd974D5C2e2928deA5F71b9825b8b646686BD200;
         
      }
      
-     function getExchangeRate(string fromSymbol, string toSymbol, string venue, uint256 amount, address requestAddress) public constant returns(uint256){
+     function getExchangeRate(string memory fromSymbol, string memory toSymbol, string memory venue, uint256 amount, address requestAddress) public returns(uint256){
          
          address toA1 = tokenAddress[fromSymbol];
          address toA2 = tokenAddress[toSymbol];
@@ -187,35 +205,35 @@ contract PremiumFeedPrices{
          string memory queryToSymbol = toSymbol;
          string memory queryFromSymbol = fromSymbol;
          
-         if(equal(queryVenue,"PROVIDER1") && equal(queryToSymbol,"USD")){
-             StockETFPrice stockProvider = StockETFPrice(0x7556fccfb056ada7aa10c6ed88b5def40d66c591);
+        if(equal(queryVenue,"PROVIDER1") && equal(queryToSymbol,"USD")){
+             StockETFPrice stockProvider = StockETFPrice(0x7556FccFB056Ada7aa10c6ed88B5DEF40D66c591);
              price = stockProvider.getLastPrice(queryFromSymbol);
          }
          
-         else if(equal(theExchange,"UNISWAP")){
+        if(equal(theExchange,"UNISWAP")){
             price= uniswapPrice(toA1, toA2, theSide, amount);
          }
          
-         else if(equal(theExchange,"KYBER")){
+        if(equal(theExchange,"KYBER")){
             price= kyberPrice(toA1, toA2, theSide, amount);
          }
-         else{
-             price=0;
-         }
-         
-         
-         return price;
+
+
+        if (equal(theExchange, "BANCOR")){
+            price = bancorPrice(toA1, toA2, theSide, amount);
+        }
+        return price;
      }
     
-    function uniswapPrice(address token1, address token2, string  side, uint256 amount) public constant returns (uint256){
+    function uniswapPrice(address token1, address token2, string memory  side, uint256 amount) public returns (uint256){
     
             address fromExchange = getUniswapContract(token1);
             address toExchange = getUniswapContract(token2);
             UniswapExchangeInterface usi1 = UniswapExchangeInterface(fromExchange);
             UniswapExchangeInterface usi2 = UniswapExchangeInterface(toExchange);    
         
-            uint256  ethPrice1;
-            uint256 ethPrice2;
+            // uint256 ethPrice1;
+            // uint256 ethPrice2;
             uint256 resultingTokens;
             uint256 ethBack;
             
@@ -266,7 +284,7 @@ contract PremiumFeedPrices{
     
     
     
-     function kyberPrice(address token1, address token2, string  side, uint256 amount) public constant returns (uint256){
+     function kyberPrice(address token1, address token2, string memory  side, uint256 amount) public returns (uint256){
          
          Kyber kyber = Kyber(0xFd9304Db24009694c680885e6aa0166C639727D6);
          uint256 price;
@@ -282,13 +300,42 @@ contract PremiumFeedPrices{
          return price;
      }
     
+    function bancorPrice(address token1, address token2, string memory side, uint256 amount) public returns (uint256){
+        // updated with the newest address of the BancorNetwork contract deployed under the circumstances of old versions of `getReturnByPath`
+        IContractRegistry contractRegistry = IContractRegistry(0x52Ae12ABe5D8BD778BD5397F99cA900624CfADD4);
+        IBancorNetwork bancorNetwork = IBancorNetwork(contractRegistry.addressOf('BancorNetwork'));
+        IBancorNetworkPathFinder bancorNetworkPathFinder = IBancorNetworkPathFinder(contractRegistry.addressOf('BancorNetworkPathFinder'));
+        uint256 price;
+        address token1ToBancor = token1;
+        address token2ToBancor = token2;
+        // in case of Ether (or Weth), we need to provide the address of the EtherToken to the BancorNetwork
+        if (token1 == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE || token1 == 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2){
+            // the EtherToken addresss for BancorNetwork
+            token1ToBancor = 0xc0829421C1d260BD3cB3E0F06cfE2D52db2cE315;
+        }
+        if (token2 == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE || token2 == 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2){
+            token2ToBancor = 0xc0829421C1d260BD3cB3E0F06cfE2D52db2cE315;
+        }
+        address[] memory addressPath;
+        if(equal(side, "BUY")){
+            addressPath = bancorNetworkPathFinder.generatePath(token1, token2);
+        } else {
+            addressPath = bancorNetworkPathFinder.generatePath(token2, token1);
+        }
+        IERC20Token[] memory tokenPath = new IERC20Token[](addressPath.length);
+        for(uint256 i = 0; i < addressPath.length; i++) {
+            tokenPath[i] = IERC20Token(addressPath[i]);
+        }
+        (price, ) = bancorNetwork.getReturnByPath(tokenPath, amount);
+        return price;
+    }
     
     
-    function getUniswapContract(address tokenAddress) public constant returns (address){
+    function getUniswapContract(address tokenAddress) public view returns (address){
         return uniswapAddresses[tokenAddress];
     }
     
-    function determineSide(string sideString) public constant returns (string){
+    function determineSide(string memory sideString) public view returns (string memory){
             
         if(contains("SELL", sideString ) == false){
             return "BUY";
@@ -301,7 +348,7 @@ contract PremiumFeedPrices{
     
     
     
-    function determineExchange(string exString) constant returns (string){
+    function determineExchange(string memory exString) public view returns (string memory){
             
         if(contains("UNISWA", exString ) == true){
             return "UNISWAP";
@@ -310,13 +357,16 @@ contract PremiumFeedPrices{
         else if(contains("KYBE", exString ) == true){
             return "KYBER";
         }
+        else if(contains("BANCO", exString)) {
+            return "BANCOR";
+        }
         else{
             return "NONE";
         }
     }
     
     
-    function contains (string memory what, string memory where)  constant returns(bool){
+    function contains (string memory what, string memory where) public view returns(bool){
     bytes memory whatBytes = bytes (what);
     bytes memory whereBytes = bytes (where);
 
@@ -339,7 +389,7 @@ contract PremiumFeedPrices{
 }
 
 
-   function compare(string _a, string _b) returns (int) {
+   function compare(string memory _a, string memory _b) public returns (int) {
         bytes memory a = bytes(_a);
         bytes memory b = bytes(_b);
         uint minLength = a.length;
@@ -358,11 +408,11 @@ contract PremiumFeedPrices{
             return 0;
     }
     /// @dev Compares two strings and returns true iff they are equal.
-    function equal(string _a, string _b) returns (bool) {
+    function equal(string memory _a, string memory _b) public returns (bool) {
         return compare(_a, _b) == 0;
     }
     /// @dev Finds the index of the first occurrence of _needle in _haystack
-    function indexOf(string _haystack, string _needle) returns (int)
+    function indexOf(string memory _haystack, string memory _needle) public returns (int)
     {
         bytes memory h = bytes(_haystack);
         bytes memory n = bytes(_needle);
