@@ -127,6 +127,12 @@ You can run you own oracle by deploying a Node app with the example code in /exa
 contracts/pegTokenExample.sol contains a template code and live contract reference for a token using OrFeed data that is pegged to the value of an off-chain asset (Alibaba Stock in the example). We are looking forward to less primitive examples that leverage DAOs, advanced collateralization techniques, etc. Also, contracts/levFacility.sol is in very early stages and is the begining of creating a token that has a built-in leveraged short/long credit facility for margin trading of futures settled by OrFeed data (very early).
 
 
+## Examples
+
+The /examples folder contracts contracts for both writing data as an oracle provider and for consuming data as an oracle consumer.
+
+The /nodeJSAppExamples folder contains Node.js apps that interface with smart contracts that either read or write oracle data
+
 
 
 ## Getting Data From [Chainlink](https://chain.link/) via OrFeed
