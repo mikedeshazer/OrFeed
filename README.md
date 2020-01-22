@@ -74,14 +74,18 @@ uint price = orfeed.getExchangeRate("AAPL", "USD", "PROVIDER1", 1);
 ```
 
 
-### Note:
-
-Stocks and ETFs are provided by a centralized oracle and we are currently working on a registry in which requests can go to any provider (centralized or decentralized)... or of course, aggregated with the removal of outliers (recommended). The current contract supports the top 10 equities by market cap (AAPL, AMZN, JNJ etc) and the top 5 ETFs (SPY, etc)
-
-You can run you own oracle by deploying a Node app with the example code in /examples/oracleNodeExampleApp (contract code is in contacts/examples/ProvideDataExamples/stockETFPriceContract.sol) and provide as many stocks at the update frequency of your choice. We recommend buying GAS token (we are in no way affiliated and not shilling) to lower your Ethereum fee risk (and so you can pay a reasonable gas price f you plan to run an oracle for a long period of time). Otherwise, you will be exposed to gas fee price risk, or your prices might not update at the frequency you would like.
 
 
-## Source and Asset Examples (Currently Live)
+## Providing Data As An Oracle Provider
+
+You can register a provider name and connect it to your custom oracle contract (DNS-style) via the OrFeed Oracle Registry: [here](https://etherscan.io/dapp/0x052cf5824a4adc682715de9a5b725c65d32f34d5) by calling the registerOracle function.
+An example of an oracle smart contract that will be compatible with the OrFeed proxy contract is available in /contracts/examples/ProvideDataExamples/userGeneratedOracleExample.sol (very simple example that either returns 500 or 2)
+Once you deploy your contract and register it to the registry (paying a small amount of ETH to prevent spamming of names), you can check/verify your registration by calling the getOracleAddress function.
+
+As more reputable, as well as trustless, oracle smart contracts register within the OrFeed registry, we will update a new list as a reference.
+
+
+## Source and Asset Examples (Currently on MainNet)
 
 
 | Asset       | Example Provider (Venue)           | Type  |
