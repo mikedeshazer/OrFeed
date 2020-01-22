@@ -129,7 +129,7 @@ contracts/pegTokenExample.sol contains a template code and live contract referen
 
 ## Examples
 
-The /examples folder contracts contracts for both writing data as an oracle provider and for consuming data as an oracle consumer.
+The contracts/examples folder contains contracts for both writing data as an oracle provider and for consuming data as an oracle consumer.
 
 The /nodeJSAppExamples folder contains Node.js apps that interface with smart contracts that either read or write oracle data
 
