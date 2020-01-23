@@ -1,9 +1,7 @@
 
-//dapp: https://etherscan.io/dapp/0x1603557c3f7197df2ecded659ad04fa72b1e1114#readContract
-//
+//example contract address: https://etherscan.io/address/0x1d6cbd79054b89ade7d840d1640a949ea82b7639#code
 
-pragma solidity >=0.4.26;
-
+pragma solidity ^0.4.26;
 contract UniswapExchangeInterface {
     // Address of ERC20 token sold on this exchange
     function tokenAddress() external view returns (address token);
@@ -62,31 +60,6 @@ interface ERC20 {
     event Approval(address indexed _owner, address indexed _spender, uint _value);
 }
 
-
-
-
-
-/// @title Kyber Network interface
-interface KyberNetworkProxyInterface {
-    function maxGasPrice() public view returns(uint);
-    function getUserCapInWei(address user) public view returns(uint);
-    function getUserCapInTokenWei(address user, ERC20 token) public view returns(uint);
-    function enabled() public view returns(bool);
-    function info(bytes32 id) public view returns(uint);
-
-    function getExpectedRate(ERC20 src, ERC20 dest, uint srcQty) public view
-        returns (uint expectedRate, uint slippageRate);
-
-    function tradeWithHint(ERC20 src, uint srcAmount, ERC20 dest, address destAddress, uint maxDestAmount,
-        uint minConversionRate, address walletId, bytes hint) public payable returns(uint);
-
-    function swapEtherToToken(ERC20 token, uint minRate) public payable returns (uint);
-
-    function swapTokenToEther(ERC20 token, uint tokenQty, uint minRate) public returns (uint);
-
-
-}
-
 interface OrFeedInterface {
   function getExchangeRate ( string fromSymbol, string toSymbol, string venue, uint256 amount ) external view returns ( uint256 );
   function getTokenDecimalCount ( address tokenAddress ) external view returns ( uint256 );
@@ -97,116 +70,32 @@ interface OrFeedInterface {
 
 
 
+contract UniswapTradeExample{
 
+    function buyDai() payable returns(uint256){
 
-contract Trader{
+        //token we are buying contract address... this this case DAI
+        address daiAddress = 0x09cabEC1eAd1c0Ba254B09efb3EE13841712bE14;
+        //Define Uniswap
+        UniswapExchangeInterface usi = UniswapExchangeInterface(daiAddress);
 
-    ERC20 constant internal ETH_TOKEN_ADDRESS = ERC20(0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee);
-    KyberNetworkProxyInterface public proxy = KyberNetworkProxyInterface(0x818E6FECD516Ecc3849DAf6845e3EC868087B755);
-    OrFeedInterface orfeed= OrFeedInterface(0x73f5022bec0e01c0859634b0c7186301c5464b46);
-    address daiAddress = 0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359;
-    bytes  PERM_HINT = "PERM";
-    address owner;
+        //amoutn of ether sent to this contract
+        uint256 amountEth = msg.value;
 
+        uint256 amountBack = usi.ethToTokenSwapInput.value(amountEth)(1, block.timestamp);
 
-
-    modifier onlyOwner() {
-        if (msg.sender != owner) {
-            throw;
-        }
-        _;
-    }
-
-
-    constructor(){
-     owner = msg.sender;
-    }
-
-   function swapEtherToToken (KyberNetworkProxyInterface _kyberNetworkProxy, ERC20 token, address destAddress) internal{
-
-    uint minRate;
-    (, minRate) = _kyberNetworkProxy.getExpectedRate(ETH_TOKEN_ADDRESS, token, msg.value);
-
-    //will send back tokens to this contract's address
-    uint destAmount = _kyberNetworkProxy.swapEtherToToken.value(msg.value)(token, minRate);
-
-    //send received tokens to destination address
-   require(token.transfer(destAddress, destAmount));
-
+        ERC20 daiToken = ERC20(0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359);
+        daiToken.transfer(msg.sender, amountBack);
+        return amountBack;
 
 
     }
 
-    function swapTokenToEther1 (KyberNetworkProxyInterface _kyberNetworkProxy, ERC20 token, uint tokenQty, address destAddress) internal returns (uint) {
-
-        uint minRate =1;
-        //(, minRate) = _kyberNetworkProxy.getExpectedRate(token, ETH_TOKEN_ADDRESS, tokenQty);
-
-        // Check that the token transferFrom has succeeded
-        token.transferFrom(msg.sender, this, tokenQty);
-
-        // Mitigate ERC20 Approve front-running attack, by initially setting
-        // allowance to 0
-
-       token.approve(proxy, 0);
-
-        // Approve tokens so network can take them during the swap
-       token.approve(address(proxy), tokenQty);
-
-
-       uint destAmount = proxy.tradeWithHint(ERC20(daiAddress), tokenQty, ERC20(0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee), this, 8000000000000000000000000000000000000000000000000000000000000000, 0, 0x0000000000000000000000000000000000000004, PERM_HINT);
-
-    return destAmount;
-      //uint destAmount = proxy.swapTokenToEther(token, tokenQty, minRate);
-
-        // Send received ethers to destination address
-     //  destAddress.transfer(destAmount);
+    function getDAIPrice() constant returns(uint256){
+        OrFeedInterface orfeed= OrFeedInterface(0x8316b082621cfedab95bf4a44a1d4b64a6ffc336);
+        uint256 ethPrice = orfeed.getExchangeRate("ETH", "USD", "", 100000000);
+        return ethPrice;
     }
-
-     function kyberToUniSwapArb(address fromAddress, address uniSwapContract, uint theAmount) public payable onlyOwner returns (bool){
-
-        address theAddress = uniSwapContract;
-        UniswapExchangeInterface usi = UniswapExchangeInterface(theAddress);
-
-        ERC20 address1 = ERC20(fromAddress);
-
-       uint ethBack = swapTokenToEther1(proxy, address1 , theAmount, msg.sender);
-
-       usi.ethToTokenSwapInput.value(ethBack)(1, block.timestamp);
-
-        return true;
-    }
-
-
-    function () external payable  {
-
-    }
-
-
-
-    function withdrawETHAndTokens() onlyOwner{
-
-        msg.sender.send(address(this).balance);
-         ERC20 daiToken = ERC20(daiAddress);
-        uint256 currentTokenBalance = daiToken.balanceOf(this);
-        daiToken.transfer(msg.sender, currentTokenBalance);
-
-    }
-
-
-
-    function getKyberSellPrice() constant returns (uint256){
-       uint256 currentPrice =  orfeed.getExchangeRate("ETH", "DAI", "SELL-KYBER-EXCHANGE", 1000000000000000000);
-        return currentPrice;
-    }
-
-
-     function getUniswapBuyPrice() constant returns (uint256){
-       uint256 currentPrice =  orfeed.getExchangeRate("ETH", "DAI", "BUY-UNISWAP-EXCHANGE", 1000000000000000000);
-        return currentPrice;
-    }
-
-
 
 
 

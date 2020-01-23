@@ -1,4 +1,4 @@
-//Example: https://etherscan.io/address/0x9b80013caff912149525c1bc1d264939a1a573a7#readContract
+//Mainnet Deployment: https://etherscan.io/address/0xbf2e5dc9b5c25911c68edcebd57438da1abd7ed6#code
 
 pragma solidity >=0.4.26;
 contract UniswapExchangeInterface {
@@ -67,6 +67,10 @@ interface OrFeedInterface {
   function getForexAddress ( string symbol ) external view returns ( address );
 }
 
+interface userGeneratedRegistry{
+    function getPriceFromOracle(string selectedOracle, string fromParam, string toParam, string  side, uint256 amount) public constant returns (uint256);
+}
+
 interface StockETFPrice{
     function getLastPrice (string symbol) constant returns (uint256);
     function getTimeUpdated (string symbol) constant returns (uint256);
@@ -114,7 +118,7 @@ contract PremiumFeedPrices{
     
     mapping (address=>address) uniswapAddresses;
     mapping (string=>address) tokenAddress;
-    
+     StockETFPrice stockProvider = StockETFPrice(0x7556fccfb056ada7aa10c6ed88b5def40d66c591);
     
      constructor() public  {
          
@@ -188,7 +192,7 @@ contract PremiumFeedPrices{
          string memory queryFromSymbol = fromSymbol;
          
          if(equal(queryVenue,"PROVIDER1") && equal(queryToSymbol,"USD")){
-             StockETFPrice stockProvider = StockETFPrice(0x7556fccfb056ada7aa10c6ed88b5def40d66c591);
+            
              price = stockProvider.getLastPrice(queryFromSymbol);
          }
          
@@ -200,12 +204,18 @@ contract PremiumFeedPrices{
             price= kyberPrice(toA1, toA2, theSide, amount);
          }
          else{
-             price=0;
+            price = getPriceFromOracle(queryVenue, queryFromSymbol, queryToSymbol, theSide, amount);
          }
          
          
          return price;
      }
+     
+    function getPriceFromOracle(string queryVenue, string queryFromSymbol, string queryToSymbol, string theSide, uint256 amount) constant returns (uint256){
+         userGeneratedRegistry registry = userGeneratedRegistry(0x45b0b6ac962a3b8bbad39868742302746c99e0d3);
+        uint256 resPrice =registry.getPriceFromOracle(queryVenue, queryFromSymbol, queryToSymbol, theSide, amount);
+        return resPrice;
+    }
     
     function uniswapPrice(address token1, address token2, string  side, uint256 amount) public constant returns (uint256){
     

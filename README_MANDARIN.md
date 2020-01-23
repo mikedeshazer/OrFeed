@@ -13,7 +13,7 @@
 
 [How OrFeed Was Conceived](https://medium.com/proof-of-fintech/introducing-orfeed-aa323342d34c) 博客帖子
 
-演示: [https://etherscan.io/dapp/0x73f5022bec0e01c0859634b0c7186301c5464b46](https://etherscan.io/dapp/0x73f5022bec0e01c0859634b0c7186301c5464b46)
+演示: [https://etherscan.io/dapp/0x8316b082621cfedab95bf4a44a1d4b64a6ffc336](https://etherscan.io/dapp/0x8316b082621cfedab95bf4a44a1d4b64a6ffc336)
 
 [Youtube video tutorial](https://youtu.be/LK1BiSveEI4)
 
@@ -35,7 +35,7 @@ interface OrFeedInterface {
 要初始化OrFeed，只需包含以下代码:
 
 ```javascript
-OrFeedInterface orfeed= OrFeedinterface(0x73f5022bec0e01c0859634b0c7186301c5464b46);
+OrFeedInterface orfeed= OrFeedinterface(0x8316b082621cfedab95bf4a44a1d4b64a6ffc336);
 
 ```
 

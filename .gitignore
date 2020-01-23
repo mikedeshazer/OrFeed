@@ -2,3 +2,8 @@
 node_modules/
 dist/
 .DS_Store
+contracts/.DS_Store
+nodeJSAppExamples/.DS_Store
+specs/.DS_Store
+tests/.DS_Store
+migrations/.DS_Store
