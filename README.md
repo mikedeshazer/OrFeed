@@ -202,7 +202,6 @@ Future private/premium data may be provided as follows (though we are to suggest
 
 These can often fall out-of-date as we take a MainNet-first approach as most of the OrFeed functionality does not require gas, as OrFeed serves as a proxy to many other contracts.
 
-the OrFeed demo already deployed to testnets  
 **Kovan**: [0x31a29958301c407d4b4bf0d53dac1f2d154d9d8d](https://kovan.etherscan.io/address/0x31a29958301c407d4b4bf0d53dac1f2d154d9d8d)  
 **Rinkeby**: [0x97875355ef55ae35613029df8b1c8cf8f89c9066](https://rinkeby.etherscan.io/address/0x97875355ef55ae35613029df8b1c8cf8f89c9066) 
 
