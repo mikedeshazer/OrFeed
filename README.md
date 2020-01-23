@@ -78,7 +78,7 @@ uint price = orfeed.getExchangeRate("AAPL", "USD", "PROVIDER1", 1);
 
 ## Providing Data As An Oracle Provider
 
-You can register a provider name and connect it to your custom oracle contract (DNS-style) via the OrFeed Oracle Registry: [here](https://etherscan.io/dapp/0x052cf5824a4adc682715de9a5b725c65d32f34d5) by calling the registerOracle function.
+You can register a provider name and connect it to your custom oracle contract (DNS-style) via the OrFeed Oracle Registry: [here](https://etherscan.io/dapp/0x45b0b6ac962a3b8bbad39868742302746c99e0d3) by calling the registerOracle function.
 An example of an oracle smart contract that will be compatible with the OrFeed proxy contract is available in /contracts/examples/ProvideDataExamples/userGeneratedOracleExample.sol (very simple example that either returns 500 or 2)
 Once you deploy your contract and register it to the registry (paying a small amount of ETH to prevent spamming of names), you can check/verify your registration by calling the getOracleAddress function.
 

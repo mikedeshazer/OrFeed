@@ -1,4 +1,4 @@
-//Latest Deployed Contract Code: https://etherscan.io/address/0x870efbbbff7b38c4fd5fc30c04be0b8bfbbd4cfd#code
+//Mainnet Deployment: https://etherscan.io/address/0xbf2e5dc9b5c25911c68edcebd57438da1abd7ed6#code
 
 pragma solidity >=0.4.26;
 contract UniswapExchangeInterface {
@@ -212,7 +212,7 @@ contract PremiumFeedPrices{
      }
      
     function getPriceFromOracle(string queryVenue, string queryFromSymbol, string queryToSymbol, string theSide, uint256 amount) constant returns (uint256){
-         userGeneratedRegistry registry = userGeneratedRegistry(0x052cf5824a4adc682715de9a5b725c65d32f34d5);
+         userGeneratedRegistry registry = userGeneratedRegistry(0x45b0b6ac962a3b8bbad39868742302746c99e0d3);
         uint256 resPrice =registry.getPriceFromOracle(queryVenue, queryFromSymbol, queryToSymbol, theSide, amount);
         return resPrice;
     }
