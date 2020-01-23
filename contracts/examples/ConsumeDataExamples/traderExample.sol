@@ -92,7 +92,7 @@ contract UniswapTradeExample{
     }
 
     function getDAIPrice() constant returns(uint256){
-        OrFeedInterface orfeed= OrFeedInterface(0x73f5022bec0e01c0859634b0c7186301c5464b46);
+        OrFeedInterface orfeed= OrFeedInterface(0x8316b082621cfedab95bf4a44a1d4b64a6ffc336);
         uint256 ethPrice = orfeed.getExchangeRate("ETH", "USD", "", 100000000);
         return ethPrice;
     }

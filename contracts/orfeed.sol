@@ -1,5 +1,8 @@
-//Contract: 0x73f5022bec0e01c0859634b0c7186301c5464b46
+//MainNet Deployment: 0x8316b082621cfedab95bf4a44a1d4b64a6ffc336
+
 //orfeed.org oracle aggregator
+
+
 pragma experimental ABIEncoderV2;
 
 interface IKyberNetworkProxy {
@@ -364,6 +367,7 @@ contract orfeed {
         freeRateTokenSymbols['TUSD'] = 0x0000000000085d4780B73119b644AE5ecd22b376;
         freeRateTokenSymbols['ETH'] = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
         freeRateTokenSymbols['WETH'] = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
+        freeRateTokenSymbols['ETH2'] = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
         freeRateTokenSymbols['SNX'] = 0xc011a72400e58ecd99ee497cf89e3775d4bd732f;
         freeRateTokenSymbols['CSAI'] = 0xf5dce57282a584d2746faf1593d3121fcac444dc;
         freeRateTokenSymbols['CUSDC'] = 0x39aa39c021dfbae8fac545936693ac917d5e7563;
@@ -384,12 +388,16 @@ contract orfeed {
         freeRateForexSymbols['CHF'] = 0x0f83287ff768d1c1e17a42f44d644d7f22e8ee1d;
         freeRateForexSymbols['JPY'] = 0xf6b1c627e95bfc3c1b4c9b825a032ff0fbf3e07d;
         freeRateForexSymbols['GBP'] = 0x97fe22e7341a0cd8db6f6c021a24dc8f4dad855f;
+        freeRateForexSymbols['sETH'] = 0x57ab1e02fee23774580c119740129eac7081e9d3;
+        
 
         freeRateForexBytes['USD'] = 0x7355534400000000000000000000000000000000000000000000000000000000;
         freeRateForexBytes['EUR'] = 0x7345555200000000000000000000000000000000000000000000000000000000;
         freeRateForexBytes['CHF'] = 0x7343484600000000000000000000000000000000000000000000000000000000;
         freeRateForexBytes['JPY'] = 0x734a505900000000000000000000000000000000000000000000000000000000;
         freeRateForexBytes['GBP'] = 0x7347425000000000000000000000000000000000000000000000000000000000;
+        freeRateForexBytes['sETH'] = 0x7345544800000000000000000000000000000000000000000000000000000000;
+
 
         //when returning rates they will be first divided by and then multiplied by these rates
         rateDivide1 = 100;
@@ -406,7 +414,7 @@ contract orfeed {
 
         //erc20 price oracle address. Can be changed by DAO
         tokenPriceOracleAddress = 0xFd9304Db24009694c680885e6aa0166C639727D6;
-        synthetixExchangeAddress = 0x22a67ecd108f7a6fc52da9e2655ddfe88eccd9ca;
+        synthetixExchangeAddress = 0xE95Ef4e7a04d2fB05cb625c62CA58da10112c605;
 
         tokenPriceOracleAddress2 = 0xe9Cf7887b93150D4F2Da7dFc6D502B216438F244;
 
@@ -414,7 +422,7 @@ contract orfeed {
         forexPriceOracleAddress = 0xE86C848De6e4457720A1eb7f37B519010CD26d35;
 
         //premium price oracle address. Can be changed by DAO
-        premiumSubPriceOracleAddress = 0x5e00a16eb51157fb192bd4fcaef4f79a4f16f480;
+        premiumSubPriceOracleAddress = 0xbf2e5dc9b5c25911c68edcebd57438da1abd7ed6;
         
         //arb proxy contract address. Can be cahnged... will be changed by DAO
         arbContractAddress = 0x0;
@@ -449,15 +457,15 @@ contract orfeed {
         uint256 ethAmount = kyber.getOutputAmount(token, ethToken, inputAmount);
         uniswap = Uniswap(tokenPriceOracleAddress2);
         uint256 sethAmount = uniswap.getEthToTokenInputPrice(ethAmount);
-        synthetix = Synthetix(forexPriceOracleAddress);
-        uint256 outputAmount = synthetix.getOutputAmount('sETH', synth, sethAmount);
+        se = SynthetixExchange(synthetixExchangeAddress);
+        uint256 outputAmount = se.effectiveValue(freeRateForexBytes['sETH'], sethAmount, synth);
         return outputAmount;
     }
 
     function getSynthToTokenOutputAmount(bytes32 synth, ERC20 token, uint256 inputAmount) returns(uint256) {
          kyber = Kyber(tokenPriceOracleAddress); 
-        synthetix = Synthetix(forexPriceOracleAddress);
-        uint256 sethAmount = synthetix.getOutputAmount(synth, 'sETH', inputAmount);
+        se = SynthetixExchange(synthetixExchangeAddress);
+        uint256 sethAmount = se.effectiveValue(synth, inputAmount, freeRateForexBytes['sETH']);
         uniswap = Uniswap(tokenPriceOracleAddress2);
         uint256 ethAmount = uniswap.getTokenToEthInputPrice(sethAmount);
         uint256 outputAmount = kyber.getOutputAmount(ethToken, token, ethAmount);
@@ -518,6 +526,13 @@ contract orfeed {
         forexPriceOracleAddress = newOracle;
         return true;
     }
+
+
+    function updateSynthAddress(address newOracle) onlyOwner external returns(bool) {
+        synthetixExchangeAddress = newOracle;
+        return true;
+    }
+
 
 
     //this will go to a DAO
@@ -745,12 +760,20 @@ contract orfeed {
         //token to forex
         else if (freeRateTokenSymbols[fromSymb] != 0x0 && freeRateTokenSymbols[toSymb] == 0x0) {
            
+            if(equal(fromSymb,"ETH")){
+                fromSymb = "ETH2";
+            }
+
             uint256 toRate2 = getTokenToSynthOutputAmount(ERC20(freeRateTokenSymbols[fromSymb]), freeRateForexBytes[toSymb], amount);
             return toRate2.mul(rateMultiply2).div(rateDivide2);
         } 
 
         //forex to token
         else if (freeRateTokenSymbols[fromSymb] == 0x0 && freeRateTokenSymbols[toSymb] != 0x0) {
+            
+            if(equal(toSymb,"ETH")){
+                toSymb = "ETH2";
+            }
             
             uint256 toRate3 = getSynthToTokenOutputAmount(freeRateForexBytes[fromSymb], ERC20(freeRateTokenSymbols[toSymb]), amount);
             return toRate3.mul(rateMultiply3).div(rateDivide3);
@@ -760,7 +783,8 @@ contract orfeed {
         //forex to forex
 
         else if (freeRateTokenSymbols[fromSymb] == 0x0 && freeRateTokenSymbols[toSymb] == 0x0) {
-            
+
+            se = SynthetixExchange(synthetixExchangeAddress);
             uint256 toRate4 = se.effectiveValue(freeRateForexBytes[fromSymb], amount, freeRateForexBytes[toSymb]);
             return toRate4.mul(rateMultiply4).div(rateDivide4);
         } 
@@ -780,6 +804,58 @@ contract orfeed {
             result := mload(add(source, 32))
         }
     }
+
+    function compare(string _a, string _b) returns (int) {
+        bytes memory a = bytes(_a);
+        bytes memory b = bytes(_b);
+        uint minLength = a.length;
+        if (b.length < minLength) minLength = b.length;
+        //@todo unroll the loop into increments of 32 and do full 32 byte comparisons
+        for (uint i = 0; i < minLength; i ++)
+            if (a[i] < b[i])
+                return -1;
+            else if (a[i] > b[i])
+                return 1;
+        if (a.length < b.length)
+            return -1;
+        else if (a.length > b.length)
+            return 1;
+        else
+            return 0;
+    }
+    
+    function equal(string _a, string _b) returns (bool) {
+        return compare(_a, _b) == 0;
+    }
+    
+    function indexOf(string _haystack, string _needle) returns (int)
+    {
+        bytes memory h = bytes(_haystack);
+        bytes memory n = bytes(_needle);
+        if(h.length < 1 || n.length < 1 || (n.length > h.length)) 
+            return -1;
+        else if(h.length > (2**128 -1)) // since we have to be able to return -1 (if the char isn't found or input error), this function must return an "int" type with a max length of (2^128 - 1)
+            return -1;                                  
+        else
+        {
+            uint subindex = 0;
+            for (uint i = 0; i < h.length; i ++)
+            {
+                if (h[i] == n[0]) // found the first char of b
+                {
+                    subindex = 1;
+                    while(subindex < n.length && (i + subindex) < h.length && h[i + subindex] == n[subindex]) // search until the chars don't match or until we reach the end of a or b
+                    {
+                        subindex++;
+                    }   
+                    if(subindex == n.length)
+                        return int(i);
+                }
+            }
+            return -1;
+        }   
+    }
+
     
     
     //end contract

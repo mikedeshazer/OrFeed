@@ -46,7 +46,7 @@ library SafeMath {
         uint256 public RATE = 0;
         bool public isMinting = true;
         bool public isExchangeListed = false;
-        OrFeedInterface orfeed= OrFeedInterface(0x73f5022bec0e01c0859634b0c7186301c5464b46);
+        OrFeedInterface orfeed= OrFeedInterface(0x8316b082621cfedab95bf4a44a1d4b64a6ffc336);
         
         using SafeMath for uint256;
         address public owner;
