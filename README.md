@@ -192,13 +192,16 @@ To test that the contracts are working well in the respective networks, please d
 
 ### Read the full docs [orfeed.org/docs](https://www.orfeed.org/docs)
 
-Free data is provided by Kyber, Uniswap and Synthetix. 
+Common default data providers when venue parameters are left blank are Kyber, Uniswap, Chainlink and Synthetix. 
 
-Premium data is provided as follows:
+Future private/premium data may be provided as follows (though we are opened to suggestions, and welcome you to join the OrFeed DAO where we will be voting on future governance decisions):
 
 ![How it all fits together](https://www.orfeed.org/images/diagram.png)
 
-### Demo on Testnets
+### Demos on Testnets
+
+These can often fall out-of date as we take a MainNet-first approach as most of the Orfeed functionality does not require gas, as orFeed serves as a proxy to many other contracts.
+
 the OrFeed demo already deployed to testnets  
 **Kovan**: [0x31a29958301c407d4b4bf0d53dac1f2d154d9d8d](https://kovan.etherscan.io/address/0x31a29958301c407d4b4bf0d53dac1f2d154d9d8d)  
 **Rinkeby**: [0x97875355ef55ae35613029df8b1c8cf8f89c9066](https://rinkeby.etherscan.io/address/0x97875355ef55ae35613029df8b1c8cf8f89c9066) 
