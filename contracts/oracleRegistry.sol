@@ -1,5 +1,8 @@
 //oracle registry
-// Example: https://etherscan.io/address/0x45b0b6ac962a3b8bbad39868742302746c99e0d3#code
+
+//MainNet: https://etherscan.io/address/0x429529ed0209458d26740934682f040a6d191703#code
+
+pragma experimental ABIEncoderV2;
 
 interface PriceOracleInterface{
       function getPriceFromOracle (string fromParam, string toParam, string  side, uint256 amount) returns (uint256);
@@ -10,6 +13,14 @@ interface PriceOracleInterface{
         
       mapping (string=>address) oracleMapping;
       mapping (string=>address) oracleOwners;
+      mapping (string=>string) oracleOwnersInfo;
+      
+      string [] oracleNamesArr;
+      address [] oracleOwnersArr;
+      string [] oracleOwnersInfoArr;
+      
+      uint256 purchaseFee;
+      
       address owner; 
       modifier onlyOwner() {
             if (msg.sender != owner) {
@@ -20,7 +31,7 @@ interface PriceOracleInterface{
         
       constructor() public payable {
             owner = msg.sender; 
-           
+            purchaseFee = 50000000000000000;
         }
         
         
@@ -45,6 +56,13 @@ interface PriceOracleInterface{
           return true;
       }
       
+      function changeFee(uint256 newFee) onlyOwner returns(bool){
+          purchaseFee = newFee;
+          return true;
+      }
+      
+    
+      
      function withdrawBalance() onlyOwner returns(bool) {
         uint amount = this.balance;
         msg.sender.transfer(amount);
@@ -53,26 +71,82 @@ interface PriceOracleInterface{
     }
     
     
-    function registerOracle(string name, address requestedAddress ) payable returns (bool){
-        require(msg.value >= 50000000000000000, "Please send .05 ETH to register an oracle. This is to prevent registration spam");
+    function registerOracle(string name, address requestedAddress, string info ) payable returns (bool){
+        require(msg.value >= purchaseFee, "Please send .05 ETH to register an oracle. This is to prevent registration spam");
         
         name = toLower(name);
+        
+        if(oracleMapping[name] < 1){
+            //you cant update re-register an address
+            throw;
+            
+        }
         if(oracleMapping[name] != 0x0 && oracleOwners[name] != msg.sender){
             //you cant update this because you did not register this name
             throw;
             
         }
         
+    string memory theDetails = info;
        oracleMapping[name] = requestedAddress;
        oracleOwners[name] = msg.sender;
+        oracleOwnersInfo[name] = theDetails;
+        
+        oracleNamesArr.push(name);
+        oracleOwnersArr.push(msg.sender);
+        oracleOwnersInfoArr.push(theDetails);
+        
+        
        return true;
         
+    }
+    
+      function transferOracleName(string name, address toAddress) returns(bool){
+           if(oracleMapping[name] != 0x0 && oracleOwners[name] != msg.sender){
+            //you cant edit this because you did not register this name
+            throw;
+            
+         }
+         oracleMapping[name] = toAddress;
+         return true;
+        
+      }
+    
+    
+    
+    function editOracle(string name, string info ) payable returns (bool){
+       
+        name = toLower(name);
+        
+       
+        if(oracleMapping[name] != 0x0 && oracleOwners[name] != msg.sender){
+            //you cant update this because you did not register this name
+            throw;
+            
+        }
+        
+        string memory theDetails = info;
+      
+        oracleOwnersInfo[name] = theDetails;
+
+       return true;
+        
+    }
+    
+    function getAllOracles() constant returns (string []){
+        return oracleNamesArr;
     }
     
     
     function getOracleAddress(string nameReference) constant returns (address){
         nameReference = toLower(nameReference);
         return oracleMapping[nameReference];
+    }
+    
+    
+    function getOracleInfo(string nameReference) constant returns (string){
+        nameReference = toLower(nameReference);
+        return oracleOwnersInfo[nameReference];
     }
     
     function toLower(string str) internal returns (string) {
