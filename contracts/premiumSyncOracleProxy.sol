@@ -212,7 +212,7 @@ contract PremiumFeedPrices{
      }
      
     function getPriceFromOracle(string queryVenue, string queryFromSymbol, string queryToSymbol, string theSide, uint256 amount) constant returns (uint256){
-         userGeneratedRegistry registry = userGeneratedRegistry(0x45b0b6ac962a3b8bbad39868742302746c99e0d3);
+         userGeneratedRegistry registry = userGeneratedRegistry(0x429529ed0209458d26740934682f040a6d191703);
         uint256 resPrice =registry.getPriceFromOracle(queryVenue, queryFromSymbol, queryToSymbol, theSide, amount);
         return resPrice;
     }
