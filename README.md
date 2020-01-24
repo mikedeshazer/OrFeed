@@ -9,13 +9,18 @@ A highly reliable oracle aggregator for Ethereum-based DeFi apps that need finan
 
 Website: [orfeed.org](https://www.orfeed.org)
 
+## [Try out](https://www.orfeed.org/explorer) OrFeed
+
+[![Test Drive Button](https://www.orfeed.org/images/testdrive.png)](https://www.orfeed.org/explorer)
+
+
 [The Reality Stone on the Blockchain](https://medium.com/proof-of-fintech/the-reality-stone-on-the-blockchain-accessible-to-all-1654a3ec71a7) blog post
 
 [How OrFeed Was Conceived](https://medium.com/proof-of-fintech/introducing-orfeed-aa323342d34c) blog post
 
 A [Use-Case](https://medium.com/proof-of-fintech/how-a-penny-can-affect-billions-a88c0837d17e) blog post
 
-Demo: [https://etherscan.io/dapp/0x8316b082621cfedab95bf4a44a1d4b64a6ffc336](https://etherscan.io/dapp/0x8316b082621cfedab95bf4a44a1d4b64a6ffc336) (Helper: getExchangeRate is a god place to start)
+Etherscan Smart Contract Interface: [https://etherscan.io/dapp/0x8316b082621cfedab95bf4a44a1d4b64a6ffc336](https://etherscan.io/dapp/0x8316b082621cfedab95bf4a44a1d4b64a6ffc336) (Helper: getExchangeRate is a god place to start)
 
 [Youtube video tutorial](https://youtu.be/LK1BiSveEI4)
 
@@ -75,6 +80,16 @@ Experimental:
 uint price = orfeed.getExchangeRate("AAPL", "USD", "PROVIDER1", 1);
 ```
 
+
+
+## RESTful API
+
+You can access the getExchangeRate functionality via RESTful API calls. e.g.
+```javascript
+https://api.orfeed.org/getExchangeRate?fromSymbol=JPY&toSymbol=USD&venue=DEFAULT&amount=10000000000000000
+```
+
+More of OrFeed's smart contract functionality will be added to RESTful calls soon. You can find the source code for the Node.js API app in /nodeJSAppExamples/orfeedapi
 
 
 
