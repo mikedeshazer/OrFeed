@@ -95,7 +95,8 @@ More of OrFeed's smart contract functionality will be added to RESTful calls soo
 
 ## Providing Data As An Oracle Provider
 
-You can register a provider name and connect it to your custom oracle contract (DNS-style) via the OrFeed Oracle Registry: [here](https://etherscan.io/dapp/0x45b0b6ac962a3b8bbad39868742302746c99e0d3) by calling the registerOracle function.
+You can register a provider name and connect it to your custom oracle contract (DNS-style) via the OrFeed Oracle Registry: [here](https://etherscan.io/dapp/0x74b5ce2330389391cc61bf2287bdc9ac73757891) by calling the registerOracle function.
+Additionally, you can tranfer the oracle name, provide contact details in case you are considering selling it, and discover other oracle providers via the smart contract.
 An example of an oracle smart contract that will be compatible with the OrFeed proxy contract is available in /contracts/examples/ProvideDataExamples/userGeneratedOracleExample.sol (very simple example that either returns 500 or 2)
 Once you deploy your contract and register it to the registry (paying a small amount of ETH to prevent spamming of names), you can check/verify your registration by calling the getOracleAddress function.
 
