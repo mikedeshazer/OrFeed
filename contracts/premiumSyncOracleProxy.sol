@@ -1,4 +1,6 @@
-//Mainnet Deployment: https://etherscan.io/address/0x5567ab19a2521f8e8dd61129e9f521a06c9c7868#code
+//MainNet Deployment: https://etherscan.io/address/0xb0d12520a3b7810f7cfa4911fb70e17887adf927#code
+
+// prem orfeed extension oracle routing
 
 pragma solidity >=0.4.26;
 contract UniswapExchangeInterface {
@@ -212,7 +214,7 @@ contract PremiumFeedPrices{
      }
      
     function getPriceFromOracle(string queryVenue, string queryFromSymbol, string queryToSymbol, string theSide, uint256 amount) constant returns (uint256){
-         userGeneratedRegistry registry = userGeneratedRegistry(0x429529ed0209458d26740934682f040a6d191703);
+         userGeneratedRegistry registry = userGeneratedRegistry(0x74b5ce2330389391cc61bf2287bdc9ac73757891);
         uint256 resPrice =registry.getPriceFromOracle(queryVenue, queryFromSymbol, queryToSymbol, theSide, amount);
         return resPrice;
     }
