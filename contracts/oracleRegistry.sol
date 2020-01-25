@@ -1,14 +1,14 @@
 //oracle registry
+//MainNet: https://etherscan.io/address/0x74b5ce2330389391cc61bf2287bdc9ac73757891#code
 
-//MainNet: https://etherscan.io/address/0x429529ed0209458d26740934682f040a6d191703#code
 
 pragma experimental ABIEncoderV2;
 
 interface PriceOracleInterface{
-      function getPriceFromOracle (string fromParam, string toParam, string  side, uint256 amount) returns (uint256);
- }
+    function getPriceFromOracle (string fromParam, string toParam, string  side, uint256 amount) returns (uint256);
+}
   
-    // ERC20 Token Smart Contract
+    // oracle registery main
     contract oracleRegistry {
         
       mapping (string=>address) oracleMapping;
@@ -33,7 +33,6 @@ interface PriceOracleInterface{
             owner = msg.sender; 
             purchaseFee = 50000000000000000;
         }
-        
         
         
      
@@ -70,14 +69,13 @@ interface PriceOracleInterface{
 
     }
     
-    
     function registerOracle(string name, address requestedAddress, string info ) payable returns (bool){
         require(msg.value >= purchaseFee, "Please send .05 ETH to register an oracle. This is to prevent registration spam");
         
         name = toLower(name);
         
-        if(oracleMapping[name] < 1){
-            //you cant update re-register an address
+        if(oracleMapping[name] > 1){
+            //you cant update/re-register an address
             throw;
             
         }
@@ -103,18 +101,16 @@ interface PriceOracleInterface{
     
       function transferOracleName(string name, address toAddress) returns(bool){
            if(oracleMapping[name] != 0x0 && oracleOwners[name] != msg.sender){
-            //you cant edit this because you did not register this name
+            //you cant transfer this because you did not register this name
             throw;
             
          }
-         oracleMapping[name] = toAddress;
+         oracleOwners[name] = toAddress;
          return true;
         
       }
     
-    
-    
-    function editOracle(string name, string info ) payable returns (bool){
+    function editOracleInfo(string name, string info) payable returns (bool){
        
         name = toLower(name);
         
@@ -128,10 +124,30 @@ interface PriceOracleInterface{
         string memory theDetails = info;
       
         oracleOwnersInfo[name] = theDetails;
+      
 
        return true;
         
     }
+
+    function editOracleAddress(string name, address newOrSameOracleAddress) payable returns (bool){
+       
+        name = toLower(name);
+        
+       
+        if(oracleMapping[name] != 0x0 && oracleOwners[name] != msg.sender){
+            //you cant update this because you did not register this name
+            throw;
+            
+        }
+        
+      
+        oracleMapping[name] = newOrSameOracleAddress;
+
+       return true;
+        
+    }
+    
     
     function getAllOracles() constant returns (string []){
         return oracleNamesArr;
@@ -143,6 +159,10 @@ interface PriceOracleInterface{
         return oracleMapping[nameReference];
     }
     
+    function getOracleOwner(string nameReference) constant returns (address){
+        nameReference = toLower(nameReference);
+        return oracleOwners[nameReference];
+    }
     
     function getOracleInfo(string nameReference) constant returns (string){
         nameReference = toLower(nameReference);
