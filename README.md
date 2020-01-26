@@ -20,7 +20,7 @@ Website: [orfeed.org](https://www.orfeed.org)
 
 A [Use-Case](https://medium.com/proof-of-fintech/how-a-penny-can-affect-billions-a88c0837d17e) blog post
 
-Etherscan Smart Contract Interface: [https://etherscan.io/dapp/0x8316b082621cfedab95bf4a44a1d4b64a6ffc336](https://etherscan.io/dapp/0x8316b082621cfedab95bf4a44a1d4b64a6ffc336) (Helper: getExchangeRate is a god place to start)
+Etherscan Smart Contract Interface: [https://etherscan.io/dapp/0x8316b082621cfedab95bf4a44a1d4b64a6ffc336](https://etherscan.io/dapp/0x8316b082621cfedab95bf4a44a1d4b64a6ffc336) (Helper: getExchangeRate is a good place to start)
 
 [Youtube video tutorial](https://youtu.be/LK1BiSveEI4)
 
