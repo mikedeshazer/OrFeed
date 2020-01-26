@@ -1,4 +1,5 @@
 // random number oracle example contract
+
 // fromParam and toParam must be positive integers of less than 100 digits. amount can be extra entropy to generate the random number.
 
 interface OrFeedInterface {
@@ -23,6 +24,8 @@ contract randomregisteredoracleExample {
     }
 
     function getPriceFromOracle(string fromParam, string toParam, string, uint256 amount) public returns (uint256){
+
+
         uint256 start = stringToUint(fromParam);
         uint256 end = stringToUint(toParam);
         assert(start < end);
