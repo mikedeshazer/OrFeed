@@ -27,6 +27,8 @@ A [Use-Case](https://medium.com/proof-of-fintech/how-a-penny-can-affect-billions
 
 Etherscan Smart Contract Interface: [https://etherscan.io/dapp/0x8316b082621cfedab95bf4a44a1d4b64a6ffc336](https://etherscan.io/dapp/0x8316b082621cfedab95bf4a44a1d4b64a6ffc336) (Helper: getExchangeRate is a good place to start)
 
+Oracle Registry [dApp](https://etherscan.io/dapp/0x74b5ce2330389391cc61bf2287bdc9ac73757891)
+
 [Youtube video tutorial](https://youtu.be/LK1BiSveEI4)
 
 
@@ -83,6 +85,13 @@ Experimental:
 
 ```javascript
 uint price = orfeed.getExchangeRate("AAPL", "USD", "PROVIDER1", 1);
+```
+
+
+Additionally, you can do hacky things like generate a random number between two numbers using the getExchangeRate method, which calls to the 'random' oracle namespace in the oracle registry and then calculates a number based on block timestamp, block difficulty, as well as the dynamic price of BTC, ETH and DAI on Kyber (often changes throughout the parsing of a block, so would be more difficult to be gamed than the common hash-of-block-time/difficulty method):
+
+```javascript
+uint price = orfeed.getExchangeRate("10", "50", "random", 0);
 ```
 
 
