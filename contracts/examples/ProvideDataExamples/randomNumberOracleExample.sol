@@ -1,4 +1,5 @@
 // random number oracle example contract
+// Example on Mainnet: https://etherscan.io/address/0x40042364f29612b830531435d02ea68f8f0dd6bb#readContract
 
 // fromParam and toParam must be positive integers of less than 100 digits. amount can be extra entropy to generate the random number.
 
@@ -23,20 +24,21 @@ contract randomregisteredoracleExample {
         owner = msg.sender;
     }
 
-    function getPriceFromOracle(string fromParam, string toParam, string, uint256 amount) public returns (uint256){
+    function getPriceFromOracle(string fromParam, string toParam, string venue, uint256 amount) public constant returns (uint256){
 
 
         uint256 start = stringToUint(fromParam);
         uint256 end = stringToUint(toParam);
-        assert(start < end);
+        require(start < end, "Start must be less than end (fromSymb must be lower than toSymb");
         uint256 width = end - start;
+        width = width+1;
+        amount =1;
 
-        uint256 rate1 = orfeed.getExchangeRate("MKR", "DAI", "DEFAULT", 10000000);
-        uint256 rate2 = orfeed.getExchangeRate("ETH", "DAI", "DEFAULT", 10000000);
-        uint256 rate3 = orfeed.getExchangeRate("WBTC", "ETH", "DEFAULT", 10000000);
-        uint256 rate4 = orfeed.getExchangeRate("KNC", "ETH", "DEFAULT", 10000000);
-        uint256 rate5 = orfeed.getExchangeRate("SNX", "ETH", "DEFAULT", 10000000);
-        uint256 seed = uint256(keccak256(abi.encodePacked(amount, block.coinbase, block.difficulty, block.timestamp, rate1, rate2, rate3, rate4, rate5)));
+        uint256 rate1 = orfeed.getExchangeRate("MKR", "DAI", "DEFAULT", 1);
+        uint256 rate2 = orfeed.getExchangeRate("ETH", "DAI", "DEFAULT", 100000000000000);
+        uint256 rate3 = orfeed.getExchangeRate("WBTC", "ETH", "DEFAULT", 100000);
+
+        uint256 seed = uint256(keccak256(abi.encodePacked(amount, block.coinbase, block.difficulty, block.timestamp, rate1, rate2, rate3)));
         return (seed % width) + start;
     }
 
