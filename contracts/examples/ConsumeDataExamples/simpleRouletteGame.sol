@@ -53,7 +53,7 @@ contract Roulette {
         require(msg.value <= maxBet, "You must bet less than the maxBet");
         require(msg.value >  0, "You cant bet zero");
         require(this.balance >= msg.value.mul(2), "There is not enough in the house to allow this bet to take place");
-        
+        require(tx.origin == msg.sender, "smart contract cannot call this contract");
         string memory theColor = toLower(oddOrEven);
         bool userInputBool;
        if (equal(theColor, "even")){

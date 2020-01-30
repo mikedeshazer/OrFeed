@@ -88,7 +88,9 @@ uint price = orfeed.getExchangeRate("AAPL", "USD", "PROVIDER1", 1);
 ```
 
 
-Additionally, you can do hacky things like generate a random number between two numbers using the getExchangeRate method, which calls to the 'random' oracle namespace in the oracle registry and then calculates a number based on block timestamp, block difficulty, as well as the dynamic price of BTC, ETH and DAI on Kyber (often changes throughout the parsing of a block, so would be more difficult to be gamed than the common hash-of-block-time/difficulty method):
+Additionally, you can do hacky things like generate a random number between two numbers using the getExchangeRate method, which calls to the 'random' oracle namespace in the oracle registry and then calculates a number based on block timestamp, block difficulty, as well as the dynamic price of BTC, ETH and DAI on Kyber (often changes throughout the parsing of a block, so would be more difficult to be gamed than the common hash-of-block-time/difficulty method).
+
+First live third-party dApp powered by this function: [EthCasino Roulette Game](https://www.EthCasino.club) 
 
 ```javascript
 uint price = orfeed.getExchangeRate("10", "50", "random", 0);
