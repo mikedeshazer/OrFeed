@@ -27,7 +27,9 @@ A [Use-Case](https://medium.com/proof-of-fintech/how-a-penny-can-affect-billions
 
 Etherscan Smart Contract Interface: [https://etherscan.io/dapp/0x8316b082621cfedab95bf4a44a1d4b64a6ffc336](https://etherscan.io/dapp/0x8316b082621cfedab95bf4a44a1d4b64a6ffc336) (Helper: getExchangeRate is a good place to start)
 
-Oracle Registry [dApp](https://etherscan.io/dapp/0x74b5ce2330389391cc61bf2287bdc9ac73757891)
+Oracle Price/Numerical Data Registry [dApp](https://etherscan.io/dapp/0x74b5ce2330389391cc61bf2287bdc9ac73757891)
+
+General Data/Event Result Registry [dApp](https://etherscan.io/address/0xd754f58d9d6d705b98bde698f9f9cec0bded1b8a#writeContract) 
 
 [Youtube video tutorial](https://youtu.be/LK1BiSveEI4)
 
@@ -94,6 +96,16 @@ Additionally, you can do hacky things like retrieve a "safe" gas price that prev
 ```javascript
 uint gasLimit = orfeed.getExchangeRate("skip", "skip", "synthetix-gas-price-limit", 0);
 ```
+
+
+## Data And Event Oracles
+
+In addition to pricing and numerical data, string data can also be retrieved using the get `getEventResult` method. You can get string data from registered OrFeed oracles (who can optionally leave notes about how their oracles work and other details). This can be used for sporting events, documents, and notes that one might want to store permanently/temprarily with an expiration for when aliens come and want data on what the human were up to. You can register an oracle via this OrFeed [dApp](https://etherscan.io/address/0xd754f58d9d6d705b98bde698f9f9cec0bded1b8a#writeContract) and set tules for how you would like to return data based on parameters sent (example: /contracts/examples/ProvideDataExamples/userRegisteredDataOrEventOracleExample.sol). Usage for retrieving data example:
+
+```javascript
+uint info = orfeed.getEventResult("skip", "satoshi-first-block");
+```
+Returns: The Times 03/Jan/2009 Chancellor on brink of second bailout for banks
 
 
 
