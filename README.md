@@ -103,7 +103,7 @@ uint gasLimit = orfeed.getExchangeRate("skip", "skip", "synthetix-gas-price-limi
 In addition to pricing and numerical data, string data can also be retrieved using the get `getEventResult` method. You can get string data from registered OrFeed oracles (who can optionally leave notes about how their oracles work and other details). This can be used for sporting events, documents, and notes that one might want to store permanently/temprarily with an expiration for when aliens come and want data on what the human were up to. You can register an oracle via this OrFeed [dApp](https://etherscan.io/address/0xd754f58d9d6d705b98bde698f9f9cec0bded1b8a#writeContract) and set tules for how you would like to return data based on parameters sent (example: /contracts/examples/ProvideDataExamples/userRegisteredDataOrEventOracleExample.sol). Usage for retrieving data example:
 
 ```javascript
-string info = orfeed.getEventResult("skip", "satoshi-first-block");
+string memory info = orfeed.getEventResult("skip", "satoshi-first-block");
 ```
 Returns: The Times 03/Jan/2009 Chancellor on brink of second bailout for banks
 
