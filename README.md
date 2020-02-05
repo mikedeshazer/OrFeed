@@ -179,6 +179,12 @@ Note: "PROVIDER1" was the first external financial data provider for the OrFeed 
 
 
 
+## DeFi Interest Rate Data/Calculator
+
+Coming soon.
+
+
+
 ## Examples
 
 The contracts/examples folder contains contracts for both writing data as an oracle provider and for consuming data as an oracle consumer.
