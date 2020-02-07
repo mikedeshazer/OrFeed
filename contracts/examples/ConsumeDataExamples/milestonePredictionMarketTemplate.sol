@@ -1,5 +1,7 @@
 //Example Prediction market for www.floater.market
 
+pragma solidity ^0.4.26;
+
 interface OrFeedInterface {
     function getExchangeRate ( string fromSymbol, string toSymbol, string venue, uint256 amount ) external view returns ( uint256 );
     function getTokenDecimalCount ( address tokenAddress ) external view returns ( uint256 );
