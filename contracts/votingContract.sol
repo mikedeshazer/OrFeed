@@ -1,11 +1,11 @@
 pragma solidity ^0.5.0;
 
-/**
+/** 
  * @title VotingContract
- * @dev Implements a voting contract will be used by judges serving as oracles in a market such as https://www.floater.market
+ * @dev Implements a voting contract will be used by judges serving as oracles in a market such as https://www.floater.market 
  */
 
-contract VotingContract {
+ contract VotingContract {
     
     // a vote window, which is a period in days which should be set in the future
     uint private votingStartDate;
@@ -85,11 +85,13 @@ contract VotingContract {
     
     modifier votingEligible() {
         // make sure the voting period is in range and the voter is already added as a judge
-        require(now >= votingStartDate 
+        require(votingStartDate > 0 
+            && votingEndDate > 0
+            && now >= votingStartDate 
             && now <= votingEndDate 
             &&  judges[msg.sender].judgeAddress == msg.sender
             && judges[msg.sender].judgeAddress != address(0), 
-            "Voting not eligible! make sure you are in the voting period and are added as a judge");
+            "Voting not eligible! make sure you are in the voting period, the voting period is valid and are added as a judge");
         _;
     }
     
@@ -185,7 +187,6 @@ contract VotingContract {
         events[_theEvent].push(_vote);
     }
     
-   
     function getResultFromOracle(string memory _theEvent, uint _dataIndex) public view returns (string memory) { 
         
         string memory votingResult = "";
@@ -238,12 +239,20 @@ contract VotingContract {
             else {
                 votingResult =  events[_theEvent][_dataIndex];
             }
-            
         }
         
         return votingResult; 
     }
     
+    // function to get the time till vote
+    function getTimeTilVote() external view  returns (uint){
+        uint timeTilVote = 0;
+        
+        if (votingStartDate > now) {
+            timeTilVote = votingStartDate - now;
+        }
+        return timeTilVote;
+    }
     
     // helper function to compare strings
     function compareStrings (string memory a, string memory b) internal pure 
@@ -251,4 +260,4 @@ contract VotingContract {
        return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))) );
     }
      
-}
+ }
