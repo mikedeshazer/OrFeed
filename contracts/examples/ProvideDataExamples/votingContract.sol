@@ -112,8 +112,8 @@ pragma solidity ^0.5.0;
         voteDetailsDescription = _voteDetailsDescription;
     }
     
-    // function to set a voting period before the voting starts
-    function setVotingPeriod(uint _startDate, uint _endDate) 
+    // function to set a voting period before the voting starts by setting the start and end dates
+    function setVotingPeriodByDates(uint _startDate, uint _endDate) 
         external 
         futureVotingDate(_startDate)
         futureVotingDate(_endDate)
@@ -123,6 +123,16 @@ pragma solidity ^0.5.0;
     {
         votingStartDate = _startDate;
         votingEndDate = _endDate;
+    }
+    
+    // function to set a voting period before the voting starts
+    function setVotingPeriod(uint _daysToVoteStart, uint _votingDurationDays) 
+        external 
+        votingShouldNotHaveStarted()
+        onlyOwner()
+    {
+        votingStartDate = now + _daysToVoteStart * 1 days;
+        votingEndDate = now + _daysToVoteStart * 1 days + _votingDurationDays * 1 days;
     }
     
     // function to reset a voting period before the voting starts
