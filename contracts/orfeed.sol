@@ -376,7 +376,10 @@ contract orfeed {
         freeRateTokenSymbols['GST1'] = 0x88d60255F917e3eb94eaE199d827DAd837fac4cB;
         freeRateTokenSymbols['GST2'] = 0x0000000000b3F879cb30FE243b4Dfee438691c04;
         
-        
+        //commented list of tokens added post deployment
+
+        //freeRateTokenSymbols['LEND'] = 0x80fb784b7ed66730e8b1dbd9820afd29931aab03;
+        //freeRateTokenSymbols['ADAI'] = 0xfc1e690f61efd961294b3e1ce3313fbd8aa4f85d;
         
   
         
