@@ -65,7 +65,7 @@ uint jpyusdPrice = orfeed.getExchangeRate("JPY", "USD", "DEFAULT", 100000);
 // returns 920 (or $920.00)
 ```
 
-Note: Replace "DEFAULT" with the oracle provider you would like data from. For example, if you want to know Uniswap's price on the buy side, use "BUY-UNISWAP-EXCHANGE". If you want Kyber's sell side data for the same, you can use "SELL-KYBER-EXCHANGE". Because ERC-20s have many, many integers, when getting prices from token to token, be sure to use very large amounts.... 1000000000 DAI is less than one penny, for example, due to divisibility at 18. 
+Note: Replace "DEFAULT" with the oracle provider you would like data from. For example, if you want to know Uniswap's price on the buy side, use "BUY-UNISWAP-EXCHANGE". If you want Kyber's sell side data for the same, you can use "SELL-KYBER-EXCHANGE". Due to the way BANCOR works with swaps/liquidity paths, you can simply use "BANCOR" when querying Bancor. Because ERC-20s have many, many integers, when getting prices from token to token, be sure to use very large amounts.... 1000000000 DAI is less than one penny, for example, due to divisibility at 18. 
 
 More examples:
 
@@ -75,6 +75,10 @@ uint price = orfeed.getExchangeRate("ETH", "USDC", "BUY-KYBER-EXCHANGE", 1000000
 
 ```javascript
 uint price = orfeed.getExchangeRate("BTC", "DAI", "SELL-UNISWAP-EXCHANGE", 100);
+```
+
+```javascript
+uint price = orfeed.getExchangeRate("ETH", "DAI", "BANCOR", 1000000000000000);
 ```
 
 ```javascript
@@ -139,7 +143,7 @@ As more reputable, as well as trustless, oracle smart contracts register within 
 | BTC      | DEFAULT | Cryptocurrency |
 | DAI      | BUY-KYBER-EXCHANGE      |   Token |
 | USDC | SELL-UNISWAP-EXCHANGE    |    Token |
-| MKR      | DEFAULT | Token |
+| MKR      | BANCOR | Token |
 | KNC      | DEFAULT      |   Token |
 | ZRX | DEFAULT    |    Token |
 | TUSD | DEFAULT    |    Token |
