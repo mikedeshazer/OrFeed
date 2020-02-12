@@ -11,7 +11,7 @@ The reason for choosing is the following
 
 ## How it would work
 
-Getting this to work, would be as easy as 1 2 3 as shwon below.
+Getting this to work, would be as easy as 1 2 3 as shown below.
 
 1. OrFeed would create a SKALE chain and move the OrFeed Oracle Registry contract to the SKALE chain, like [this](https://skale.network/docs/developers/getting-started/beginner).
 2. Data providers would then register their custom oracle contracts, in the SKALE chain, via the above OrFeed Oracle Registry contract.
