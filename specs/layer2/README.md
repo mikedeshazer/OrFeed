@@ -15,7 +15,7 @@ Getting this to work, would be as easy as 1 2 3 as shwon below.
 
 1. OrFeed would create a SKALE chain and move the OrFeed Oracle Registry contract to the SKALE chain, like [this](https://skale.network/docs/developers/getting-started/beginner).
 2. Data providers would then register their custom oracle contracts, in the SKALE chain, via the above OrFeed Oracle Registry contract.
-3. Finally the data providers would now easily update their data about stocks/ETF's e.t.c via the SKALE chain, with not only __zero-fee transactions__ but also high 
+3. Finally the data providers would now easily update their data about stocks/ETF's e.t.c via the SKALE chain, with not only __zero-fee transactions__ but also high __transaction volumes__ meaning they can literally update their data to ther blockchain every second without any lags and at no cost at all.
 
 
 
