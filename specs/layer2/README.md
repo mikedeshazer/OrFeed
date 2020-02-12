@@ -4,10 +4,10 @@ My proposal to help reduce gas fees for OrFeed would be to use the [SKALE](https
 
 The reason for choosing is the following
 
-- SKALE is allows users to deploy mini "sidechains" that have full EVM compatibility meaning the current contracts can be deployed to them and will work as intended.
-- It is also super fast and can process over 2000 transactions per second without any lags unlike the ethereum network.
-- It supports the current ethereum developer tooling so getting it to work wouldn't be an issue so long as one knows solidity, truffle, web3.js, remix e.t.c
-- It is also very secure, since each SKALE chain is deployed as a private instance which connects to the ethereum network to enable consensus on a batch of off-chain transactions after a certain period of time i.e. for every 1000 transactions created off-chain, the private SKALE chain will connect to the ethereum network for the transactions to be validated and for them added to the blockchain upon confirmation
+- SKALE allows users to deploy "mini-chains" that have full EVM compatibility meaning the current Orfeed contracts can be deployed to the SKALE "mini-chains" and will work as intended.
+- It is also super fast and can process over 2000 transactions per second without any lags unlike the ethereum network which lags frequently for high volume transactions due to network congestion.
+- It also supports the current ethereum developer tooling so getting it to work wouldn't be an issue as long as a developer has experience with solidity, truffle, web3.js, remix e.t.c
+- It is also very secure, since each SKALE chain is deployed as a private instance which only connects to the ethereum network occasionally to enable consensus on a batch of off-chain transactions i.e. for every 1000 transactions created off-chain, the private SKALE chain will connect to the ethereum network for the transactions to be validated and then added to the blockchain upon confirmation.
 
 ## How it would work
 
