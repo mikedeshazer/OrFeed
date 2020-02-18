@@ -381,7 +381,16 @@ contract orfeed {
         //freeRateTokenSymbols['LEND'] = 0x80fb784b7ed66730e8b1dbd9820afd29931aab03;
         //freeRateTokenSymbols['ADAI'] = 0xfc1e690f61efd961294b3e1ce3313fbd8aa4f85d;
         //freeRateTokenSymbols['REP'] =  0x1985365e9f78359a9B6AD760e32412f4a445E862;
-        
+        //freeRateTokenSymbols['ZIL'] =  0x05f4a42e251f2d52b8ed15e9fedaacfcef1fad27;
+        //freeRateTokenSymbols['AST'] =  0x27054b13b1b798b345b591a4d22e6562d47ea75a;
+        //freeRateTokenSymbols['HOT'] =  0x6c6ee5e31d828de241282b9606c8e98ea48526e2;
+        //freeRateTokenSymbols['KCS'] =  0x039b5649a59967e3e936d7471f9c3700100ee1ab;
+        //freeRateTokenSymbols['MXM'] =  0x8e766f57f7d16ca50b4a0b90b88f6468a09b0439;
+        //freeRateTokenSymbols['CRO'] =  0xa0b73e1ff0b80914ab6fe0444e65848c4c34450b;
+        //freeRateTokenSymbols['BNB'] =  0xB8c77482e45F1F44dE1745F52C74426C631bDD52;
+        //freeRateTokenSymbols['BNT'] =  0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c;
+        //freeRateTokenSymbols['HT'] =  0x6f259637dcd74c767781e37bc6133cd6a68aa161;
+        //freeRateTokenSymbols['PAX'] =  0x8e870d67f660d95d5be530380d0ec0bd388289e1;
         
         
   
