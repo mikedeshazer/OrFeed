@@ -391,6 +391,9 @@ contract orfeed {
         //freeRateTokenSymbols['BNT'] =  0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c;
         //freeRateTokenSymbols['HT'] =  0x6f259637dcd74c767781e37bc6133cd6a68aa161;
         //freeRateTokenSymbols['PAX'] =  0x8e870d67f660d95d5be530380d0ec0bd388289e1;
+        //freeRateTokenSymbols['CDAI'] =  0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643;
+        //freeRateTokenSymbols['CSAI'] =  0xf5dce57282a584d2746faf1593d3121fcac444dc;
+        //freeRateTokenSymbols['USDT'] = 0xdac17f958d2ee523a2206206994597c13d831ec7;
         
         
   
