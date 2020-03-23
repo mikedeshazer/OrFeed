@@ -2,46 +2,48 @@ dist: bionic
 
 sudo: required
 
-include:
-    - language: python
+matrix:
+  include:
+      - language: python
 
-      python: 3.7.6
+        python: 3.7.6
 
-      before_install:
-        - sudo add-apt-repository ppa:ethereum/ethereum --y
-        - sudo apt-get update 
-        - sudo apt-get install solc
+        before_install:
+          - sudo add-apt-repository ppa:ethereum/ethereum --y
+          - sudo apt-get update 
+          - sudo apt-get install solc
 
-      install: 
-        - pip install mythx-cli
+        install: 
+          - pip install mythx-cli
 
-      script:
-        - mythx analyze --solc-version 0.6.4 contracts/orfeed.sol
+        script:
+          - mythx analyze --solc-version 0.6.4 contracts/orfeed.sol
 
-    - language: node_js
-      node_js: 8.11.3
+      - language: node_js
+      
+        node_js: 8.11.3
 
-      env:
-        - CXX=g++-4.8
+        env:
+          - CXX=g++-4.8
 
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - build-essential
-            - g++-4.8
+        addons:
+          apt:
+            sources:
+              - ubuntu-toolchain-r-test
+            packages:
+              - build-essential
+              - g++-4.8
 
-      before_install:
-        - export CXX="g++-4.8"
-        - npm install -g npm@latest
-        - npm install -g truffle
+        before_install:
+          - export CXX="g++-4.8"
+          - npm install -g npm@latest
+          - npm install -g truffle
 
-      install:
-        - npm install 
+        install:
+          - npm install 
 
-      script:
-        - truffle test --mainnet
+        script:
+          - truffle test --mainnet
 
 notifications:
   email: false
