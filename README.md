@@ -141,7 +141,7 @@ As more reputable, as well as trustless, oracle smart contracts register within 
 | ------------- |:-------------:| -----:|
 | ETH      | DEFAULT | Cryptocurrency |
 | BTC      | DEFAULT | Cryptocurrency |
-| DAI      | BUY-KYBER-EXCHANGE      |   Token |
+| DAI      | KYBERBYSYMBOLV1      |   Token |
 | USDC | UNISWAPBYSYMBOLV1   |    Token |
 | MKR      | BANCOR | Token |
 | KNC      | DEFAULT      |   Token |
