@@ -70,7 +70,7 @@ Note: Replace "DEFAULT" with the oracle provider you would like data from. For e
 More examples:
 
 ```javascript
-uint price = orfeed.getExchangeRate("ETH", "USDC", "BUY-KYBER-EXCHANGE", 100000000000000);
+uint price = orfeed.getExchangeRate("ETH", "USDC", "UNISWAPBYSYMBOLV1", 100000000000000);
 ```
 
 ```javascript
@@ -142,7 +142,7 @@ As more reputable, as well as trustless, oracle smart contracts register within 
 | ETH      | DEFAULT | Cryptocurrency |
 | BTC      | DEFAULT | Cryptocurrency |
 | DAI      | BUY-KYBER-EXCHANGE      |   Token |
-| USDC | SELL-UNISWAP-EXCHANGE    |    Token |
+| USDC | UNISWAPBYSYMBOLV1   |    Token |
 | MKR      | BANCOR | Token |
 | KNC      | DEFAULT      |   Token |
 | ZRX | DEFAULT    |    Token |
