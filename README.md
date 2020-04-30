@@ -47,6 +47,7 @@ interface OrFeedInterface {
   function getForexAddress ( string symbol ) external view returns ( address );
   function requestAsyncEvent(string eventName, string source)  external returns(string);
   function getAsyncEventResult(string eventName, string source, string referenceId) external view returns (string);
+  function arb(address fundsReturnToAddress, address liquidityProviderContractAddress, string[] tokens,  uint256 amount, string[] exchanges) payable returns (bool);
 }
 ```
 
@@ -54,7 +55,7 @@ interface OrFeedInterface {
 To Initialize OrFeed, simply include this code:
 
 ```javascript
-OrFeedInterface orfeed= OrFeedinterface(0x8316b082621cfedab95bf4a44a1d4b64a6ffc336);
+OrFeedInterface orfeed= OrFeedInterface(0x8316b082621cfedab95bf4a44a1d4b64a6ffc336);
 
 ```
 
