@@ -181,8 +181,14 @@ contract flashIt{
 
 
     ERC20 theToken = ERC20(_reserve);
+
         //place the arb you would like to perform below
+
         OrFeedInterface orfeed= OrFeedInterface(0x8316b082621cfedab95bf4a44a1d4b64a6ffc336);
+
+        //approve the token you are starting  (tokenOrder element 0 below)with (so that the orfeed contract perform its operations below )
+        theToken.approve(0x8316b082621cfedab95bf4a44a1d4b64a6ffc336, 10000000000000000000000000000);
+        
          string[] memory tokenOrder = new string[](3);
          string[] memory exchangeOrder = new string[](3);
          
