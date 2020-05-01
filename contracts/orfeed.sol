@@ -432,6 +432,8 @@ contract orfeed {
 
         //erc20 price oracle address. Can be changed by DAO
         tokenPriceOracleAddress = 0xFd9304Db24009694c680885e6aa0166C639727D6;
+
+        //New address, as dynamically updated in the most recent contract is: 0x9D7F70AF5DF5D5CC79780032d47a34615D1F1d77
         synthetixExchangeAddress = 0xE95Ef4e7a04d2fB05cb625c62CA58da10112c605;
 
         tokenPriceOracleAddress2 = 0xe9Cf7887b93150D4F2Da7dFc6D502B216438F244;
