@@ -8,8 +8,7 @@
     "test": "tests"
   },
   "devDependencies": {
-    "truffle-hdwallet-provider": "^1.0.17",
-    "web3": "^1.2.4"
+    "truffle-hdwallet-provider": "^1.0.17"
   },
   "scripts": {
     "test": "truffle test --mainnet"
