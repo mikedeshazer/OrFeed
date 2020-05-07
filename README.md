@@ -15,6 +15,7 @@ Website: [orfeed.org](https://www.orfeed.org)
 
 [![Test Drive Button](https://www.orfeed.org/images/testdrive.png)](https://www.orfeed.org/explorer)
 
+[OrFeed DeFi Arbitrage Discovery Tool](https://www.orfeed.org/defiarbfinder)
 
 [The Reality Stone on the Blockchain](https://medium.com/proof-of-fintech/the-reality-stone-on-the-blockchain-accessible-to-all-1654a3ec71a7) blog post
 
