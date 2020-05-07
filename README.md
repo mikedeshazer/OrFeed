@@ -3,7 +3,7 @@
 [![Discord](https://img.shields.io/discord/671195829524103199)](https://discord.gg/byCPVsY)
 
 
-### Homemade, aspirationally high-reliability oracle aggregator for Ethereum-based DeFi apps that need on and off-chain data.
+### Homemade, aspirationally high-reliability oracle aggregator for Ethereum-based DeFi apps that need on and off-chain data, with a bit of streamlined execution functionality in there, as well.
 
 ![OrFeed Logo](https://www.orfeed.org/images/orfeed.png)
 
