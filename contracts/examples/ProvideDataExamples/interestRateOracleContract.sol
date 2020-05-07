@@ -164,7 +164,7 @@ contract InterestRateOracleContract {
         if (platformSide.platform == 'Compound') {
             string memory platformToken;
             if (symbol == 'BTC') {
-                platformToken = 'CWBTC';
+                platformToken = '0xC11b1268C1A384e55C48c2391d8d480264A3A7F4';
             } else {
                 platformToken = abi.encodePacked('C', symbol);
             }
@@ -179,7 +179,7 @@ contract InterestRateOracleContract {
         } else if (platformSide.platform == 'Fulcrum') {
             string memory platformToken;
             if (symbol == 'BTC') {
-                platformToken = 'IWBTC';
+                platformToken = '0xba9262578efef8b3aff7f60cd629d6cc8859c8b5';
             } else {
                 platformToken = abi.encodePacked('I', symbol);
             }
@@ -217,7 +217,7 @@ contract InterestRateOracleContract {
         } else if (platformSide.platform == 'Aave') {
             string memory platformToken;
             if (symbol == 'BTC') {
-                platformToken = 'AWBTC';
+                platformToken = '0xFC4B8ED459e00e5400be803A9BB3954234FD50e3';
             } else {
                 platformToken = abi.encodePacked('A', symbol);
             }
