@@ -2,9 +2,8 @@
 
 [![Discord](https://img.shields.io/discord/671195829524103199)](https://discord.gg/byCPVsY)
 
-## Homemade Price Feed and Website Data Provider for Smart Contracts That Need Finance, Sports and Other Miscellaneous Information That Resides On- and/or Off-Chain.
 
-A highly reliable oracle aggregator for Ethereum-based DeFi apps that need financial data from the outside world.
+###Homemade, aspirationally high-reliability oracle aggregator for Ethereum-based DeFi apps that need on and off-chain data.
 
 ![OrFeed Logo](https://www.orfeed.org/images/orfeed.png)
 
