@@ -1,6 +1,9 @@
-//MainNet Deployment: https://etherscan.io/address/0xb0d12520a3b7810f7cfa4911fb70e17887adf927#code
+//MainNet Deployment: https://etherscan.io/address/0x61ac8278f1c84317555efb1b4c800b36fd432431#code
+//This contract is heading for deprecation and will merely be a proxy to the registry soon... This was built during a hackathon, and is being put out to pasture
 
-// prem orfeed extension oracle routing
+
+
+// router to registry
 
 pragma solidity >=0.4.26;
 contract UniswapExchangeInterface {
@@ -124,7 +127,7 @@ contract PremiumFeedPrices{
     
      constructor() public  {
          
-         
+         //Below is no longer needed nor is used in this code.
         
          //DAI
          uniswapAddresses[0x6b175474e89094c44da98b954eedeac495271d0f] =  0x2a1530c4c41db0b0b2bb646cb5eb1a67b7158667;
@@ -198,6 +201,8 @@ contract PremiumFeedPrices{
              price = stockProvider.getLastPrice(queryFromSymbol);
          }
          
+         /*
+         No longer needed
          else if(equal(theExchange,"UNISWAP")){
             price= uniswapPrice(toA1, toA2, theSide, amount);
          }
@@ -205,6 +210,9 @@ contract PremiumFeedPrices{
          else if(equal(theExchange,"KYBER")){
             price= kyberPrice(toA1, toA2, theSide, amount);
          }
+         
+         */
+         
          else{
             price = getPriceFromOracle(queryVenue, queryFromSymbol, queryToSymbol, theSide, amount);
          }
@@ -314,17 +322,21 @@ contract PremiumFeedPrices{
     
     
     function determineExchange(string exString) constant returns (string){
-            
-        if(contains("UNISWA", exString ) == true){
+            /*
+            As per the registry, default values were no longer needed
+            So falling back to NONE so all requests get routed to the registry
+        if(contains("-UNISWAP-EXCHANG", exString ) == true){
             return "UNISWAP";
         }
         
-        else if(contains("KYBE", exString ) == true){
+        else if(contains("-KYBER-EXCHANG", exString ) == true){
             return "KYBER";
         }
+        
         else{
+        */
             return "NONE";
-        }
+       // }
     }
     
     

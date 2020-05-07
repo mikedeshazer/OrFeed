@@ -365,6 +365,7 @@ contract orfeed {
         freeRateTokenSymbols['OMG'] = 0xd26114cd6EE289AccF82350c8d8487fedB8A0C07;
         freeRateTokenSymbols['ZRX'] = 0xe41d2489571d322189246dafa5ebde1f4699f498;
         freeRateTokenSymbols['TUSD'] = 0x0000000000085d4780B73119b644AE5ecd22b376;
+        // ETH is typically always better off as 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2
         freeRateTokenSymbols['ETH'] = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
         freeRateTokenSymbols['WETH'] = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
         freeRateTokenSymbols['ETH2'] = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
@@ -394,6 +395,12 @@ contract orfeed {
         //freeRateTokenSymbols['CDAI'] =  0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643;
         //freeRateTokenSymbols['CSAI'] =  0xf5dce57282a584d2746faf1593d3121fcac444dc;
         //freeRateTokenSymbols['USDT'] = 0xdac17f958d2ee523a2206206994597c13d831ec7;
+        //freeRateTokenSymbols['SUSD'] = 0x57ab1e02fee23774580c119740129eac7081e9d3;
+        //freeRateTokenSymbols['SEUR'] = 0xd71ecff9342a5ced620049e616c5035f1db98620;
+        //freeRateTokenSymbols['SGBP'] = 0x97fe22e7341a0cd8db6f6c021a24dc8f4dad855f;
+        //freeRateTokenSymbols['SETH'] = 0x57ab1e02fee23774580c119740129eac7081e9d3;
+        //freeRateTokenSymbols['SJPY'] = 0xf6b1c627e95bfc3c1b4c9b825a032ff0fbf3e07d;
+        //freeRateTokenSymbols['PAY'] = 0xB97048628DB6B661D4C2aA833e95Dbe1A905B280;
         
         
   
