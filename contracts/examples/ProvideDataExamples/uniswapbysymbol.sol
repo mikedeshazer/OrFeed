@@ -2,7 +2,7 @@
 //Better uniswap oracle for orfeed
 
 
-//mainnet: https://etherscan.io/address/0xa8ddb64f2c6b184273b6e81a066614bbc12a2f97#code
+//mainnet: https://etherscan.io/address/0x2b984ac863137a1d4df06a4384aacfa9fbfcb037#code
 
 interface IUniswapFactory {
     function createExchange(address token) external returns (address exchange);
@@ -117,7 +117,16 @@ contract IUniswapExchange {
         IUniswapExchange usi2 = IUniswapExchange(exchangeAddressBuy);
         
         uint256 ethBack = usi1.getTokenToEthInputPrice(amount);
-        uint256 resultingTokens = usi2.getEthToTokenInputPrice(ethBack);
+
+        uint256 resultingTokens;
+
+        if(sellToken == 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2){
+            resultingTokens = usi2.getEthToTokenInputPrice(amount);
+        }
+        else{
+            resultingTokens = usi2.getEthToTokenInputPrice(ethBack);
+        }
+ 
         
         return resultingTokens;
           
