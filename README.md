@@ -231,6 +231,37 @@ Similar integrations with Augur, Provable and Band Protocol are coming soon.
 Once your transaction has been confirmed on the blockchain, Chainlink then waits 1-3 blocks and sends the response from their smart contract.
 
 
+## Understanding the OrFeed.arb function
+
+### Primer
+
+Triangle arbitrage enables a user to perform a three point exchange of funds between specified Assets on supported exchanges.
+
+### OrFeed Angle
+
+OrFeed Angle provides an interface to engage in Triangle Arbitrage. Configuring the Angle system with your wallet of choice will require approving access between [OrFeed](https://www.orfeed.org) and one of your tokens. For example, in order to perform arbitrage between UDSC, ETH and DAI a user will be required to confirm an approval transaction for each token and this will enable OrFeed Angle to act on your behalf with these tokens.
+
+### OrFeed Arb function
+
+The OrFeed contract provides a function called `arb` which is used to perform an arbitrage-as-code operation. The arb function can take an array of 2 or 3 token symbols representing the tokens which will be used in the arbitrage. The arb function also takes a parameter `exchanges` which is an array of exchange through which the arbitrage will be performed.
+
+### Example of the arb function
+
+Provided in this repository is a smart contract which uses the arb function in conjunction with a flash loan as a source of funds.
+
++ [Arb function used with a Flash Loan](https://github.com/ProofSuite/OrFeed/blob/0145979b9428ce10b1b6bc892b1ceb10cc955688/contracts/examples/tutorialSamples/flashLoanWithArb.sol)
+
+### Parameters of the arb function
+
+`address fundsReturnToAddress` - After execution this is the address funds are sent to to conclude the operation
+
+`address liquidityProviderContractAddress` - The address that will be used as a source of liquidity. Can be the same value ass `fundsReturnToAddress`
+
+`string[] tokens` - An array containing the symbols or 2 or three tokens to be arbitraged
+
+`uint256 amount` - The amount of funds that will be used for the arbitrage
+
+`string[] exchanges` - An array containing the names of 2 or 3 exchange which will be used during the arbitrage
 
 ## Testing
 
