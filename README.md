@@ -55,7 +55,7 @@ interface OrFeedInterface {
 To Initialize OrFeed, simply include this code:
 
 ```javascript
-OrFeedInterface orfeed= OrFeedInterface(0x8316b082621cfedab95bf4a44a1d4b64a6ffc336);
+OrFeedInterface orfeed= OrFeedInterface(0x8316B082621CFedAB95bf4a44a1d4B64a6ffc336);
 
 ```
 
@@ -73,6 +73,13 @@ More examples:
 ```javascript
 uint price = orfeed.getExchangeRate("ETH", "USDC", "UNISWAPBYSYMBOLV1", 100000000000000);
 ```
+
+Supports Uniswap v.2 as follows:
+
+```javascript
+uint price = orfeed.getExchangeRate("ETH", "USDC", "UNISWAPBYSYMBOLV2", 100000000000000);
+```
+
 
 ```javascript
 uint price = orfeed.getExchangeRate("BTC", "DAI", "SELL-UNISWAP-EXCHANGE", 100);
@@ -144,6 +151,7 @@ As more reputable, as well as trustless, oracle smart contracts register within 
 | BTC      | DEFAULT | Cryptocurrency |
 | DAI      | KYBERBYSYMBOLV1      |   Token |
 | USDC | UNISWAPBYSYMBOLV1   |    Token |
+| LINK | UNISWAPBYSYMBOLV2   |    Token |
 | MKR      | BANCOR | Token |
 | KNC      | DEFAULT      |   Token |
 | ZRX | DEFAULT    |    Token |
@@ -235,7 +243,7 @@ Once your transaction has been confirmed on the blockchain, Chainlink then waits
 
 ### Primer
 
-Triangle arbitrage enables a user to perform a three-point exchange of funds between specified Assets on supported decentralized exchanges.
+Triangle arbitrage enables a user to perform a multi-point exchange of funds between specified Assets on supported decentralized exchanges. It also supports a simple 2-way exchange.
 
 ### [OrFeed Angle](https://www.orfeed.org/angle)
 
