@@ -3,7 +3,9 @@
 [![Discord](https://img.shields.io/discord/671195829524103199)](https://discord.gg/byCPVsY)
 
 
-### Homemade, aspirationally high-reliability oracle aggregator for Ethereum-based DeFi apps that need on and off-chain data, with a bit of streamlined execution functionality in there, as well.
+### Homemade high-reliability oracle aggregator for Ethereum-based DeFi apps that need on and off-chain data, with a bit of streamlined execution functionality in there, as well.
+
+Written the way smart contracts used to be: simple with most information on a single page per functional aspect.
 
 ![OrFeed Logo](https://www.orfeed.org/images/orfeed.png)
 
@@ -262,7 +264,7 @@ Once your transaction has been confirmed on the blockchain, Chainlink then waits
 
 ### Primer
 
-Triangle arbitrage enables a user to perform a multi-point exchange of funds between specified Assets on supported decentralized exchanges. It also supports a simple 2-way exchange.
+Trianglular arbitrage enables a user to perform a multi-point exchange of funds between specified Assets on supported decentralized exchanges. The orfeed.arb method also supports a simple 2-way exchange, in addition to 3+ way.
 
 ### [OrFeed Angle](https://www.orfeed.org/angle)
 
