@@ -260,7 +260,7 @@ Similar integrations with Augur, Provable and Band Protocol are coming soon.
 Once your transaction has been confirmed on the blockchain, Chainlink then waits 1-3 blocks and sends the response from their smart contract.
 
 
-## Understanding the OrFeed.arb function
+## Understanding the OrFeed.arb method
 
 ### Primer
 
@@ -270,17 +270,17 @@ Trianglular arbitrage enables a user to perform a multi-point exchange of funds 
 
 OrFeed [Angle](https://www.orfeed.org/angle) provides a user interface to engage in triangle arbitrage and test OrFeed's arb method. Configuring the Angle system with your wallet of choice will require approving access between the OrFeed contract and one of your tokens. For example, in order to perform arbitrage between USDC, ETH and DAI a user will be required to confirm an approval transaction for the first of the three tokens (USDC in this case).
 
-### OrFeed Arb function
+### OrFeed Arb method
 
 The OrFeed contract provides a function called `arb` which is used to perform a streamlined triangular arbitrage operation. 
 
-### Example of the arb function
+### Example of the Arb method
 
 Provided in this repository is a smart contract which uses the arb function in conjunction with a flash loan as a source of funds.
 
 + [Arb function used with a Flash Loan](https://github.com/ProofSuite/OrFeed/blob/0145979b9428ce10b1b6bc892b1ceb10cc955688/contracts/examples/tutorialSamples/flashLoanWithArb.sol)
 
-### Parameters of the arb function
+### Parameters of the Arb Method
 
 `address fundsReturnToAddress` - After execution this is the address funds are sent to to conclude the operation
 
