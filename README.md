@@ -264,7 +264,26 @@ Once your transaction has been confirmed on the blockchain, Chainlink then waits
 
 ### Primer
 
-Trianglular arbitrage enables a user to perform a multi-point exchange of funds between specified Assets on supported decentralized exchanges. The orfeed.arb method also supports a simple 2-way exchange, in addition to 3+ way.
+Trianglular arbitrage enables a user to perform a multi-point exchange of funds between specified Assets on supported decentralized exchanges. The orfeed.arb method also supports a simple 2-way exchange, in addition to multi-way exchange. Additionally, you can try flash loans from Aave which are built directly into the tool.
+
+Example usage
+
+Simple 3-Way Arb:
+```
+orfeed.arb('0x6668bd849c4cb444ca9cde392491312574c824fe', '0x6668bd849c4cb444ca9cde392491312574c824fe', ["DAI","MKR","USDC"], 5000000000000000000, ["KYBER","UNISWAP","KYBER"]);
+```
+
+Same Simple 3-Way Arb with an Aave Flash Loan and much higher amount:
+```
+orfeed.arb('0x6668bd849c4cb444ca9cde392491312574c824fe', '0x398eC7346DcD622eDc5ae82352F02bE94C62d119', ["ETH","DAI","MKR","USDC"], 5000000000000000000000, ["SKIP","KYBER","UNISWAP","KYBER"]);
+```
+
+For simple mult-way trades using your own capital, approve the orfeed contract: `0x8316b082621cfedab95bf4a44a1d4b64a6ffc336`
+
+For simple multi-way way trades using Aave capital, approve the orfeed flash loan contract: `0xc6eba20877dc64e920975b9f5e6f1a0da48ee68e`
+
+
+
 
 ### [OrFeed Angle](https://www.orfeed.org/angle)
 
