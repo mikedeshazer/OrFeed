@@ -268,14 +268,14 @@ Trianglular arbitrage enables a user to perform a multi-point exchange of funds 
 
 Example usage
 
-Simple 3-Way Arb:
+Simple 3-Way trade in which `0x08906e8e5193929181011043b52432973E5F8446` is your account or the account that should receive the assets at the end of the transaction:
 ```
-orfeed.arb('0x6668bd849c4cb444ca9cde392491312574c824fe', '0x6668bd849c4cb444ca9cde392491312574c824fe', ["DAI","MKR","USDC"], 5000000000000000000, ["KYBER","UNISWAP","KYBER"]);
+orfeed.arb('0x08906e8e5193929181011043b52432973E5F8446', '0x08906e8e5193929181011043b52432973E5F8446', ["DAI","MKR","USDC"], 5000000000000000000, ["KYBER","UNISWAP","KYBER"]);
 ```
 
-Same Simple 3-Way Arb with an Aave Flash Loan and much higher amount:
+Same Simple 3-Way trade as above with an Aave Flash Loan and much higher amount:
 ```
-orfeed.arb('0x6668bd849c4cb444ca9cde392491312574c824fe', '0x398eC7346DcD622eDc5ae82352F02bE94C62d119', ["ETH","DAI","MKR","USDC"], 5000000000000000000000, ["SKIP","KYBER","UNISWAP","KYBER"]);
+orfeed.arb('0x08906e8e5193929181011043b52432973E5F8446', '0x398eC7346DcD622eDc5ae82352F02bE94C62d119', ["ETH","DAI","MKR","USDC"], 5000000000000000000000, ["SKIP","KYBER","UNISWAP","KYBER"]);
 ```
 
 For simple mult-way trades using your own capital, approve the orfeed contract: `0x8316b082621cfedab95bf4a44a1d4b64a6ffc336`
