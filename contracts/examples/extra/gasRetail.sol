@@ -1,4 +1,4 @@
-//Draft: Gas retail contract for buying, storing and selling gas token at set rates, as well as deploying gas as a proxy contract
+// Draft: Gas retail contract for buying, storing and selling gas token at set rates, as well as deploying gas as a proxy contract
 
 pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
@@ -47,7 +47,7 @@ interface ERC20 {
 
 
 interface ERC20GasToken {
-    function name (  ) external view returns ( string );
+    function name (  ) external view returns ( string memory);
   function freeFromUpTo ( address from, uint256 value ) external returns ( uint256 freed );
   function approve ( address spender, uint256 value ) external returns ( bool success );
   function totalSupply (  ) external view returns ( uint256 supply );
@@ -56,7 +56,7 @@ interface ERC20GasToken {
   function freeFrom ( address from, uint256 value ) external returns ( bool success );
   function freeUpTo ( uint256 value ) external returns ( uint256 freed );
   function balanceOf ( address owner ) external view returns ( uint256 balance );
-  function symbol (  ) external view returns ( string );
+  function symbol (  ) external view returns ( string memory);
   function mint ( uint256 value ) external;
   function transfer ( address to, uint256 value ) external returns ( bool success );
   function free ( uint256 value ) external returns ( bool success );
@@ -80,59 +80,84 @@ contract GasRetailContract {
     OrFeedInterface orfeed= OrFeedInterface(0x8316B082621CFedAB95bf4a44a1d4B64a6ffc336);
     ERC20GasToken gasToken = ERC20GasToken(0x0000000000b3F879cb30FE243b4Dfee438691c04);
     uint8 public constant decimals = 2;
-    uint256 public constant buyPrice = 2500; //25 gwei
-    uint256 public constant sellPrice = 2000; //20 gwei
-    address owner;
+    uint256 public buyPrice = 2500; //25 gwei
+    uint256 public sellPrice = 2000; //20 gwei
+    uint256 public constant gweiToWei = 1000000000; //gwei to wei converter
+    
+    address payable owner;
     mapping(address => uint256) balances;
-    uint256 public constant thirdPartyStored =0;
-    uint256 public constant totalSupply =0;
+    uint256 public thirdPartyStored = 0;
+    uint256 public totalSupply = 0;
     
      // Functions with this modifier can only be executed by the owner
     modifier onlyOwner() {
-            if (msg.sender != owner) {
-                throw;
-            }
-             _;
+        require(msg.sender == owner, "Caller is not owner of the contract");
+        _;
+    }
+    
+    // check that amount sent to buy gas tokens is greaterthan or equal to the current buying price in gwei
+    modifier buyerPriceSentValid(uint256 _amountSentInGwei) {
+        require(_amountSentInGwei >= buyPrice, "Make sure the buying amount sent is equal to or greater the current buying price");
+        _;
     }
 
+    
+    // check the seller has enough gas tokens to sell back to contract
+    modifier gasTokensBalanceValid(uint _amount) {
+        require(balances[msg.sender] >= _amount, "Amount to sell is greater than your aavailable gas token balance ");
+        _;
+    }
+    
+    // check if user has enough gas token balance to store in this contract
+    modifier userGastokenBalanceSufficient(uint _amount) {
+        require(gasToken.balanceOf(msg.sender) >= _amount, "Your gas token balance is insufficient to store the specified amount");
+        _;
+    }
     
     constructor() public payable {
          owner = msg.sender;
     }
 
-    function balanceOf(address _owner) public constant returns(uint256){
-            return balances[_owner];
+    function balanceOf(address _owner) external view returns(uint256){
+        return balances[_owner];
     }
 
 
-    function setGasBuyPrice(uint256 newPrice) onlyOwner returns(bool){
+    function setGasBuyPrice(uint256 newPrice) public onlyOwner returns(bool){
         buyPrice = newPrice;
         return true;
     }
 
-    function setGasSellPrice(uint256 newPrice) onlyOwner returns(bool){
+    function setGasSellPrice(uint256 newPrice) public onlyOwner returns(bool){
         sellPrice = newPrice;
         return true;
     }
 
-    function buyGas() payable public returns (bool){
+    function buyGas() public payable buyerPriceSentValid(msg.value.div(gweiToWei)) returns (bool){
         
-        uint256 ethSent = msg.value;
-        amountToSend = msg.value.mul(buyPrice).div(10000000000000000);
+        uint256 gweiSent = msg.value.div(gweiToWei);
+        uint256 amountToSend = gweiSent.div(buyPrice);
         require(gasToken.transfer(msg.sender, amountToSend), "This contract does not have enough gas token to fill your order");
         return true;
     }
 
-    function sellGas(uint256 amount){
-        uint256 amountToPay = amount.div(sellPrice).mul(amount);
-        require(msg.send(msg.sender, amountToPay), "Not enough ETH in the contract to fill this order");
+    function sellGas(uint256 amount) external gasTokensBalanceValid(amount) returns (bool){
+        // convert the amount to pay from gwei to wei
+        uint256 amountToPayInWei = sellPrice.mul(amount).mul(gweiToWei);
+        
+        require(msg.sender.send(amountToPayInWei), "Not enough ETH in the contract to fill this order");
+        // reduce the seller's gas token balance & also third party store
+        balances[msg.sender] = balances[msg.sender].sub(amount);
+        // we also reduce the total 3rd party supply of gas tokens because technically the tokens sold belong to this contract
+        thirdPartyStored = thirdPartyStored.sub(amount);
+        
         return true;
     }
 
-    function storeGas()public returns (bool){
-
-        require(gasToken.transferFrom(msg.sender, this, amount ), "You must approve this contract at the following smart contract before buying: 0x0000000000b3F879cb30FE243b4Dfee438691c04");
-        balances[msg.sender] = amount;
+    function storeGas(uint256 amount)external userGastokenBalanceSufficient(amount) returns (bool){
+      
+        require(gasToken.transferFrom(msg.sender, address(this), amount ), "You must approve this contract at the following smart contract before buying: 0x0000000000b3F879cb30FE243b4Dfee438691c04");
+        balances[msg.sender] = balances[msg.sender].add(amount);
         thirdPartyStored = thirdPartyStored.add(amount);
         totalSupply = totalSupply.add(amount);
         return true;
@@ -143,24 +168,37 @@ contract GasRetailContract {
        tokenToWithdraw.transfer(owner, amount);
        return true;
     }
-
-    function deployGas(address logic_contract) {
-        gasToken.freeFromUpTo(msg.sender, balanceOf[msg.sender]);
-         address target = logic_contract;
-        assembly {
-            let ptr := mload(0x40)
-            calldatacopy(ptr, 0, calldatasize)
-            let result := delegatecall(gas, target, ptr, calldatasize, 0, 0)
-            let size := returndatasize
-            returndatacopy(ptr, 0, size)
-            switch result
-            case 0 { revert(ptr, size) }
-            case 1 { return(ptr, size) }
+    
+    // return surplus gas token to the owner
+    function returnSurplusGasTokenToOwner() public onlyOwner returns(uint256){
+        uint256 gasTokenSurplus = 0;
+      // check if the balance of gas tokens in the contract is greater than the total supply of 3rd party store
+       if( gasToken.balanceOf(address(this)) > thirdPartyStored) {
+           gasTokenSurplus = gasToken.balanceOf(address(this)) - thirdPartyStored;
+           gasToken.transfer(owner, gasTokenSurplus);
+       }
+       
+       return gasTokenSurplus;
+    }
+    
+    // return surplus ETH to the owner
+    
+    function returnSurplusEthToOwner() public onlyOwner returns(uint256){
+        uint256 ethSurplus = 0;
+        uint256 totalSellingPriceInWei = sellPrice.mul(thirdPartyStored).mul(gweiToWei);
+        
+        if (address(this).balance >= totalSellingPriceInWei) {
+            ethSurplus = address(this).balance - totalSellingPriceInWei;
+            owner.transfer(ethSurplus);
         }
+   
+       return ethSurplus;
     }
-
+    
+    // free up gas tokens held by the contract for the user so as to do more expensive operations
+    function deployGas() external {
+        require(balances[msg.sender] > 0, "Not enough gas tokens, please store some gas in this contract to continue!");
+        gasToken.freeFromUpTo(address(this), balances[msg.sender]);
     }
-
-
-
+   
 }
