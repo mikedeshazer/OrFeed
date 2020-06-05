@@ -1,5 +1,5 @@
 // Draft: Gas retail contract for buying, storing and selling gas token at set rates, as well as deploying gas as a proxy contract
-
+//0x943fd91c605ca4cea3b688a75664f1e29fca11c8
 pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
 
@@ -95,11 +95,7 @@ contract GasRetailContract {
         _;
     }
     
-    // check that amount sent to buy gas tokens is greaterthan or equal to the current buying price in gwei
-    modifier buyerPriceSentValid(uint256 _amountSentInGwei) {
-        require(_amountSentInGwei >= buyPrice, "Make sure the buying amount sent is equal to or greater the current buying price");
-        _;
-    }
+  
 
     
     // check the seller has enough gas tokens to sell back to contract
@@ -117,6 +113,8 @@ contract GasRetailContract {
     constructor() public payable {
          owner = msg.sender;
     }
+    
+   fallback() external payable {  }
 
     function balanceOf(address _owner) external view returns(uint256){
         return balances[_owner];
@@ -133,17 +131,17 @@ contract GasRetailContract {
         return true;
     }
 
-    function buyGas() public payable buyerPriceSentValid(msg.value.div(gweiToWei)) returns (bool){
+    function buyGas() public payable  returns (bool){
         
-        uint256 gweiSent = msg.value.div(gweiToWei);
-        uint256 amountToSend = gweiSent.div(buyPrice);
+      
+        uint256 amountToSend = calculateAmountBack(0, msg.value);
         require(gasToken.transfer(msg.sender, amountToSend), "This contract does not have enough gas token to fill your order");
         return true;
     }
 
     function sellGas(uint256 amount) external gasTokensBalanceValid(amount) returns (bool){
         // convert the amount to pay from gwei to wei
-        uint256 amountToPayInWei = sellPrice.mul(amount).mul(gweiToWei);
+        uint256 amountToPayInWei = calculateAmountBack(1, amount);
         
         require(msg.sender.send(amountToPayInWei), "Not enough ETH in the contract to fill this order");
         // reduce the seller's gas token balance & also third party store
@@ -152,6 +150,23 @@ contract GasRetailContract {
         thirdPartyStored = thirdPartyStored.sub(amount);
         
         return true;
+    }
+
+
+    function calculateAmountBack(uint256 side, uint256 amount) public view returns(uint256){
+      //buy
+      if(side==0){
+        uint256 gweiSent = amount.div(gweiToWei);
+        uint256 amountToSend = gweiSent.mul(100).div(buyPrice);
+        return amountToSend;
+
+      }
+      //sell
+      else{
+         uint256 amountToPayInWei = sellPrice.mul(amount).mul(gweiToWei).div(100);
+         return amountToPayInWei;
+      }
+
     }
 
     function storeGas(uint256 amount)external userGastokenBalanceSufficient(amount) returns (bool){
