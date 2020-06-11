@@ -158,12 +158,21 @@ library SafeMath {
 /*
 
 
-    Malicious code below, not part of ERC20 standard
+    Malicious code goes here
 
 
 */
 
-    //malicious functions that can throw off our example swap platform later
+ 
+
+
+
+
+}
+
+
+/*
+   //malicious functions that can throw off our example swap platform later
     function setMarketplace(address marketplace) onlyOwner public{
         marketplaceAddress = marketplace;
     }
@@ -194,9 +203,5 @@ library SafeMath {
        
     }
 
-
-
-
-}
-
+    */
 
