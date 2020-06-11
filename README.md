@@ -5,7 +5,6 @@
 
 ### Homemade high-reliability oracle aggregator for Ethereum-based DeFi apps that need on and off-chain data, with a bit of streamlined execution functionality in there, as well.
 
-Written the way smart contracts used to be: simple with most information on a single page per functional aspect.
 
 ![OrFeed Logo](https://www.orfeed.org/images/orfeed.png)
 
@@ -73,12 +72,15 @@ interface OrFeedInterface {
 
 
 
-To Initialize OrFeed, simply include this code:
+To Initialize OrFeed on mainnet, simply include this code:
 
 ```javascript
 OrFeedInterface orfeed= OrFeedInterface(0x8316B082621CFedAB95bf4a44a1d4B64a6ffc336);
 
 ```
+
+Ganache and Truffle documentation coming soon.
+
 
 One of the best things about OrFeed is that OrFeed automatically detects which kind of asset you are looking for (though the data can come from different providers), as the parameter of "venue" when making the getExchangeRate call. For example, you can get the price for ETH/USD the same way you get the price for JPY/ETH. The 3rd parameter is the venue. Use blank ('') for default oracle. In the future, you can reference several venues/providers to get their data and throw out any that deviate too far from the average.
 
@@ -163,7 +165,7 @@ Once you deploy your contract and register it to the registry (paying a small am
 As more reputable, as well as trustless, oracle smart contracts register within the OrFeed registry, we will update a new list as a reference.
 
 
-## Source and Asset Examples (Currently on MainNet)
+## Source and Asset Examples (Currently on Main-net)
 
 
 | Asset       | Example Provider (Venue)           | Type  |
@@ -217,8 +219,12 @@ Note: "PROVIDER1" was the first external financial data provider for the OrFeed 
 
 ## DeFi Interest Rate Data/Calculator
 
-Coming soon.
+Learn more here: [Youtube Tutorial](https://www.youtube.com/watch?v=AFBi_2c6CUQ)
 
+
+## DeFi Legos Tutorials
+
+Vulnerability/exploit smart contract examples, DeFi mock contracts/projects and other files from Youtube and Coursera material can be found in `/contracts/examples/tutorialSamples/`
 
 
 ## Examples
