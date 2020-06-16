@@ -2,6 +2,16 @@
 
 [![Discord](https://img.shields.io/discord/671195829524103199)](https://discord.gg/byCPVsY)
 
+```html
+OrFeed is currently being refactored.
+
+OrFeed 0.5 is coming very soon..
+
+All current functionality will not be affected / All current contracts will operate as normal, but new ones will be deployed that are better and do more.
+
+What's coming? Code will be cleaner, tests will be at the core, Ganache and other testnets will be MUCH more compatible and a newer Solidity compiler will be used
+
+```
 
 ### Homemade high-reliability oracle aggregator for Ethereum-based DeFi apps that need on and off-chain data, with a bit of streamlined execution functionality in there, as well.
 
