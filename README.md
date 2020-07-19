@@ -5,11 +5,11 @@
 
 ```OrFeed is currently being refactored.```
 
-```OrFeed 0.5 is coming very soon...```
+```The next release will be OrFeed 0.5.```
 
-```All current functionality will not be affected / All current contracts will operate as normal, but new ones will be deployed that are better and do more.```
+```Current functionality will not be affected / All current contracts will operate as normal, but new ones will be deployed that are hopefully better and do more.```
 
-```What's coming? Code will be cleaner, tests will be at the core, Ganache and other testnets will be MUCH more compatible and a newer Solidity compiler will be used. ```
+```What's coming? Code will be cleaner, tests will be at the core, Ganache and mainnet forks will be documented, and a newer Solidity compiler will be used. ```
 
 
 ### Homemade high-reliability oracle aggregator for Ethereum-based DeFi apps that need on and off-chain data, with a bit of streamlined execution functionality in there, as well.
@@ -39,7 +39,7 @@ Etherscan Smart Contract Interface: [https://etherscan.io/dapp/0x8316b082621cfed
 
 Oracle Price/Numerical Data Registry [dApp](https://etherscan.io/dapp/0x74b5ce2330389391cc61bf2287bdc9ac73757891)
 
-General Data/Event Result Registry [dApp](https://etherscan.io/address/0xd754f58d9d6d705b98bde698f9f9cec0bded1b8a#writeContract) 
+General Data/Event Result Registry [dApp](https://etherscan.io/address/0xd754f58d9d6d705b98bde698f9f9cec0bded1b8a#writeContract)
 
 [Youtube video tutorial](https://youtu.be/LK1BiSveEI4)
 
@@ -98,7 +98,7 @@ uint jpyusdPrice = orfeed.getExchangeRate("JPY", "USD", "DEFAULT", 100000);
 // returns 920 (or $920.00)
 ```
 
-Note: Replace "DEFAULT" with the oracle provider you would like data from. For example, if you want to know Uniswap's price on the buy side, use "BUY-UNISWAP-EXCHANGE". If you want Kyber's sell side data for the same, you can use "SELL-KYBER-EXCHANGE". Due to the way Bancor works with swaps/liquidity paths, you can simply use "BANCOR" when querying Bancor. Because ERC-20s have many, many integers, when getting prices from token to token, be sure to use very large amounts.... 1000000000 DAI is less than one penny, for example, due to divisibility at 18. 
+Note: Replace "DEFAULT" with the oracle provider you would like data from. For example, if you want to know Uniswap's price on the buy side, use "BUY-UNISWAP-EXCHANGE". If you want Kyber's sell side data for the same, you can use "SELL-KYBER-EXCHANGE". Due to the way Bancor works with swaps/liquidity paths, you can simply use "BANCOR" when querying Bancor. Because ERC-20s have many, many integers, when getting prices from token to token, be sure to use very large amounts.... 1000000000 DAI is less than one penny, for example, due to divisibility at 18.
 
 More examples:
 
@@ -248,7 +248,7 @@ The /nodeJSAppExamples folder contains Node.js apps that interface with smart co
 
 You can retrieve data from a website (off-chain) asynchronously via the Chainlink integration. To use this feature, please follow these steps:
 
-1. Make sure you have [LINK](https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca) coins in your wallet that you are making the request from. If you don't have LINK, you can visit Uniswap.io or Kyberswap to convert Ether to LINK. You will need .1 LINK per request. 
+1. Make sure you have [LINK](https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca) coins in your wallet that you are making the request from. If you don't have LINK, you can visit Uniswap.io or Kyberswap to convert Ether to LINK. You will need .1 LINK per request.
 
 2. Approve the OrFeed Chainlink proxy contract to use your LINK coins to pay the Chainlink fees. Visit [https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca#writeContract](https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca#writeContract) and use the "Approve" function. In the "_spender" field, paste this address: 0xa0f806d435f6acaf57c60d034e57666d21294c47. In the "_amount" field, input: 100000000000000000000000000. Additionally, at the top of the page, right above the approve function, make sure to click Connect to Web3.
 
@@ -306,7 +306,7 @@ OrFeed [Angle](https://www.orfeed.org/angle) provides a user interface to engage
 
 ### OrFeed Arb method
 
-The OrFeed contract provides a function called `arb` which is used to perform a streamlined triangular arbitrage operation. 
+The OrFeed contract provides a function called `arb` which is used to perform a streamlined triangular arbitrage operation.
 
 ### Example of the Arb method
 
@@ -342,7 +342,7 @@ To test that the contracts are working well in the respective networks, please d
 
 ### Read the full docs [orfeed.org/docs](https://www.orfeed.org/docs)
 
-Common default data providers when venue parameters are left blank are Kyber, Uniswap, Chainlink and Synthetix. 
+Common default data providers when venue parameters are left blank are Kyber, Uniswap, Chainlink and Synthetix.
 
 Future private/premium data may be provided as follows (though we are to suggestions, and welcome you to join the OrFeed DAO where we will be voting on future governance decisions):
 
@@ -353,7 +353,7 @@ Future private/premium data may be provided as follows (though we are to suggest
 These can often fall out-of-date as we take a MainNet-first approach as most of the OrFeed functionality does not require gas, as OrFeed serves as a proxy to many other contracts.
 
 **Kovan**: [0x31a29958301c407d4b4bf0d53dac1f2d154d9d8d](https://kovan.etherscan.io/address/0x31a29958301c407d4b4bf0d53dac1f2d154d9d8d)  
-**Rinkeby**: [0x97875355ef55ae35613029df8b1c8cf8f89c9066](https://rinkeby.etherscan.io/address/0x97875355ef55ae35613029df8b1c8cf8f89c9066) 
+**Rinkeby**: [0x97875355ef55ae35613029df8b1c8cf8f89c9066](https://rinkeby.etherscan.io/address/0x97875355ef55ae35613029df8b1c8cf8f89c9066)
 
 
 ### Works Provided As Inspiration Of Thought Through Development:
