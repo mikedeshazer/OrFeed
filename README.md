@@ -112,6 +112,13 @@ Supports Uniswap v.2 as follows:
 uint price = orfeed.getExchangeRate("ETH", "USDC", "UNISWAPBYSYMBOLV2", 100000000000000);
 ```
 
+Get prices by address on Uniswap v.2 using the `UNISWAPBYADDRESSV2` provider. WETH/DAI example:
+
+```javascript
+uint price = orfeed.getExchangeRate("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", "0x6B175474E89094C44Da98b954EedeAC495271d0F", "UNISWAPBYADDRESSV2", 10000000000000000);
+```
+
+
 
 ```javascript
 uint price = orfeed.getExchangeRate("BTC", "DAI", "SELL-UNISWAP-EXCHANGE", 100);
