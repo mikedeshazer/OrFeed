@@ -318,19 +318,19 @@ contract orfeed {
 
     //premium price oracle address. Can be changed by DAO
     address premiumSubPriceOracleAddress;
-    
-    //external async price oracle 
+
+    //external async price oracle
     address asyncProxyContractAddress;
-    
+
     //events (no price oracle)
     address eventsProxySyncContractAddress;
-    
+
     //events ( async, no price oracle)
     address eventsProxyAsyncContractAddress;
-    
+
     //arb contract
     address arbContractAddress;
-    
+
 
     premiumSubInterface psi;
     IKyberNetworkProxy ki;
@@ -342,7 +342,7 @@ contract orfeed {
     Uniswap uniswap;
     ERC20 ethToken;
 
-   
+
 
     // Functions with this modifier can only be executed by the owner DAO
     modifier onlyOwner() {
@@ -376,7 +376,7 @@ contract orfeed {
         freeRateTokenSymbols['USDT'] = 0xdac17f958d2ee523a2206206994597c13d831ec7;
         freeRateTokenSymbols['GST1'] = 0x88d60255F917e3eb94eaE199d827DAd837fac4cB;
         freeRateTokenSymbols['GST2'] = 0x0000000000b3F879cb30FE243b4Dfee438691c04;
-        
+
         //commented list of tokens added post deployment
 
         //freeRateTokenSymbols['LEND'] = 0x80fb784b7ed66730e8b1dbd9820afd29931aab03;
@@ -401,20 +401,20 @@ contract orfeed {
         //freeRateTokenSymbols['SETH'] = 0x57ab1e02fee23774580c119740129eac7081e9d3;
         //freeRateTokenSymbols['SJPY'] = 0xf6b1c627e95bfc3c1b4c9b825a032ff0fbf3e07d;
         //freeRateTokenSymbols['PAY'] = 0xB97048628DB6B661D4C2aA833e95Dbe1A905B280;
-        
-        
-  
-        
-        
 
-        //free forex rates. Can be changed/updated by ownerDAO        
+
+
+
+
+
+        //free forex rates. Can be changed/updated by ownerDAO
         freeRateForexSymbols['USD'] = 0x57ab1e02fee23774580c119740129eac7081e9d3;
         freeRateForexSymbols['EUR'] = 0xd71ecff9342a5ced620049e616c5035f1db98620;
         freeRateForexSymbols['CHF'] = 0x0f83287ff768d1c1e17a42f44d644d7f22e8ee1d;
         freeRateForexSymbols['JPY'] = 0xf6b1c627e95bfc3c1b4c9b825a032ff0fbf3e07d;
         freeRateForexSymbols['GBP'] = 0x97fe22e7341a0cd8db6f6c021a24dc8f4dad855f;
         freeRateForexSymbols['sETH'] = 0x57ab1e02fee23774580c119740129eac7081e9d3;
-        
+
 
         freeRateForexBytes['USD'] = 0x7355534400000000000000000000000000000000000000000000000000000000;
         freeRateForexBytes['EUR'] = 0x7345555200000000000000000000000000000000000000000000000000000000;
@@ -440,7 +440,7 @@ contract orfeed {
         //erc20 price oracle address. Can be changed by DAO
         tokenPriceOracleAddress = 0xFd9304Db24009694c680885e6aa0166C639727D6;
 
-        //New address, as dynamically updated in the most recent contract is: 0x9D7F70AF5DF5D5CC79780032d47a34615D1F1d77
+        //New address, as dynamically updated in the most recent contract is: 0xba727c69636491ecdfE3E6F64cBE9428aD371e48
         synthetixExchangeAddress = 0xE95Ef4e7a04d2fB05cb625c62CA58da10112c605;
 
         tokenPriceOracleAddress2 = 0xe9Cf7887b93150D4F2Da7dFc6D502B216438F244;
@@ -450,17 +450,17 @@ contract orfeed {
 
         //premium price oracle address. Can be changed by DAO
         premiumSubPriceOracleAddress = 0xbf2e5dc9b5c25911c68edcebd57438da1abd7ed6;
-        
+
         //arb proxy contract address. Can be cahnged... will be changed by DAO
         arbContractAddress = 0x0;
-        
+
 
         ethTokenAddress = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 
 
         ethToken = ERC20(ethTokenAddress);
 
-        
+
 
         ki = IKyberNetworkProxy(tokenPriceOracleAddress);
         se = SynthetixExchange(synthetixExchangeAddress);
@@ -480,7 +480,7 @@ contract orfeed {
     }
 
     function getTokenToSynthOutputAmount(ERC20 token, bytes32 synth, uint256 inputAmount) returns(uint256) {
-        kyber = Kyber(tokenPriceOracleAddress); 
+        kyber = Kyber(tokenPriceOracleAddress);
         uint256 ethAmount = kyber.getOutputAmount(token, ethToken, inputAmount);
         uniswap = Uniswap(tokenPriceOracleAddress2);
         uint256 sethAmount = uniswap.getEthToTokenInputPrice(ethAmount);
@@ -490,7 +490,7 @@ contract orfeed {
     }
 
     function getSynthToTokenOutputAmount(bytes32 synth, ERC20 token, uint256 inputAmount) returns(uint256) {
-         kyber = Kyber(tokenPriceOracleAddress); 
+         kyber = Kyber(tokenPriceOracleAddress);
         se = SynthetixExchange(synthetixExchangeAddress);
         uint256 sethAmount = se.effectiveValue(synth, inputAmount, freeRateForexBytes['sETH']);
         uniswap = Uniswap(tokenPriceOracleAddress2);
@@ -567,29 +567,29 @@ contract orfeed {
         premiumSubPriceOracleAddress = newOracle;
         return true;
     }
-    
+
       //this will go to a DAO
     function updateAsyncOracleAddress (address newOracle) onlyOwner external returns(bool) {
         asyncProxyContractAddress = newOracle;
         return true;
     }
-    
+
      function updateAsyncEventsAddress (address newOracle) onlyOwner external returns(bool) {
         eventsProxyAsyncContractAddress = newOracle;
         return true;
     }
-    
+
      function updateSyncEventsAddress (address newOracle) onlyOwner external returns(bool) {
         eventsProxySyncContractAddress = newOracle;
         return true;
     }
-    
-    
+
+
     function updateArbContractAddress (address newAddress) onlyOwner external returns(bool) {
         arbContractAddress = newAddress;
         return true;
     }
-    
+
 
     //this will go to a DAO
     function addFreeToken(string symb, address tokenAddress) onlyOwner external returns(bool) {
@@ -622,7 +622,7 @@ contract orfeed {
         return true;
     }
 
-   
+
 
     //returns zero if the rate cannot be found
     function getExchangeRate(string fromSymbol, string toSymbol, string venue, uint256 amount) constant external returns(uint256) {
@@ -641,72 +641,72 @@ contract orfeed {
             return rate;
         }
     }
-    
+
     function requestAsyncExchangeRate(string fromSymbol, string toSymbol, string venue, uint256 amount)  external returns(string) {
-    
+
         priceAsyncInterface api = priceAsyncInterface(asyncProxyContractAddress);
         string memory resString = api.requestPriceResult(fromSymbol, toSymbol, venue, amount);
         //resString ideally is a reference id
         return resString;
     }
-    
+
      function requestAsyncExchangeRateResult(string fromSymbol, string toSymbol, string venue, uint256 amount, string referenceId) constant  external returns(uint256) {
-    
+
         priceAsyncInterface api = priceAsyncInterface(asyncProxyContractAddress);
         uint256 resPrice = api.getRequestedPriceResult(fromSymbol, toSymbol, venue, amount,referenceId);
         return resPrice;
     }
-    
-    
+
+
     function getEventResult(string eventName, string source)  constant external returns(string) {
-    
+
         eventsSyncInterface epiSync = eventsSyncInterface(eventsProxySyncContractAddress);
         string memory resString = epiSync.getEventResult(eventName, source);
         return resString;
     }
-    
-    
-   
-    
+
+
+
+
     function requestAsyncEvent(string eventName, string source)  external returns(string) {
-    
+
         eventsAsyncInterface epi = eventsAsyncInterface(eventsProxyAsyncContractAddress);
         string memory resString = epi.requestEventResult(eventName, source);
         return resString;
     }
-    
+
     function getAsyncEventResult(string eventName, string source, string referenceId) constant  external returns(string) {
-    
+
         eventsAsyncInterface epi = eventsAsyncInterface(eventsProxyAsyncContractAddress);
         string memory resString = epi.getRequestedEventResult(eventName, source, referenceId);
         return resString;
     }
-    
+
 
 
     function arb(address fundsReturnToAddress, address liquidityProviderContractAddress, string[] tokens,  uint256 amount, string[] exchanges) payable returns (bool){
-       
+
         arbInterface arbContract = arbInterface(arbContractAddress);
        address tokenAddress = getTokenAddress(tokens[0]);
        if(tokenAddress != getTokenAddress("ETH")){
            require(ERC20(tokenAddress).transferFrom(msg.sender, arbContractAddress, amount));
        }
-       
+
         bool arbResp = arbContract.arb.value(msg.value)(fundsReturnToAddress, liquidityProviderContractAddress, tokens, amount, exchanges);
         if(arbResp != true){
             throw;
         }
         return arbResp;
     }
-    
+
     function callExtraFunction(string param1, string param2, string param3, string param4) returns (string){
          arbInterface arbContract = arbInterface(arbContractAddress);
          string memory extraResp = arbContract.extraFunction(param1, param2, param3, param4);
          return extraResp;
     }
-    
 
-    
+
+
 
 
     function getTokenAddress(string symbol) constant  returns(address){
@@ -714,11 +714,11 @@ contract orfeed {
              address tokenAddress = address(stringToBytes32(symbol));
              return tokenAddress;
         }
-       
+
         return freeRateTokenSymbols[symbol];
     }
-    
-    
+
+
 
 
     function getForexAddress(string symbol) constant external returns(address){
@@ -743,15 +743,15 @@ contract orfeed {
     function isFreeVenueCheck(string venueToCheck) returns(bool) {
         string memory blankString = '';
         string memory defaultString = 'DEFAULT';
-        
+
         if (compareStrings(venueToCheck, blankString)) {
             return true;
-        } 
-        
+        }
+
         if (compareStrings(venueToCheck, defaultString)) {
             return true;
-        } 
-    
+        }
+
         else {
             return false;
         }
@@ -777,34 +777,34 @@ contract orfeed {
 
          //token to token
         if (freeRateTokenSymbols[fromSymb] != 0x0 && freeRateTokenSymbols[toSymb] != 0x0) {
-           
-             kyber = Kyber(tokenPriceOracleAddress); 
+
+             kyber = Kyber(tokenPriceOracleAddress);
             uint256 toRate = kyber.getOutputAmount(ERC20(freeRateTokenSymbols[fromSymb]), ERC20(freeRateTokenSymbols[toSymb]), amount);
             return toRate;
-           
-        } 
+
+        }
 
         //token to forex
         else if (freeRateTokenSymbols[fromSymb] != 0x0 && freeRateTokenSymbols[toSymb] == 0x0) {
-           
+
             if(equal(fromSymb,"ETH")){
                 fromSymb = "ETH2";
             }
 
             uint256 toRate2 = getTokenToSynthOutputAmount(ERC20(freeRateTokenSymbols[fromSymb]), freeRateForexBytes[toSymb], amount);
             return toRate2.mul(rateMultiply2).div(rateDivide2);
-        } 
+        }
 
         //forex to token
         else if (freeRateTokenSymbols[fromSymb] == 0x0 && freeRateTokenSymbols[toSymb] != 0x0) {
-            
+
             if(equal(toSymb,"ETH")){
                 toSymb = "ETH2";
             }
-            
+
             uint256 toRate3 = getSynthToTokenOutputAmount(freeRateForexBytes[fromSymb], ERC20(freeRateTokenSymbols[toSymb]), amount);
             return toRate3.mul(rateMultiply3).div(rateDivide3);
-        } 
+        }
 
 
         //forex to forex
@@ -814,19 +814,19 @@ contract orfeed {
             se = SynthetixExchange(synthetixExchangeAddress);
             uint256 toRate4 = se.effectiveValue(freeRateForexBytes[fromSymb], amount, freeRateForexBytes[toSymb]);
             return toRate4.mul(rateMultiply4).div(rateDivide4);
-        } 
+        }
         //something's wrong
         else {
             return 0;
         }
     }
-    
+
     function stringToBytes32(string memory source) returns (bytes32 result) {
         bytes memory tempEmptyStringTest = bytes(source);
         if (tempEmptyStringTest.length == 0) {
             return 0x0;
         }
-    
+
         assembly {
             result := mload(add(source, 32))
         }
@@ -850,19 +850,19 @@ contract orfeed {
         else
             return 0;
     }
-    
+
     function equal(string _a, string _b) returns (bool) {
         return compare(_a, _b) == 0;
     }
-    
+
     function indexOf(string _haystack, string _needle) returns (int)
     {
         bytes memory h = bytes(_haystack);
         bytes memory n = bytes(_needle);
-        if(h.length < 1 || n.length < 1 || (n.length > h.length)) 
+        if(h.length < 1 || n.length < 1 || (n.length > h.length))
             return -1;
         else if(h.length > (2**128 -1)) // since we have to be able to return -1 (if the char isn't found or input error), this function must return an "int" type with a max length of (2^128 - 1)
-            return -1;                                  
+            return -1;
         else
         {
             uint subindex = 0;
@@ -874,16 +874,16 @@ contract orfeed {
                     while(subindex < n.length && (i + subindex) < h.length && h[i + subindex] == n[subindex]) // search until the chars don't match or until we reach the end of a or b
                     {
                         subindex++;
-                    }   
+                    }
                     if(subindex == n.length)
                         return int(i);
                 }
             }
             return -1;
-        }   
+        }
     }
 
-    
-    
+
+
     //end contract
 }

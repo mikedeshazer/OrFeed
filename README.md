@@ -3,9 +3,17 @@
 [![Discord](https://img.shields.io/discord/671195829524103199)](https://discord.gg/byCPVsY)
 
 
+```OrFeed is currently being refactored.```
+
+```The next release will be OrFeed 0.5.```
+
+```Current functionality will not be affected / All current contracts will operate as normal, but new ones will be deployed that are hopefully better and do more.```
+
+```What's coming? Code will be cleaner, tests will be at the core, Ganache and mainnet forks will be documented, and a newer Solidity compiler will be used. ```
+
+
 ### Homemade high-reliability oracle aggregator for Ethereum-based DeFi apps that need on and off-chain data, with a bit of streamlined execution functionality in there, as well.
 
-Written the way smart contracts used to be: simple with most information on a single page per functional aspect.
 
 ![OrFeed Logo](https://www.orfeed.org/images/orfeed.png)
 
@@ -31,7 +39,7 @@ Etherscan Smart Contract Interface: [https://etherscan.io/dapp/0x8316b082621cfed
 
 Oracle Price/Numerical Data Registry [dApp](https://etherscan.io/dapp/0x74b5ce2330389391cc61bf2287bdc9ac73757891)
 
-General Data/Event Result Registry [dApp](https://etherscan.io/address/0xd754f58d9d6d705b98bde698f9f9cec0bded1b8a#writeContract) 
+General Data/Event Result Registry [dApp](https://etherscan.io/address/0xd754f58d9d6d705b98bde698f9f9cec0bded1b8a#writeContract)
 
 [Youtube video tutorial](https://youtu.be/LK1BiSveEI4)
 
@@ -73,12 +81,15 @@ interface OrFeedInterface {
 
 
 
-To Initialize OrFeed, simply include this code:
+To Initialize OrFeed on mainnet, simply include this code:
 
 ```javascript
 OrFeedInterface orfeed= OrFeedInterface(0x8316B082621CFedAB95bf4a44a1d4B64a6ffc336);
 
 ```
+
+Ganache and Truffle documentation coming soon.
+
 
 One of the best things about OrFeed is that OrFeed automatically detects which kind of asset you are looking for (though the data can come from different providers), as the parameter of "venue" when making the getExchangeRate call. For example, you can get the price for ETH/USD the same way you get the price for JPY/ETH. The 3rd parameter is the venue. Use blank ('') for default oracle. In the future, you can reference several venues/providers to get their data and throw out any that deviate too far from the average.
 
@@ -87,7 +98,7 @@ uint jpyusdPrice = orfeed.getExchangeRate("JPY", "USD", "DEFAULT", 100000);
 // returns 920 (or $920.00)
 ```
 
-Note: Replace "DEFAULT" with the oracle provider you would like data from. For example, if you want to know Uniswap's price on the buy side, use "BUY-UNISWAP-EXCHANGE". If you want Kyber's sell side data for the same, you can use "SELL-KYBER-EXCHANGE". Due to the way Bancor works with swaps/liquidity paths, you can simply use "BANCOR" when querying Bancor. Because ERC-20s have many, many integers, when getting prices from token to token, be sure to use very large amounts.... 1000000000 DAI is less than one penny, for example, due to divisibility at 18. 
+Note: Replace "DEFAULT" with the oracle provider you would like data from. For example, if you want to know Uniswap's price on the buy side, use "BUY-UNISWAP-EXCHANGE". If you want Kyber's sell side data for the same, you can use "SELL-KYBER-EXCHANGE". Due to the way Bancor works with swaps/liquidity paths, you can simply use "BANCOR" when querying Bancor. Because ERC-20s have many, many integers, when getting prices from token to token, be sure to use very large amounts.... 1000000000 DAI is less than one penny, for example, due to divisibility at 18.
 
 More examples:
 
@@ -100,6 +111,13 @@ Supports Uniswap v.2 as follows:
 ```javascript
 uint price = orfeed.getExchangeRate("ETH", "USDC", "UNISWAPBYSYMBOLV2", 100000000000000);
 ```
+
+Get prices by address on Uniswap v.2 using the `UNISWAPBYADDRESSV2` provider. WETH/DAI example:
+
+```javascript
+uint price = orfeed.getExchangeRate("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", "0x6B175474E89094C44Da98b954EedeAC495271d0F", "UNISWAPBYADDRESSV2", 10000000000000000);
+```
+
 
 
 ```javascript
@@ -163,7 +181,7 @@ Once you deploy your contract and register it to the registry (paying a small am
 As more reputable, as well as trustless, oracle smart contracts register within the OrFeed registry, we will update a new list as a reference.
 
 
-## Source and Asset Examples (Currently on MainNet)
+## Source and Asset Examples (Currently on Main-net)
 
 
 | Asset       | Example Provider (Venue)           | Type  |
@@ -217,8 +235,12 @@ Note: "PROVIDER1" was the first external financial data provider for the OrFeed 
 
 ## DeFi Interest Rate Data/Calculator
 
-Coming soon.
+Learn more here: [Youtube Tutorial](https://www.youtube.com/watch?v=AFBi_2c6CUQ)
 
+
+## DeFi Legos Tutorials
+
+Vulnerability/exploit smart contract examples, DeFi mock contracts/projects and other files from Youtube and Coursera material can be found in `/contracts/examples/tutorialSamples/`
 
 
 ## Examples
@@ -233,7 +255,7 @@ The /nodeJSAppExamples folder contains Node.js apps that interface with smart co
 
 You can retrieve data from a website (off-chain) asynchronously via the Chainlink integration. To use this feature, please follow these steps:
 
-1. Make sure you have [LINK](https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca) coins in your wallet that you are making the request from. If you don't have LINK, you can visit Uniswap.io or Kyberswap to convert Ether to LINK. You will need .1 LINK per request. 
+1. Make sure you have [LINK](https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca) coins in your wallet that you are making the request from. If you don't have LINK, you can visit Uniswap.io or Kyberswap to convert Ether to LINK. You will need .1 LINK per request.
 
 2. Approve the OrFeed Chainlink proxy contract to use your LINK coins to pay the Chainlink fees. Visit [https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca#writeContract](https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca#writeContract) and use the "Approve" function. In the "_spender" field, paste this address: 0xa0f806d435f6acaf57c60d034e57666d21294c47. In the "_amount" field, input: 100000000000000000000000000. Additionally, at the top of the page, right above the approve function, make sure to click Connect to Web3.
 
@@ -264,7 +286,26 @@ Once your transaction has been confirmed on the blockchain, Chainlink then waits
 
 ### Primer
 
-Trianglular arbitrage enables a user to perform a multi-point exchange of funds between specified Assets on supported decentralized exchanges. The orfeed.arb method also supports a simple 2-way exchange, in addition to 3+ way.
+Trianglular arbitrage enables a user to perform a multi-point exchange of funds between specified Assets on supported decentralized exchanges. The orfeed.arb method also supports a simple 2-way exchange, in addition to multi-way exchange. Additionally, you can try flash loans from Aave which are built directly into the tool.
+
+Example usage
+
+Simple 3-Way trade in which `0x08906e8e5193929181011043b52432973E5F8446` is your account or the account that should receive the assets at the end of the transaction:
+```
+orfeed.arb('0x08906e8e5193929181011043b52432973E5F8446', '0x08906e8e5193929181011043b52432973E5F8446', ["DAI","MKR","USDC"], 5000000000000000000, ["KYBER","UNISWAP","KYBER"]);
+```
+
+Same Simple 3-Way trade as above with an Aave Flash Loan and much higher amount:
+```
+orfeed.arb('0x08906e8e5193929181011043b52432973E5F8446', '0x398eC7346DcD622eDc5ae82352F02bE94C62d119', ["ETH","DAI","MKR","USDC"], 5000000000000000000000, ["SKIP","KYBER","UNISWAP","KYBER"]);
+```
+
+For simple mult-way trades using your own capital, approve the orfeed contract: `0x8316b082621cfedab95bf4a44a1d4b64a6ffc336`
+
+For simple multi-way way trades using Aave capital, approve the orfeed flash loan contract: `0xc6eba20877dc64e920975b9f5e6f1a0da48ee68e`
+
+
+
 
 ### [OrFeed Angle](https://www.orfeed.org/angle)
 
@@ -272,7 +313,7 @@ OrFeed [Angle](https://www.orfeed.org/angle) provides a user interface to engage
 
 ### OrFeed Arb method
 
-The OrFeed contract provides a function called `arb` which is used to perform a streamlined triangular arbitrage operation. 
+The OrFeed contract provides a function called `arb` which is used to perform a streamlined triangular arbitrage operation.
 
 ### Example of the Arb method
 
@@ -308,7 +349,7 @@ To test that the contracts are working well in the respective networks, please d
 
 ### Read the full docs [orfeed.org/docs](https://www.orfeed.org/docs)
 
-Common default data providers when venue parameters are left blank are Kyber, Uniswap, Chainlink and Synthetix. 
+Common default data providers when venue parameters are left blank are Kyber, Uniswap, Chainlink and Synthetix.
 
 Future private/premium data may be provided as follows (though we are to suggestions, and welcome you to join the OrFeed DAO where we will be voting on future governance decisions):
 
@@ -319,7 +360,7 @@ Future private/premium data may be provided as follows (though we are to suggest
 These can often fall out-of-date as we take a MainNet-first approach as most of the OrFeed functionality does not require gas, as OrFeed serves as a proxy to many other contracts.
 
 **Kovan**: [0x31a29958301c407d4b4bf0d53dac1f2d154d9d8d](https://kovan.etherscan.io/address/0x31a29958301c407d4b4bf0d53dac1f2d154d9d8d)  
-**Rinkeby**: [0x97875355ef55ae35613029df8b1c8cf8f89c9066](https://rinkeby.etherscan.io/address/0x97875355ef55ae35613029df8b1c8cf8f89c9066) 
+**Rinkeby**: [0x97875355ef55ae35613029df8b1c8cf8f89c9066](https://rinkeby.etherscan.io/address/0x97875355ef55ae35613029df8b1c8cf8f89c9066)
 
 
 ### Works Provided As Inspiration Of Thought Through Development:

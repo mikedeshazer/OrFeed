@@ -1,5 +1,5 @@
-//Mainnet: https://etherscan.io/address/0xa2cae661463933c52e71983de5d33fb9624e0ff2#code
-//Works for Lending
+//Mainnet: https://etherscan.io/address/0x042c5509e618d901df9750772b51c8f168599877#code
+//Works for Borrowing
 pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
 
@@ -151,11 +151,11 @@ contract InterestRateOracleContract {
 */
     function getPlatformSide(string memory whichPlatform, string memory doesBorrow) internal view returns (PlatformSide memory) {
         bool isBorrowing;
-        if(equal("BORROW", doesBorrow)){
-            isBorrowing= true;
+        if(equal("LEND", doesBorrow)){
+            isBorrowing= false;
         }
         else{
-            isBorrowing=false;
+            isBorrowing=true;
         }
         return PlatformSide(whichPlatform,isBorrowing);
     }
